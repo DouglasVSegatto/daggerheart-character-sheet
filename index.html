@@ -228,7 +228,7 @@
 
 <div class="fixed bottom-0 left-0 right-0 bg-zinc-900 border-t border-zinc-800 p-2 z-40">
     <div class="max-w-md mx-auto flex gap-2">
-        <button onclick="saveSheet()" class="flex-1 bg-indigo-600 text-[9px] py-2 rounded font-bold uppercase">⬇ Export</button>
+        <button id="exportBtn" onclick="saveSheet()" class="flex-1 bg-indigo-600 text-[9px] py-2 rounded font-bold uppercase">⬇ Export</button>
         <button onclick="loadSheet()" class="flex-1 bg-zinc-700 text-[9px] py-2 rounded font-bold uppercase">⬆ Import</button>
         <button onclick="clearSheet()" class="flex-1 bg-red-900 text-[9px] py-2 rounded font-bold uppercase">Clear</button>
     </div>
@@ -318,6 +318,10 @@
         a.download = `${charName}_${date}.json`;
         a.click();
         URL.revokeObjectURL(url);
+        const btn = document.getElementById('exportBtn');
+        btn.textContent = '✓ Saved!';
+        btn.classList.replace('bg-indigo-600', 'bg-green-600');
+        setTimeout(() => { btn.textContent = '⬇ Export'; btn.classList.replace('bg-green-600', 'bg-indigo-600'); }, 2000);
     }
 
     function loadSheet(silent) {
