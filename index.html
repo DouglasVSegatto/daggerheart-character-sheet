@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daggerheart Digital Sheet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0d0d0d; color: #d4d4d8; font-family: 'Inter', sans-serif; }
+        .card { background: #18181b; border: 1px solid #27272a; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+        .trait-box { border: 1px solid #3f3f46; border-radius: 4px; padding: 6px; text-align: center; }
+        .trait-label { font-size: 10px; font-weight: 800; color: #a1a1aa; text-transform: uppercase; display: block; }
+        .sub-stat { font-size: 8px; color: #52525b; margin-top: 2px; line-height: 1; }
+        .input-underline { background: transparent; border-bottom: 1px solid #3f3f46; outline: none; text-align: center; color: white; width: 100%; }
+        input, textarea { color: white !important; }
+
+        .dot { width: 18px; height: 18px; border: 2px solid #3f3f46; border-radius: 4px; cursor: pointer; transition: 0.1s; }
+        .dot.filled-hp { background-color: #ef4444; border-color: #ef4444; }
+        .dot.filled-armor { background-color: #3b82f6; border-color: #3b82f6; }
+        .dot.filled-stress { background-color: #a855f7; border-color: #a855f7; }
+        .dot.filled-hope { background-color: #eab308; border-color: #eab308; }
+    </style>
+</head>
+<body class="max-w-md mx-auto p-4 pb-24">
+
+<div class="card bg-zinc-900/50">
+    <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-2">
+            <input id="charName" type="text" placeholder="CHARACTER NAME" class="input-underline text-xl font-black text-left">
+        </div>
+        <input id="charPronouns" type="text" placeholder="PRONOUNS" class="input-underline text-xs text-left">
+        <input id="charLevel" type="text" placeholder="LEVEL" class="input-underline text-xs text-left">
+        <input id="charHeritage" type="text" placeholder="HERITAGE" class="input-underline text-xs text-left">
+        <input id="charClass" type="text" placeholder="CLASS & SUBCLASS" class="input-underline text-xs text-left">
+    </div>
+</div>
+
+<div class="grid grid-cols-4 gap-2 mb-4">
+    <div class="trait-box col-span-1 border-indigo-500/50">
+        <span class="trait-label text-indigo-400">EVASION</span>
+        <input id="track_ev" type="number" class="w-full bg-transparent text-lg font-bold text-center" value="10">
+    </div>
+    <div class="col-span-3 grid grid-cols-3 gap-2">
+        <div class="trait-box"><span class="trait-label">AGI</span><input id="t_agi" type="text" class="w-full bg-transparent text-center" value="0"></div>
+        <div class="trait-box"><span class="trait-label">STR</span><input id="t_str" type="text" class="w-full bg-transparent text-center" value="0"></div>
+        <div class="trait-box"><span class="trait-label">FIN</span><input id="t_fin" type="text" class="w-full bg-transparent text-center" value="0"></div>
+    </div>
+    <div class="col-span-4 grid grid-cols-3 gap-2">
+        <div class="trait-box"><span class="trait-label">INST</span><input id="t_inst" type="text" class="w-full bg-transparent text-center" value="0"></div>
+        <div class="trait-box"><span class="trait-label">PRES</span><input id="t_pres" type="text" class="w-full bg-transparent text-center" value="0"></div>
+        <div class="trait-box"><span class="trait-label">KNOW</span><input id="t_know" type="text" class="w-full bg-transparent text-center" value="0"></div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-status')">
+        <span class="trait-label text-zinc-400">Status</span>
+        <span class="text-zinc-600 text-[9px]" id="sec-status-tog">▼</span>
+    </div>
+    <div id="sec-status" class="mt-2 space-y-3">
+
+    <div class="border-red-900/30 border rounded-md p-2">
+        <div class="flex justify-between items-center mb-1">
+            <span class="trait-label text-red-500">HP (Max: <input type="number" id="hp_max" value="6" class="w-8 bg-transparent">)</span>
+        </div>
+        <div id="hp_dots" class="flex flex-wrap gap-1.5"></div>
+    </div>
+
+    <div class="border-purple-900/30 border rounded-md p-2">
+        <div class="flex justify-between items-center mb-1">
+            <span class="trait-label text-purple-400">Stress (Max: <input type="number" id="stress_max" value="6" class="w-8 bg-transparent">)</span>
+        </div>
+        <div id="stress_dots" class="flex flex-wrap gap-1.5"></div>
+    </div>
+
+    <div class="border-yellow-900/30 border rounded-md p-2">
+        <div class="flex justify-between items-center mb-1">
+            <span class="trait-label text-yellow-500">Hope (Max: <input type="number" id="hope_max" value="6" class="w-8 bg-transparent">)</span>
+        </div>
+        <div id="hope_dots" class="flex flex-wrap gap-1.5"></div>
+    </div>
+
+    <div class="border-blue-900/30 border rounded-md p-2">
+        <div class="flex justify-between items-center mb-1">
+            <span class="trait-label text-blue-400">Armor (Max: <input type="number" id="armor_max" value="3" class="w-8 bg-transparent">)</span>
+        </div>
+        <div id="armor_dots" class="flex flex-wrap gap-1.5"></div>
+    </div>
+
+    <div class="border-zinc-700 border rounded-md p-2">
+        <span class="trait-label text-zinc-500 mb-1">Damage Thresholds</span>
+        <div class="flex items-center justify-between gap-1 text-center mt-1">
+            <div class="flex-1">
+                <div class="text-[9px] font-bold text-gray-400">MINOR</div>
+                <div class="text-[7px] text-gray-600">1 HP</div>
+            </div>
+            <div class="w-12">
+                <input id="track_mi" type="number" class="w-full bg-gray-800 border border-gray-700 rounded py-1 text-center font-bold text-indigo-400 outline-none" placeholder="0">
+            </div>
+            <div class="flex-1">
+                <div class="text-[9px] font-bold text-gray-400">MAJOR</div>
+                <div class="text-[7px] text-gray-600">2 HP</div>
+            </div>
+            <div class="w-12">
+                <input id="track_ma" type="number" class="w-full bg-gray-800 border border-gray-700 rounded py-1 text-center font-bold text-indigo-400 outline-none" placeholder="0">
+            </div>
+            <div class="flex-1">
+                <div class="text-[9px] font-bold text-gray-400">SEVERE</div>
+                <div class="text-[7px] text-gray-600">3 HP</div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+</div>
+
+<div class="card">
+    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-weapons')">
+        <span class="trait-label text-zinc-500">Active Weapons & Armor</span>
+        <span class="text-zinc-600 text-[9px]" id="sec-weapons-tog">▼</span>
+    </div>
+    <div id="sec-weapons" class="mt-2">
+    <div class="space-y-4">
+        <div class="border-b border-zinc-800 pb-2">
+            <input id="wep1_name" type="text" placeholder="Weapon Name" class="bg-transparent text-sm w-full font-bold outline-none">
+            <div class="flex justify-between text-[10px] text-zinc-500 mt-1">
+                <input id="wep1_trait" type="text" placeholder="Trait/Range" class="bg-transparent w-1/2">
+                <input id="wep1_dmg" type="text" placeholder="Dmg Dice" class="bg-transparent w-1/2 text-right">
+            </div>
+        </div>
+        <div>
+            <input id="wep2_name" type="text" placeholder="Weapon Name" class="bg-transparent text-sm w-full font-bold outline-none">
+            <div class="flex justify-between text-[10px] text-zinc-500 mt-1">
+                <input id="wep2_trait" type="text" placeholder="Trait/Range" class="bg-transparent w-1/2">
+                <input id="wep2_dmg" type="text" placeholder="Dmg Dice" class="bg-transparent w-1/2 text-right">
+            </div>
+        </div>
+        <div class="border-t border-zinc-800 pt-2">
+            <input id="armor_name" type="text" placeholder="Armor Name" class="bg-transparent text-sm w-full font-bold outline-none">
+            <div class="flex justify-between text-[10px] text-zinc-500 mt-1">
+                <input id="armor_trait" type="text" placeholder="Trait/Feature" class="bg-transparent w-1/2">
+                <input id="armor_score" type="text" placeholder="Score/Base" class="bg-transparent w-1/2 text-right">
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-gold')">
+        <span class="trait-label text-yellow-600">Gold & Gear</span>
+        <span class="text-zinc-600 text-[9px]" id="sec-gold-tog">▼</span>
+    </div>
+    <div id="sec-gold" class="mt-2">
+    <div class="grid grid-cols-2 gap-2 mb-3">
+        <div class="bg-black/40 p-1 rounded text-center">
+            <span class="text-[8px] text-zinc-500">HANDFULS</span>
+            <input id="gold_hand" type="number" class="w-full bg-transparent text-center text-sm" value="0">
+        </div>
+        <div class="bg-black/40 p-1 rounded text-center">
+            <span class="text-[8px] text-zinc-500">BAGS</span>
+            <input id="gold_bags" type="number" class="w-full bg-transparent text-center text-sm" value="0">
+        </div>
+    </div>
+    <div class="flex justify-between items-center mb-1">
+        <span class="trait-label text-zinc-500">Inventory</span>
+        <button class="bg-zinc-700 text-[9px] px-2 py-1 rounded font-bold uppercase" onclick="addInventoryItem()">+ Add Item</button>
+    </div>
+    <div id="inventoryList" class="space-y-1">
+        <div class="text-center text-[10px] text-zinc-600 italic">None</div>
+    </div>
+    </div>
+</div>
+<div class="card border-indigo-900/40">
+    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-abilities')">
+        <div class="flex items-center gap-2">
+            <span class="trait-label text-indigo-400">Abilities & Cards</span>
+            <span class="text-zinc-600 text-[9px]" id="sec-abilities-tog">▼</span>
+        </div>
+        <button class="bg-indigo-600 text-[9px] px-2 py-1 rounded font-bold uppercase" onclick="event.stopPropagation(); openDatabase()">+ Add</button>
+    </div>
+    <div id="sec-abilities" class="mt-4">
+    <div class="mb-1"><span class="text-[8px] font-bold text-amber-500 uppercase">Domain Cards</span></div>
+    <div id="domainCards" class="space-y-2 mb-3">
+        <div class="text-center text-[10px] text-zinc-600 italic">None</div>
+    </div>
+    <div class="mb-1"><span class="text-[8px] font-bold text-teal-500 uppercase">General</span></div>
+    <div id="generalCards" class="space-y-2">
+        <div class="text-center text-[10px] text-zinc-600 italic">None</div>
+    </div>
+    </div>
+</div>
+
+<div class="card border-cyan-900/40">
+    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-experience')">
+        <div class="flex items-center gap-2">
+            <span class="trait-label text-cyan-400">Experience</span>
+            <span class="text-zinc-600 text-[9px]" id="sec-experience-tog">▼</span>
+        </div>
+        <button class="bg-cyan-700 text-[9px] px-2 py-1 rounded font-bold uppercase" onclick="event.stopPropagation(); addExperience()">+ Add</button>
+    </div>
+    <div id="sec-experience" class="mt-2">
+        <div id="experienceList" class="space-y-1">
+            <div class="text-center text-[10px] text-zinc-600 italic">None</div>
+        </div>
+    </div>
+</div>
+
+<div class="card border-emerald-900/40">
+    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-levelup')">
+        <span class="trait-label text-emerald-400">Level Up Notes</span>
+        <span class="text-zinc-600 text-[9px]" id="sec-levelup-tog">▼</span>
+    </div>
+    <div id="sec-levelup" class="mt-2">
+        <textarea id="levelupNotes" placeholder="Track level-up choices, stat increases, new abilities..." class="w-full bg-black/40 border border-zinc-800 rounded p-2 text-xs h-28 outline-none text-zinc-300"></textarea>
+    </div>
+</div>
+
+<div class="card border-rose-900/40">
+    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-backstory')">
+        <span class="trait-label text-rose-400">Backstory</span>
+        <span class="text-zinc-600 text-[9px]" id="sec-backstory-tog">▼</span>
+    </div>
+    <div id="sec-backstory" class="mt-2">
+        <textarea id="backstory" placeholder="Your character's history, motivations, connections..." class="w-full bg-black/40 border border-zinc-800 rounded p-2 text-xs h-36 outline-none text-zinc-300"></textarea>
+    </div>
+</div>
+
+<div class="fixed bottom-0 left-0 right-0 bg-zinc-900 border-t border-zinc-800 p-2 z-40">
+    <div class="max-w-md mx-auto flex gap-2">
+        <button onclick="saveSheet()" class="flex-1 bg-indigo-600 text-[9px] py-2 rounded font-bold uppercase">⬇ Export</button>
+        <button onclick="loadSheet()" class="flex-1 bg-zinc-700 text-[9px] py-2 rounded font-bold uppercase">⬆ Import</button>
+        <button onclick="clearSheet()" class="flex-1 bg-red-900 text-[9px] py-2 rounded font-bold uppercase">Clear</button>
+    </div>
+</div>
+
+<div id="cardModal" class="fixed inset-0 bg-black/95 hidden z-50 p-4 overflow-y-auto">
+    <div class="max-w-md mx-auto bg-zinc-900 border border-zinc-700 rounded-lg p-4 shadow-2xl">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="font-black text-indigo-400 text-sm uppercase">SRD Library</h2>
+            <button onclick="closeDatabase()" class="text-zinc-500 hover:text-white text-xl">✕</button>
+        </div>
+
+        <div class="space-y-3 mb-4">
+            <select id="dataType" class="w-full bg-black border border-zinc-700 rounded p-2 text-xs text-white" onchange="fetchData()">
+                <option value="">Choose Category...</option>
+                <option value="ancestries.json">Ancestries</option>
+                <option value="communities.json">Communities</option>
+                <option value="domain-cards.json">Domain Cards</option>
+                <option value="subclasses.json">Subclasses</option>
+            </select>
+            <input type="text" id="cardSearch" placeholder="Filter by name..." class="w-full bg-black border border-zinc-700 rounded p-2 text-xs text-white" oninput="filterCards()">
+        </div>
+
+        <div id="modalResults" class="space-y-2 max-h-[60vh] overflow-y-auto pr-2">
+        </div>
+    </div>
+</div>
+
+<script>
+    const GITHUB_RAW = "https://raw.githubusercontent.com/daggersearch/daggerheart-data/main/core/";
+    let currentData = [];
+    let addedCards = new Set();
+
+    let savedCardsData = [];
+
+    const SAVE_KEY = 'dh_sheet_v1';
+
+    const FIELD_IDS = ['charName','charPronouns','charLevel','charHeritage','charClass',
+        'track_ev','t_agi','t_str','t_fin','t_inst','t_pres','t_know',
+        'hp_max','stress_max','hope_max','armor_max','track_mi','track_ma',
+        'wep1_name','wep1_trait','wep1_dmg','wep2_name','wep2_trait','wep2_dmg',
+        'armor_name','armor_trait','armor_score',
+        'gold_hand','gold_bags'];
+    const TEXTAREA_IDS = ['levelupNotes','backstory'];
+
+    function getDotStates() {
+        const states = {};
+        ['hp','stress','hope','armor'].forEach(type => {
+            const dots = document.getElementById(`${type}_dots`);
+            if (!dots) return;
+            states[type] = Array.from(dots.children).map(d => d.classList.contains(`filled-${type}`));
+        });
+        return states;
+    }
+
+    function setDotStates(states) {
+        if (!states) return;
+        Object.keys(states).forEach(type => {
+            const dots = document.getElementById(`${type}_dots`);
+            if (!dots) return;
+            states[type].forEach((filled, i) => {
+                if (dots.children[i] && filled) dots.children[i].classList.add(`filled-${type}`);
+            });
+        });
+    }
+
+    function gatherData() {
+        const data = { fields: {}, textareas: {}, dots: getDotStates(), cards: savedCardsData, experience: getExperienceData(), inventory: getInventoryData() };
+        FIELD_IDS.forEach(id => { const el = document.getElementById(id); if (el) data.fields[id] = el.value; });
+        TEXTAREA_IDS.forEach(id => { const el = document.getElementById(id); if (el) data.textareas[id] = el.value; });
+        return data;
+    }
+
+    function autoCache() {
+        localStorage.setItem(SAVE_KEY, JSON.stringify(gatherData()));
+    }
+
+    function saveSheet() {
+        const data = gatherData();
+        localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const charName = data.fields.charName || 'character';
+        const date = new Date().toISOString().slice(0, 10);
+        a.download = `${charName}_${date}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function loadSheet(silent) {
+        if (!silent) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    try {
+                        const data = JSON.parse(ev.target.result);
+                        applyData(data);
+                        localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+                        alert('Sheet loaded from file!');
+                    } catch { alert('Invalid file.'); }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+            return;
+        }
+        const raw = localStorage.getItem(SAVE_KEY);
+        if (!raw) return;
+        applyData(JSON.parse(raw));
+    }
+
+    function applyData(data) {
+        FIELD_IDS.forEach(id => { const el = document.getElementById(id); if (el && data.fields?.[id] !== undefined) el.value = data.fields[id]; });
+        TEXTAREA_IDS.forEach(id => { const el = document.getElementById(id); if (el && data.textareas?.[id] !== undefined) el.value = data.textareas[id]; });
+        ['hp','stress','hope','armor'].forEach(t => renderDots(t, document.getElementById(`${t}_max`)?.value || 0));
+        setDotStates(data.dots);
+        document.getElementById('domainCards').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
+        document.getElementById('generalCards').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
+        addedCards.clear();
+        savedCardsData = data.cards || [];
+        savedCardsData.forEach(c => addCardToSheet(c));
+        // Restore experience
+        document.getElementById('experienceList').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
+        if (data.experience && data.experience.length) {
+            data.experience.forEach(e => addExperience(e.name, e.value));
+        }
+        // Restore inventory
+        document.getElementById('inventoryList').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
+        if (data.inventory && data.inventory.length) {
+            data.inventory.forEach(item => addInventoryItem(item));
+        }
+    }
+
+    function clearSheet() {
+        if (!confirm('Clear all data? This cannot be undone.')) return;
+        localStorage.removeItem(SAVE_KEY);
+        FIELD_IDS.forEach(id => { const el = document.getElementById(id); if (el) el.value = el.type === 'number' ? '0' : ''; });
+        document.getElementById('track_ev').value = '10';
+        document.getElementById('hp_max').value = '6';
+        document.getElementById('stress_max').value = '6';
+        document.getElementById('hope_max').value = '6';
+        document.getElementById('armor_max').value = '3';
+        TEXTAREA_IDS.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+        ['hp','stress','hope','armor'].forEach(t => renderDots(t, document.getElementById(`${t}_max`)?.value || 0));
+        document.getElementById('domainCards').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
+        document.getElementById('generalCards').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
+        addedCards.clear();
+        savedCardsData = [];
+        document.getElementById('experienceList').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
+        document.getElementById('inventoryList').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
+        autoCache();
+        alert('Sheet cleared!');
+    }
+
+    const CATEGORY_LABELS = {
+        'ancestries.json': 'Ancestry',
+        'communities.json': 'Community',
+        'subclasses.json': 'Subclass',
+    };
+
+    function openDatabase() {
+        document.getElementById('cardModal').classList.remove('hidden');
+        if (currentData.length) displayResults(currentData);
+    }
+    function closeDatabase() { document.getElementById('cardModal').classList.add('hidden'); }
+
+    async function fetchData() {
+        const file = document.getElementById('dataType').value;
+        if (!file) return;
+
+        const container = document.getElementById('modalResults');
+        container.innerHTML = '<div class="text-center py-10 text-[10px] text-zinc-500 animate-pulse uppercase">Fetching Data...</div>';
+
+        try {
+            const response = await fetch(GITHUB_RAW + file);
+            const json = await response.json();
+
+            // --- THE FLATTENER ---
+            // Daggerheart data can be in card.cards, card.items, or just a raw array.
+            // This logic finds the list regardless of the key name.
+            if (Array.isArray(json)) {
+                currentData = json;
+            } else {
+                // Search for the first property that is an array (e.g., "cards", "ancestries")
+                const key = Object.keys(json).find(k => Array.isArray(json[k]));
+                currentData = key ? json[key] : [];
+            }
+
+            // Sort domain cards by level low→high
+            if (file === 'domain-cards.json') {
+                currentData.sort((a, b) => (a.level || 0) - (b.level || 0));
+            }
+
+            // Flatten subclasses into individual tier features
+            if (file === 'subclasses.json') {
+                const flat = [];
+                currentData.forEach(sc => {
+                    const scName = t(sc.name);
+                    const cls = sc.class || '';
+                    ['foundation', 'specialization', 'mastery'].forEach(tier => {
+                        if (sc[tier] && Array.isArray(sc[tier].features)) {
+                            sc[tier].features.forEach(f => {
+                                flat.push({
+                                    _display: `${scName} — ${tier.charAt(0).toUpperCase() + tier.slice(1)}`,
+                                    name: f.name,
+                                    description: f.description,
+                                    _tier: tier,
+                                    _class: cls
+                                });
+                            });
+                        }
+                    });
+                });
+                currentData = flat;
+            }
+
+            console.log("Data loaded from GitHub:", currentData);
+            displayResults(currentData);
+        } catch (e) {
+            container.innerHTML = `<div class="text-red-500 text-center p-4">Error: ${e.message}</div>`;
+        }
+    }
+
+    // Extract localized text from Daggerheart's nested structures
+    function t(val) {
+        if (!val) return '';
+        if (typeof val === 'string') return val;
+        if (val['en-US']) return val['en-US'];
+        return String(val);
+    }
+
+    const DOMAIN_COLORS = {
+        ARCANA:   { text: '#9b6fbf', border: '#391F48', bg: '#391F4830', icon: 'images/arcana.png' },
+        BLADE:    { text: '#c75a4a', border: '#933728', bg: '#93372830', icon: 'images/blade.png' },
+        BLOOD:    { text: '#b83a3d', border: '#760306', bg: '#76030630', icon: 'images/blood.png' },
+        BONE:     { text: '#999a9c', border: '#666769', bg: '#66676930', icon: 'images/bone.png' },
+        CODEX:    { text: '#5b82c4', border: '#19284A', bg: '#19284A30', icon: 'images/codex.png' },
+        DREAD:    { text: '#8a7fc4', border: '#453C7F', bg: '#453C7F30', icon: 'images/dread.png' },
+        GRACE:    { text: '#c46e9e', border: '#883C6E', bg: '#883C6E30', icon: 'images/grace.png' },
+        MIDNIGHT: { text: '#7a7a82', border: '#26252A', bg: '#26252A50', icon: 'images/midnight.png' },
+        SAGE:     { text: '#3da86a', border: '#044320', bg: '#04432030', icon: 'images/sage.png' },
+        SPLENDOR: { text: '#d4af5e', border: '#BF9947', bg: '#BF994730', icon: 'images/splendor.png' },
+        VALOR:    { text: '#d49050', border: '#A66828', bg: '#A6682830', icon: 'images/valor.png' },
+    };
+
+    function domainColor(domain) {
+        return DOMAIN_COLORS[domain] || { text: '#a1a1aa', border: '#3f3f46', bg: '#3f3f4620' };
+    }
+
+    function parseDesc(descArr) {
+        if (!Array.isArray(descArr)) return t(descArr) || '';
+        return descArr.map(d => {
+            if (d.paragraph) return `<p>${t(d.paragraph)}</p>`;
+            if (d.list) return d.list.map(li => `<p>• ${t(li)}</p>`).join('');
+            return t(d);
+        }).filter(Boolean).join('');
+    }
+
+    function parseItem(item) {
+        const name = t(item.name) || t(item.title) || 'Unnamed Card';
+        let desc = parseDesc(item.description) || t(item.text) || t(item.ability) || t(item.effect) || '';
+        let feature = '';
+        if (Array.isArray(item.features) && item.features.length) {
+            feature = item.features.map(f => {
+                const fn = t(f.name);
+                const fd = parseDesc(f.description);
+                return fn ? `<b>${fn}</b>: ${fd}` : fd;
+            }).join('<br>');
+        }
+        return { name, desc, feature };
+    }
+
+    function displayResults(data) {
+        const container = document.getElementById('modalResults');
+        container.innerHTML = '';
+
+        if (!data || data.length === 0) {
+            container.innerHTML = '<div class="text-zinc-600 text-center py-10 text-xs">No entries found.</div>';
+            return;
+        }
+
+        const category = document.getElementById('dataType').value;
+        const isDomainCards = category === 'domain-cards.json';
+
+        data.forEach((item) => {
+            const { name, desc, feature } = parseItem(item);
+            const label = item._display || '';
+            const tierColors = { foundation: 'text-green-400', specialization: 'text-yellow-400', mastery: 'text-red-400' };
+            const tierColor = tierColors[item._tier] || '';
+            const dc = isDomainCards ? domainColor(item.domain) : null;
+
+            const cardKey = (label ? `${label}: ${name}` : name).toLowerCase();
+            const alreadyAdded = addedCards.has(cardKey);
+
+            const div = document.createElement('div');
+            div.className = `p-3 bg-black border rounded mb-2 transition-all ${alreadyAdded ? 'opacity-40 cursor-default' : 'cursor-pointer'}`;
+            if (dc) {
+                div.style.borderColor = dc.border;
+                div.style.backgroundColor = dc.bg;
+            } else {
+                div.classList.add('border-zinc-800');
+                if (!alreadyAdded) div.classList.add('hover:border-indigo-500');
+            }
+
+            if (!alreadyAdded) {
+                div.onclick = () => {
+                    addCardToSheet({
+                        name: label ? `${label}: ${name}` : name,
+                        desc, feature, category,
+                        domain: item.domain || '',
+                        type: item.type || '',
+                        level: item.level,
+                        recallCost: item.recallCost
+                    });
+                    closeDatabase();
+                };
+            }
+
+            const addedBadge = alreadyAdded ? '<span class="text-[8px] bg-zinc-700 text-zinc-400 px-1.5 py-0.5 rounded">✓ Added</span>' : '';
+
+            const domainBadge = isDomainCards
+                ? `<img src="${dc.icon}" class="w-4 h-4" alt="${item.domain}">
+                   <span class="text-[8px] font-bold uppercase px-1 rounded" style="color:${dc.text}">${item.domain}</span>
+                   <span class="text-[8px] text-zinc-500">Lvl ${item.level} · Recall ${item.recallCost}</span>`
+                : '';
+
+            div.innerHTML = `
+            ${label ? `<div class="text-[12px] font-bold uppercase ${tierColor} mb-0.5">${label}</div>` : ''}
+            ${domainBadge ? `<div class="flex gap-2 items-center mb-0.5">${domainBadge}</div>` : ''}
+            <div class="flex items-center gap-2 mb-1">
+                <span class="text-[12px] font-black uppercase" ${dc ? `style="color:${dc.text}"` : 'class="text-indigo-300"'}>${name}</span>
+                ${addedBadge}
+            </div>
+            <p class="text-[11px] text-zinc-400 line-clamp-3">${desc}</p>
+            ${feature ? `<p class="text-[11px] text-zinc-300 mt-1">${feature}</p>` : ''}
+        `;
+            container.appendChild(div);
+        });
+    }
+
+    function addCardToSheet(opts) {
+        const { name, desc, feature, category, domain, type, level, recallCost } = opts;
+        const isDomain = category === 'domain-cards.json';
+        const container = document.getElementById(isDomain ? 'domainCards' : 'generalCards');
+        if (container.innerText.trim() === 'None') container.innerHTML = '';
+
+        const cardKey = name.toLowerCase();
+        addedCards.add(cardKey);
+        // Track for save
+        if (!savedCardsData.find(c => c.name.toLowerCase() === cardKey)) {
+            savedCardsData.push(opts);
+        }
+
+        const id = 'card-' + Math.random().toString(36).substr(2, 9);
+        const dc = isDomain ? domainColor(domain) : null;
+        const borderStyle = dc ? `style="border-left-color:${dc.border}"` : 'style="border-left-color:#0d9488"';
+
+        const meta = '';
+
+        const html = `
+        <div class="p-3 bg-zinc-900 border-l-2 relative mb-2" ${borderStyle} id="${id}" data-card-name="${cardKey}">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-1.5 cursor-pointer" onclick="toggleCard('${id}')">
+                    ${dc ? `<img src="${dc.icon}" class="w-4 h-4" alt="${domain}">` : ''}
+                    <span class="text-[10px] font-black uppercase" ${dc ? `style="color:${dc.text}"` : ''}>${name}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    ${isDomain ? `<span class="text-[8px] font-bold uppercase" style="color:${dc.text}">${domain}</span>` : ''}
+                    ${isDomain ? `<span class="text-[8px] text-zinc-500 whitespace-nowrap">Lvl ${level} | Recall ${recallCost}</span>` : ''}
+                    ${!isDomain ? `<span class="text-[8px] text-zinc-500 uppercase">${CATEGORY_LABELS[category] || category}</span>` : ''}
+                    ${isDomain ? `<button onclick="moveCard('${id}',-1)" class="text-zinc-600 hover:text-white text-[10px]">▲</button>
+                    <button onclick="moveCard('${id}',1)" class="text-zinc-600 hover:text-white text-[10px]">▼</button>` : ''}
+                    <button onclick="toggleCard('${id}')" class="text-zinc-500 hover:text-white text-[9px]" id="${id}-tog">▼</button>
+                    <button onclick="removeCard('${id}')" class="text-zinc-700 hover:text-red-500 text-xs">✕</button>
+                </div>
+            </div>
+            <div id="${id}-body" class="mt-1">
+                ${meta}
+                ${feature ? `<div class="text-[11px] text-zinc-300 leading-tight mb-1">${feature}</div>` : ''}
+                ${desc ? `<div class="text-[11px] text-zinc-300 leading-tight">${desc}</div>` : ''}
+            </div>
+        </div>
+    `;
+        container.insertAdjacentHTML('beforeend', html);
+        autoCache();
+    }
+
+    function addInventoryItem(text) {
+        const container = document.getElementById('inventoryList');
+        if (container.innerText.trim() === 'None') container.innerHTML = '';
+        const id = 'inv-' + Math.random().toString(36).substr(2, 9);
+        const val = text || '';
+        const html = `
+        <div class="flex items-center gap-2" id="${id}">
+            <input type="text" value="${val}" placeholder="Item..." class="flex-1 bg-black/40 border border-zinc-800 rounded px-2 py-1 text-[11px] text-zinc-300 outline-none" oninput="autoCache()">
+            <button onclick="removeInventoryItem('${id}')" class="text-zinc-700 hover:text-red-500 text-xs">✕</button>
+        </div>`;
+        container.insertAdjacentHTML('beforeend', html);
+        if (!text) autoCache();
+    }
+
+    function removeInventoryItem(id) {
+        document.getElementById(id).remove();
+        const container = document.getElementById('inventoryList');
+        if (!container.children.length) container.innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
+        autoCache();
+    }
+
+    function getInventoryData() {
+        const items = [];
+        document.querySelectorAll('#inventoryList > div[id^="inv-"]').forEach(el => {
+            items.push(el.querySelector('input').value);
+        });
+        return items;
+    }
+
+    function addExperience(name, value) {
+        const container = document.getElementById('experienceList');
+        if (container.innerText.trim() === 'None') container.innerHTML = '';
+        const id = 'exp-' + Math.random().toString(36).substr(2, 9);
+        const n = name || '';
+        const v = value || '';
+        const html = `
+        <div class="flex items-center gap-2" id="${id}">
+            <input type="text" value="${n}" placeholder="Name..." class="flex-1 bg-black/40 border border-zinc-800 rounded px-2 py-1 text-[11px] text-zinc-300 outline-none" oninput="autoCache()">
+            <input type="text" value="${v}" placeholder="+0" class="w-12 bg-black/40 border border-zinc-800 rounded px-2 py-1 text-[11px] text-zinc-300 text-center outline-none" oninput="autoCache()">
+            <button onclick="removeExperience('${id}')" class="text-zinc-700 hover:text-red-500 text-xs">✕</button>
+        </div>`;
+        container.insertAdjacentHTML('beforeend', html);
+        if (!name && !value) autoCache();
+    }
+
+    function removeExperience(id) {
+        document.getElementById(id).remove();
+        const container = document.getElementById('experienceList');
+        if (!container.children.length) container.innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
+        autoCache();
+    }
+
+    function getExperienceData() {
+        const items = [];
+        document.querySelectorAll('#experienceList > div[id^="exp-"]').forEach(el => {
+            const inputs = el.querySelectorAll('input');
+            items.push({ name: inputs[0].value, value: inputs[1].value });
+        });
+        return items;
+    }
+
+    function toggleSection(id) {
+        const el = document.getElementById(id);
+        const tog = document.getElementById(id + '-tog');
+        const hidden = el.style.display === 'none';
+        el.style.display = hidden ? '' : 'none';
+        tog.textContent = hidden ? '▼' : '▶';
+    }
+
+    function removeCard(id) {
+        if (confirm('Remove this card?')) {
+            const el = document.getElementById(id);
+            const cardName = el.getAttribute('data-card-name');
+            if (cardName) {
+                addedCards.delete(cardName);
+                savedCardsData = savedCardsData.filter(c => c.name.toLowerCase() !== cardName);
+            }
+            el.remove();
+            autoCache();
+        }
+    }
+
+    function moveCard(id, dir) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (dir === -1 && el.previousElementSibling) {
+            el.parentNode.insertBefore(el, el.previousElementSibling);
+        } else if (dir === 1 && el.nextElementSibling) {
+            el.parentNode.insertBefore(el.nextElementSibling, el);
+        }
+    }
+
+    function toggleCard(id) {
+        const body = document.getElementById(id + '-body');
+        const tog = document.getElementById(id + '-tog');
+        const hidden = body.style.display === 'none';
+        body.style.display = hidden ? '' : 'none';
+        tog.textContent = hidden ? '▼' : '▶';
+    }
+
+    function filterCards() {
+        const query = document.getElementById('cardSearch').value.toLowerCase();
+        const filtered = currentData.filter(c => {
+            const n = t(c.name || c.title || '').toLowerCase();
+            const label = (c._display || '').toLowerCase();
+            return n.includes(query) || label.includes(query);
+        });
+        displayResults(filtered);
+    }
+
+    // Basic Dot Rendering (Stateless)
+    function renderDots(type, count) {
+        const container = document.getElementById(`${type}_dots`);
+        if(!container) return;
+        container.innerHTML = '';
+        for (let i = 1; i <= count; i++) {
+            const dot = document.createElement('div');
+            dot.className = `dot ${type}-dot`;
+            dot.onclick = () => { dot.classList.toggle(`filled-${type}`); autoCache(); };
+            container.appendChild(dot);
+        }
+    }
+
+    window.onload = () => {
+        ['hp', 'stress', 'hope', 'armor'].forEach(t => {
+            const input = document.getElementById(`${t}_max`);
+            if(input) {
+                renderDots(t, input.value);
+                input.onchange = (e) => renderDots(t, e.target.value);
+            }
+        });
+        // Auto-load on start
+        const raw = localStorage.getItem(SAVE_KEY);
+        if (raw) loadSheet(true);
+        // Auto-cache on any input change
+        document.addEventListener('input', autoCache);
+        document.addEventListener('change', autoCache);
+    }
+</script>
+</body>
+</html>
