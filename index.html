@@ -23,13 +23,20 @@
 </head>
 <body class="max-w-md mx-auto p-4 pb-24">
 
+<div class="flex gap-1 mb-4 sticky top-0 z-30 bg-[#0d0d0d] pt-1 pb-2">
+    <button onclick="switchTab('tab-sheet')" id="btn-tab-sheet" class="flex-1 text-[10px] font-bold uppercase py-2 rounded bg-indigo-600">Sheet</button>
+    <button onclick="switchTab('tab-story')" id="btn-tab-story" class="flex-1 text-[10px] font-bold uppercase py-2 rounded bg-zinc-800 text-zinc-500">Story</button>
+</div>
+
+<div id="tab-sheet">
+
 <div class="card bg-zinc-900/50">
     <div class="grid grid-cols-2 gap-4">
         <div class="col-span-2">
             <input id="charName" type="text" placeholder="CHARACTER NAME" class="input-underline text-xl font-black text-left">
         </div>
         <input id="charPronouns" type="text" placeholder="PRONOUNS" class="input-underline text-xs text-left">
-        <input id="charLevel" type="text" placeholder="LEVEL" class="input-underline text-xs text-left">
+        <input id="charLevel" type="number" placeholder="LEVEL" class="input-underline text-xs text-left" value="1">
         <input id="charHeritage" type="text" placeholder="HERITAGE" class="input-underline text-xs text-left">
         <input id="charClass" type="text" placeholder="CLASS & SUBCLASS" class="input-underline text-xs text-left">
     </div>
@@ -41,14 +48,14 @@
         <input id="track_ev" type="number" class="w-full bg-transparent text-lg font-bold text-center" value="10">
     </div>
     <div class="col-span-3 grid grid-cols-3 gap-2">
-        <div class="trait-box"><span class="trait-label">AGI</span><input id="t_agi" type="text" class="w-full bg-transparent text-center" value="0"></div>
-        <div class="trait-box"><span class="trait-label">STR</span><input id="t_str" type="text" class="w-full bg-transparent text-center" value="0"></div>
-        <div class="trait-box"><span class="trait-label">FIN</span><input id="t_fin" type="text" class="w-full bg-transparent text-center" value="0"></div>
+        <div class="trait-box"><span class="trait-label">Agility</span><input id="t_agi" type="text" class="w-full bg-transparent text-center" value="0"></div>
+        <div class="trait-box"><span class="trait-label">Strength</span><input id="t_str" type="text" class="w-full bg-transparent text-center" value="0"></div>
+        <div class="trait-box"><span class="trait-label">Finesse</span><input id="t_fin" type="text" class="w-full bg-transparent text-center" value="0"></div>
     </div>
     <div class="col-span-4 grid grid-cols-3 gap-2">
-        <div class="trait-box"><span class="trait-label">INST</span><input id="t_inst" type="text" class="w-full bg-transparent text-center" value="0"></div>
-        <div class="trait-box"><span class="trait-label">PRES</span><input id="t_pres" type="text" class="w-full bg-transparent text-center" value="0"></div>
-        <div class="trait-box"><span class="trait-label">KNOW</span><input id="t_know" type="text" class="w-full bg-transparent text-center" value="0"></div>
+        <div class="trait-box"><span class="trait-label">Instinct</span><input id="t_inst" type="text" class="w-full bg-transparent text-center" value="0"></div>
+        <div class="trait-box"><span class="trait-label">Presence</span><input id="t_pres" type="text" class="w-full bg-transparent text-center" value="0"></div>
+        <div class="trait-box"><span class="trait-label">Knowledge</span><input id="t_know" type="text" class="w-full bg-transparent text-center" value="0"></div>
     </div>
 </div>
 
@@ -91,24 +98,31 @@
         <span class="trait-label text-zinc-500 mb-1">Damage Thresholds</span>
         <div class="flex items-center justify-between gap-1 text-center mt-1">
             <div class="flex-1">
-                <div class="text-[9px] font-bold text-gray-400">MINOR</div>
-                <div class="text-[7px] text-gray-600">1 HP</div>
-            </div>
-            <div class="w-12">
-                <input id="track_mi" type="number" class="w-full bg-gray-800 border border-gray-700 rounded py-1 text-center font-bold text-indigo-400 outline-none" placeholder="0">
-            </div>
-            <div class="flex-1">
                 <div class="text-[9px] font-bold text-gray-400">MAJOR</div>
                 <div class="text-[7px] text-gray-600">2 HP</div>
             </div>
-            <div class="w-12">
-                <input id="track_ma" type="number" class="w-full bg-gray-800 border border-gray-700 rounded py-1 text-center font-bold text-indigo-400 outline-none" placeholder="0">
+            <div class="w-16">
+                <div id="thresh_major" class="w-full bg-gray-800 border border-gray-700 rounded py-1 text-center font-bold text-indigo-400 text-sm">0</div>
             </div>
             <div class="flex-1">
                 <div class="text-[9px] font-bold text-gray-400">SEVERE</div>
                 <div class="text-[7px] text-gray-600">3 HP</div>
             </div>
+            <div class="w-16">
+                <div id="thresh_severe" class="w-full bg-gray-800 border border-gray-700 rounded py-1 text-center font-bold text-indigo-400 text-sm">0</div>
+            </div>
         </div>
+        <div class="flex items-center justify-between gap-1 text-center mt-2">
+            <div class="flex-1">
+                <div class="text-[7px] text-zinc-600">MAJOR EXTRA</div>
+                <input id="thresh_major_extra" type="number" value="0" class="w-12 mx-auto bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center text-[10px] outline-none" oninput="updateThresholds()">
+            </div>
+            <div class="flex-1">
+                <div class="text-[7px] text-zinc-600">SEVERE EXTRA</div>
+                <input id="thresh_severe_extra" type="number" value="0" class="w-12 mx-auto bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center text-[10px] outline-none" oninput="updateThresholds()">
+            </div>
+        </div>
+        <div class="text-[7px] text-zinc-600 text-center mt-1">Auto: Armor Base + Level + Extra</div>
     </div>
 
     </div>
@@ -123,23 +137,81 @@
     <div class="space-y-4">
         <div class="border-b border-zinc-800 pb-2">
             <input id="wep1_name" type="text" placeholder="Weapon Name" class="bg-transparent text-sm w-full font-bold outline-none">
-            <div class="flex justify-between text-[10px] text-zinc-500 mt-1">
-                <input id="wep1_trait" type="text" placeholder="Trait/Range" class="bg-transparent w-1/2">
-                <input id="wep1_dmg" type="text" placeholder="Dmg Dice" class="bg-transparent w-1/2 text-right">
+            <div class="grid grid-cols-4 gap-2 text-[10px] text-zinc-500 mt-1">
+                <div class="text-center">
+                    <div class="text-[7px] text-zinc-600 mb-0.5">TRAIT</div>
+                    <select id="wep1_trait" class="w-full bg-black/40 border border-zinc-800 rounded px-0.5 py-0.5 text-center outline-none text-[9px]" onchange="updateAttackBonus()">
+                        <option value="">—</option>
+                        <option value="t_agi">Agility</option>
+                        <option value="t_str">Strength</option>
+                        <option value="t_fin">Finesse</option>
+                        <option value="t_inst">Instinct</option>
+                        <option value="t_pres">Presence</option>
+                        <option value="t_know">Knowledge</option>
+                    </select>
+                </div>
+                <div class="text-center">
+                    <div class="text-[7px] text-zinc-600 mb-0.5">RANGE</div>
+                    <input id="wep1_range" type="text" placeholder="—" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center outline-none">
+                </div>
+                <div class="text-center">
+                    <div class="text-[7px] text-zinc-600 mb-0.5">DAMAGE</div>
+                    <input id="wep1_dmg" type="text" placeholder="—" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center outline-none">
+                </div>
+                <div class="text-center">
+                    <div class="text-[7px] text-zinc-600 mb-0.5">ATK BONUS</div>
+                    <div id="wep1_atk" class="w-full bg-gray-800 border border-gray-700 rounded py-0.5 text-center font-bold text-indigo-400 text-[10px]">—</div>
+                </div>
             </div>
         </div>
         <div>
             <input id="wep2_name" type="text" placeholder="Weapon Name" class="bg-transparent text-sm w-full font-bold outline-none">
-            <div class="flex justify-between text-[10px] text-zinc-500 mt-1">
-                <input id="wep2_trait" type="text" placeholder="Trait/Range" class="bg-transparent w-1/2">
-                <input id="wep2_dmg" type="text" placeholder="Dmg Dice" class="bg-transparent w-1/2 text-right">
+            <div class="grid grid-cols-4 gap-2 text-[10px] text-zinc-500 mt-1">
+                <div class="text-center">
+                    <div class="text-[7px] text-zinc-600 mb-0.5">TRAIT</div>
+                    <select id="wep2_trait" class="w-full bg-black/40 border border-zinc-800 rounded px-0.5 py-0.5 text-center outline-none text-[9px]" onchange="updateAttackBonus()">
+                        <option value="">—</option>
+                        <option value="t_agi">Agility</option>
+                        <option value="t_str">Strength</option>
+                        <option value="t_fin">Finesse</option>
+                        <option value="t_inst">Instinct</option>
+                        <option value="t_pres">Presence</option>
+                        <option value="t_know">Knowledge</option>
+                    </select>
+                </div>
+                <div class="text-center">
+                    <div class="text-[7px] text-zinc-600 mb-0.5">RANGE</div>
+                    <input id="wep2_range" type="text" placeholder="—" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center outline-none">
+                </div>
+                <div class="text-center">
+                    <div class="text-[7px] text-zinc-600 mb-0.5">DAMAGE</div>
+                    <input id="wep2_dmg" type="text" placeholder="—" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center outline-none">
+                </div>
+                <div class="text-center">
+                    <div class="text-[7px] text-zinc-600 mb-0.5">ATK BONUS</div>
+                    <div id="wep2_atk" class="w-full bg-gray-800 border border-gray-700 rounded py-0.5 text-center font-bold text-indigo-400 text-[10px]">—</div>
+                </div>
             </div>
         </div>
         <div class="border-t border-zinc-800 pt-2">
             <input id="armor_name" type="text" placeholder="Armor Name" class="bg-transparent text-sm w-full font-bold outline-none">
-            <div class="flex justify-between text-[10px] text-zinc-500 mt-1">
-                <input id="armor_trait" type="text" placeholder="Trait/Feature" class="bg-transparent w-1/2">
-                <input id="armor_score" type="text" placeholder="Score/Base" class="bg-transparent w-1/2 text-right">
+            <div class="grid grid-cols-3 gap-2 text-[10px] text-zinc-500 mt-1">
+                <div class="text-center">
+                    <div class="text-[7px] text-zinc-600 mb-0.5">MAJOR</div>
+                    <input id="armor_thresh_major" type="number" placeholder="0" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center outline-none" value="0" oninput="updateThresholds()">
+                </div>
+                <div class="text-center">
+                    <div class="text-[7px] text-zinc-600 mb-0.5">SEVERE</div>
+                    <input id="armor_thresh_severe" type="number" placeholder="0" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center outline-none" value="0" oninput="updateThresholds()">
+                </div>
+                <div class="text-center">
+                    <div class="text-[7px] text-zinc-600 mb-0.5">SCORE</div>
+                    <input id="armor_score" type="text" placeholder="0" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center outline-none">
+                </div>
+            </div>
+            <div class="mt-1">
+                <div class="text-[7px] text-zinc-600 mb-0.5">FEATURE</div>
+                <input id="armor_feature" type="text" placeholder="Armor feature..." class="w-full bg-black/40 border border-zinc-800 rounded px-2 py-0.5 text-[10px] outline-none">
             </div>
         </div>
     </div>
@@ -206,6 +278,10 @@
     </div>
 </div>
 
+</div>
+
+<div id="tab-story" style="display:none">
+
 <div class="card border-emerald-900/40">
     <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-levelup')">
         <span class="trait-label text-emerald-400">Level Up Notes</span>
@@ -224,6 +300,47 @@
     <div id="sec-backstory" class="mt-2">
         <textarea id="backstory" placeholder="Your character's history, motivations, connections..." class="w-full bg-black/40 border border-zinc-800 rounded p-2 text-xs h-36 outline-none text-zinc-300"></textarea>
     </div>
+</div>
+
+<div class="card border-violet-900/40">
+    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-description')">
+        <span class="trait-label text-violet-400">Character Description</span>
+        <span class="text-zinc-600 text-[9px]" id="sec-description-tog">▼</span>
+    </div>
+    <div id="sec-description" class="mt-2 space-y-2">
+        <div>
+            <div class="text-[8px] text-zinc-600 mb-0.5">CLOTHES</div>
+            <input id="desc_clothes" type="text" placeholder="extravagant, fancy, loud, oversized, ragged, sleek, wild..." class="w-full bg-black/40 border border-zinc-800 rounded px-2 py-1 text-[11px] outline-none">
+        </div>
+        <div>
+            <div class="text-[8px] text-zinc-600 mb-0.5">EYES</div>
+            <input id="desc_eyes" type="text" placeholder="carnations, earth, endless ocean, fire, ivy, lilacs, night..." class="w-full bg-black/40 border border-zinc-800 rounded px-2 py-1 text-[11px] outline-none">
+        </div>
+        <div>
+            <div class="text-[8px] text-zinc-600 mb-0.5">BODY</div>
+            <input id="desc_body" type="text" placeholder="broad, carved, curvy, lanky, rotund, short, stocky, tall..." class="w-full bg-black/40 border border-zinc-800 rounded px-2 py-1 text-[11px] outline-none">
+        </div>
+        <div>
+            <div class="text-[8px] text-zinc-600 mb-0.5">SKIN</div>
+            <input id="desc_skin" type="text" placeholder="ashes, clover, falling snow, fine sand, obsidian, rose..." class="w-full bg-black/40 border border-zinc-800 rounded px-2 py-1 text-[11px] outline-none">
+        </div>
+        <div>
+            <div class="text-[8px] text-zinc-600 mb-0.5">ATTITUDE</div>
+            <input id="desc_attitude" type="text" placeholder="a barkeep, a magician, a ringmaster, a rock star..." class="w-full bg-black/40 border border-zinc-800 rounded px-2 py-1 text-[11px] outline-none">
+        </div>
+    </div>
+</div>
+
+<div class="card border-amber-900/40">
+    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-connections')">
+        <span class="trait-label text-amber-400">Background & Connections</span>
+        <span class="text-zinc-600 text-[9px]" id="sec-connections-tog">▼</span>
+    </div>
+    <div id="sec-connections" class="mt-2">
+        <textarea id="connections" placeholder="Background questions, connections to other characters, bonds, motivations..." class="w-full bg-black/40 border border-zinc-800 rounded p-2 text-xs h-40 outline-none text-zinc-300"></textarea>
+    </div>
+</div>
+
 </div>
 
 <div class="fixed bottom-0 left-0 right-0 bg-zinc-900 border-t border-zinc-800 p-2 z-40">
@@ -246,6 +363,7 @@
                 <option value="">Choose Category...</option>
                 <option value="ancestries.json">Ancestries</option>
                 <option value="communities.json">Communities</option>
+                <option value="classes.json">Classes</option>
                 <option value="domain-cards.json">Domain Cards</option>
                 <option value="subclasses.json">Subclasses</option>
             </select>
@@ -268,11 +386,13 @@
 
     const FIELD_IDS = ['charName','charPronouns','charLevel','charHeritage','charClass',
         'track_ev','t_agi','t_str','t_fin','t_inst','t_pres','t_know',
-        'hp_max','stress_max','hope_max','armor_max','track_mi','track_ma',
-        'wep1_name','wep1_trait','wep1_dmg','wep2_name','wep2_trait','wep2_dmg',
-        'armor_name','armor_trait','armor_score',
+        'hp_max','stress_max','hope_max','armor_max',
+        'wep1_name','wep1_trait','wep1_range','wep1_dmg','wep2_name','wep2_trait','wep2_range','wep2_dmg',
+        'armor_name','armor_thresh_major','armor_thresh_severe','armor_score','armor_feature',
+        'thresh_major_extra','thresh_severe_extra',
+        'desc_clothes','desc_eyes','desc_body','desc_skin','desc_attitude',
         'gold_hand','gold_bags'];
-    const TEXTAREA_IDS = ['levelupNotes','backstory'];
+    const TEXTAREA_IDS = ['levelupNotes','backstory','connections'];
 
     function getDotStates() {
         const states = {};
@@ -300,6 +420,35 @@
         FIELD_IDS.forEach(id => { const el = document.getElementById(id); if (el) data.fields[id] = el.value; });
         TEXTAREA_IDS.forEach(id => { const el = document.getElementById(id); if (el) data.textareas[id] = el.value; });
         return data;
+    }
+
+    function switchTab(tabId) {
+        document.getElementById('tab-sheet').style.display = tabId === 'tab-sheet' ? '' : 'none';
+        document.getElementById('tab-story').style.display = tabId === 'tab-story' ? '' : 'none';
+        document.getElementById('btn-tab-sheet').className = `flex-1 text-[10px] font-bold uppercase py-2 rounded ${tabId === 'tab-sheet' ? 'bg-indigo-600' : 'bg-zinc-800 text-zinc-500'}`;
+        document.getElementById('btn-tab-story').className = `flex-1 text-[10px] font-bold uppercase py-2 rounded ${tabId === 'tab-story' ? 'bg-indigo-600' : 'bg-zinc-800 text-zinc-500'}`;
+    }
+
+    function updateAttackBonus() {
+        [1, 2].forEach(n => {
+            const traitId = document.getElementById(`wep${n}_trait`).value;
+            const atkEl = document.getElementById(`wep${n}_atk`);
+            if (traitId) {
+                atkEl.textContent = document.getElementById(traitId).value || '0';
+            } else {
+                atkEl.textContent = '—';
+            }
+        });
+    }
+
+    function updateThresholds() {
+        const lvl = parseInt(document.getElementById('charLevel').value) || 0;
+        const baseMajor = parseInt(document.getElementById('armor_thresh_major').value) || 0;
+        const baseSevere = parseInt(document.getElementById('armor_thresh_severe').value) || 0;
+        const extraMajor = parseInt(document.getElementById('thresh_major_extra').value) || 0;
+        const extraSevere = parseInt(document.getElementById('thresh_severe_extra').value) || 0;
+        document.getElementById('thresh_major').textContent = baseMajor + lvl + extraMajor;
+        document.getElementById('thresh_severe').textContent = baseSevere + lvl + extraSevere;
     }
 
     function autoCache() {
@@ -371,6 +520,7 @@
         if (data.inventory && data.inventory.length) {
             data.inventory.forEach(item => addInventoryItem(item));
         }
+        updateThresholds();
     }
 
     function clearSheet() {
@@ -397,6 +547,7 @@
     const CATEGORY_LABELS = {
         'ancestries.json': 'Ancestry',
         'communities.json': 'Community',
+        'classes.json': 'Class',
         'subclasses.json': 'Subclass',
     };
 
@@ -409,6 +560,7 @@
     async function fetchData() {
         const file = document.getElementById('dataType').value;
         if (!file) return;
+        document.getElementById('cardSearch').value = '';
 
         const container = document.getElementById('modalResults');
         container.innerHTML = '<div class="text-center py-10 text-[10px] text-zinc-500 animate-pulse uppercase">Fetching Data...</div>';
@@ -433,6 +585,34 @@
                 currentData.sort((a, b) => (a.level || 0) - (b.level || 0));
             }
 
+            // Flatten classes into individual features
+            if (file === 'classes.json') {
+                const flat = [];
+                currentData.forEach(cls => {
+                    const clsName = cls.name || t(cls.name);
+                    const domains = (cls.domains || []).join(' / ');
+                    if (cls.hopeFeature) {
+                        flat.push({
+                            _display: `${clsName} — Hope Feature`,
+                            name: cls.hopeFeature.name,
+                            features: [cls.hopeFeature],
+                            _classInfo: domains
+                        });
+                    }
+                    if (Array.isArray(cls.classFeatures)) {
+                        cls.classFeatures.forEach(f => {
+                            flat.push({
+                                _display: `${clsName} — Class Feature`,
+                                name: f.name,
+                                features: [f],
+                                _classInfo: domains
+                            });
+                        });
+                    }
+                });
+                currentData = flat;
+            }
+
             // Flatten subclasses into individual tier features
             if (file === 'subclasses.json') {
                 const flat = [];
@@ -445,7 +625,7 @@
                                 flat.push({
                                     _display: `${scName} — ${tier.charAt(0).toUpperCase() + tier.slice(1)}`,
                                     name: f.name,
-                                    description: f.description,
+                                    features: [f],
                                     _tier: tier,
                                     _class: cls
                                 });
@@ -506,8 +686,9 @@
             feature = item.features.map(f => {
                 const fn = t(f.name);
                 const fd = parseDesc(f.description);
-                return fn ? `<b>${fn}</b>: ${fd}` : fd;
-            }).join('<br>');
+                if (fn) return `<div class="text-[11px] font-bold text-zinc-200 mt-1">${fn}</div><div class="text-[11px] text-zinc-400 leading-relaxed">${fd}</div>`;
+                return `<div class="text-[11px] text-zinc-400 leading-relaxed">${fd}</div>`;
+            }).join('');
         }
         return { name, desc, feature };
     }
@@ -546,9 +727,11 @@
 
             if (!alreadyAdded) {
                 div.onclick = () => {
+                    const skipDesc = ['communities.json','ancestries.json','classes.json'].includes(category);
                     addCardToSheet({
                         name: label ? `${label}: ${name}` : name,
-                        desc, feature, category,
+                        desc: skipDesc ? '' : desc,
+                        feature, category,
                         domain: item.domain || '',
                         type: item.type || '',
                         level: item.level,
@@ -566,14 +749,16 @@
                    <span class="text-[8px] text-zinc-500">Lvl ${item.level} · Recall ${item.recallCost}</span>`
                 : '';
 
+            const showDesc = !['communities.json','ancestries.json','classes.json'].includes(category);
+
             div.innerHTML = `
-            ${label ? `<div class="text-[12px] font-bold uppercase ${tierColor} mb-0.5">${label}</div>` : ''}
+            ${label ? `<div class="text-[12px] font-bold uppercase ${tierColor} mb-0.5">${label}${item._classInfo ? ` <span class="text-zinc-500 text-[9px] normal-case">(${item._classInfo})</span>` : ''}</div>` : ''}
             ${domainBadge ? `<div class="flex gap-2 items-center mb-0.5">${domainBadge}</div>` : ''}
             <div class="flex items-center gap-2 mb-1">
                 <span class="text-[12px] font-black uppercase" ${dc ? `style="color:${dc.text}"` : 'class="text-indigo-300"'}>${name}</span>
                 ${addedBadge}
             </div>
-            <p class="text-[11px] text-zinc-400 line-clamp-3">${desc}</p>
+            ${showDesc ? `<p class="text-[11px] text-zinc-400 line-clamp-3">${desc}</p>` : ''}
             ${feature ? `<p class="text-[11px] text-zinc-300 mt-1">${feature}</p>` : ''}
         `;
             container.appendChild(div);
@@ -762,8 +947,10 @@
         const raw = localStorage.getItem(SAVE_KEY);
         if (raw) loadSheet(true);
         // Auto-cache on any input change
-        document.addEventListener('input', autoCache);
-        document.addEventListener('change', autoCache);
+        document.addEventListener('input', () => { updateThresholds(); updateAttackBonus(); autoCache(); });
+        document.addEventListener('change', () => { updateThresholds(); updateAttackBonus(); autoCache(); });
+        updateThresholds();
+        updateAttackBonus();
     }
 </script>
 </body>
