@@ -2,20 +2,26 @@
 
 A lightweight, mobile-friendly digital character sheet for **Daggerheart TTRPG**, built as a single HTML page with no backend required.
 
+> 🎮 **Try it live:** [https://douglasvsegatto.github.io/daggerheart-character-sheet/](https://douglasvsegatto.github.io/daggerheart-character-sheet/) — no install needed, just open and play. Your data saves automatically in your browser.
+
 ## Features
 
+- **Tabbed Interface** — Sheet tab for gameplay, Story tab for roleplay/narrative
 - **Character Info** — Name, pronouns, level, heritage, class & subclass
 - **Attributes** — Evasion, Agility, Strength, Finesse, Instinct, Presence, Knowledge (supports +/- values)
 - **Status Tracking** — Clickable dots for HP, Stress, Hope, and Armor with configurable max values
-- **Damage Thresholds** — Minor, Major, and Severe tracking
-- **Weapons & Armor** — Two weapon slots and an armor slot
-- **Gold & Gear** — Handfuls/Bags counters with a dynamic inventory list
+- **Damage Thresholds** — Auto-calculated from Armor Base + Character Level + Extras
+- **Weapons & Armor** — Two weapon slots with trait dropdown, range, damage, and auto-calculated attack bonus; armor slot with base thresholds, score, and feature
+- **Gold & Gear** — Handfuls/Bags counters with a dynamic inventory list (add/remove items)
 - **Abilities & Cards** — Pull directly from the [Daggerheart SRD data](https://github.com/daggersearch/daggerheart-data) with support for:
   - **Domain Cards** — Color-coded by domain with icons, sorted by level, showing recall cost
-  - **Communities** — Name, description, and feature
-  - **Ancestries** — Name, description, and feature
+  - **Communities** — Name and feature
+  - **Ancestries** — Name and feature
+  - **Classes** — Hope features and class features, with domain info
   - **Subclasses** — Flattened by tier (Foundation, Specialization, Mastery) as individual cards
 - **Experience Tracking** — Add name + value pairs (e.g. Eagle Eye +2)
+- **Character Description** — Clothes, eyes, body, skin, attitude fields with Daggerheart guide suggestions
+- **Background & Connections** — Free-text area for character bonds and questions
 - **Level Up Notes** — Free-text area for tracking level-up decisions
 - **Backstory** — Free-text area for character history and motivations
 - **Collapsible Sections** — Every section can be minimized to save space
