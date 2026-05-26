@@ -948,16 +948,19 @@
     }
 
     function removeCard(id) {
-        if (confirm('Remove this card?')) {
-            const el = document.getElementById(id);
-            const cardName = el.getAttribute('data-card-name');
-            if (cardName) {
-                addedCards.delete(cardName);
-                savedCardsData = savedCardsData.filter(c => c.name.toLowerCase() !== cardName);
-            }
-            el.remove();
-            autoCache();
+        const el = document.getElementById(id);
+        const cardName = el.getAttribute('data-card-name');
+        if (cardName && selectedDomainCards.has(cardName)) {
+            alert('Unmark this card from your loadout before removing it.');
+            return;
         }
+        if (!confirm('Remove this card?')) return;
+        if (cardName) {
+            addedCards.delete(cardName);
+            savedCardsData = savedCardsData.filter(c => c.name.toLowerCase() !== cardName);
+        }
+        el.remove();
+        autoCache();
     }
 
     function moveCard(id, dir) {

@@ -12,9 +12,9 @@ A lightweight, mobile-friendly digital character sheet for **Daggerheart TTRPG**
 - **Status Tracking** — Clickable dots for HP, Stress, Hope, and Armor with configurable max values
 - **Damage Thresholds** — Auto-calculated from Armor Base + Character Level + Extras
 - **Weapons & Armor** — Two weapon slots with trait dropdown, range, damage, and auto-calculated attack bonus; armor slot with base thresholds, score, and feature
-- **Gold & Gear** — Handfuls/Bags counters with a dynamic inventory list (add/remove items)
+- **Gold & Gear** — Handfuls/Bags counters with a dynamic inventory list (add/remove items with quantity)
 - **Abilities & Cards** — Pull directly from the [Daggerheart SRD data](https://github.com/daggersearch/daggerheart-data) with support for:
-  - **Domain Cards** — Color-coded by domain with icons, sorted by level, showing recall cost
+  - **Domain Cards** — Color-coded by domain with icons, sorted by level, showing recall cost. Select up to 5 cards as your active loadout (★)
   - **Communities** — Name and feature
   - **Ancestries** — Name and feature
   - **Classes** — Hope features and class features, with domain info
@@ -25,11 +25,12 @@ A lightweight, mobile-friendly digital character sheet for **Daggerheart TTRPG**
 - **Level Up Notes** — Free-text area for tracking level-up decisions
 - **Backstory** — Free-text area for character history and motivations
 - **Collapsible Sections** — Every section can be minimized to save space
+- **Domain Card Loadout** — Star up to 5 domain cards as your active loadout; selected cards auto-sort to the top by level
 - **Duplicate Prevention** — Already-added cards are grayed out in the picker
-- **Reorderable Domain Cards** — Move cards up/down with arrow buttons
 - **Auto-Save** — All changes are cached to localStorage automatically, survives page refresh
 - **Export/Import** — Save your sheet as a JSON file (`CharacterName_YYYY-MM-DD.json`) or load one back in
 - **Clear** — Reset the entire sheet with confirmation
+- **Loadout Protection** — Cannot delete a domain card while it's in your active loadout
 
 ## Domain Colors & Icons
 
