@@ -52,8 +52,8 @@
         .tab-btn:hover { opacity: 0.9; }
 
         /* Theme picker */
-        .theme-swatch { width: 18px; height: 18px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; }
-        .theme-swatch:hover { transform: scale(1.2); }
+        .theme-swatch { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; }
+        .theme-swatch:hover { transform: scale(1.15); }
         .theme-swatch.active { border-color: #fff; box-shadow: 0 0 6px rgba(255,255,255,0.3); }
         .btn-danger { background: linear-gradient(135deg, #6b1a1a, #8b2020); }
         .section-border { border-color: #3d362a; }
@@ -493,6 +493,8 @@
         green:   { base: [39, 174, 96] },
         teal:    { base: [22, 160, 133] },
         rose:    { base: [196, 112, 128] },
+        silver:  { base: [149, 165, 166] },
+        bronze:  { base: [176, 122, 60] },
     };
 
     function hexFromRgb(r, g, b) {
@@ -514,14 +516,34 @@
         // Update active swatch
         document.querySelectorAll('.theme-swatch').forEach(s => s.classList.toggle('active', s.dataset.theme === name));
         localStorage.setItem(THEME_KEY, name);
+        // Update the trigger button color
+        const trigger = document.querySelector('#themePicker .theme-swatch.active:not([data-theme])');
+        if (!trigger) {
+            const btn = document.querySelector('#themePicker > div > button');
+            if (btn) btn.style.background = color;
+        }
+        // Close dropdown
+        const dd = document.getElementById('themeDropdown');
+        if (dd) dd.classList.add('hidden');
     }
 
     function renderThemePicker() {
         const container = document.getElementById('themePicker');
-        container.innerHTML = Object.entries(THEMES).map(([name, t]) => {
-            const color = hexFromRgb(...t.base);
-            return `<div class="theme-swatch" style="background:${color}" data-theme="${name}" onclick="applyTheme('${name}')" title="${name}"></div>`;
-        }).join('');
+        const current = localStorage.getItem(THEME_KEY) || 'gold';
+        const currentColor = hexFromRgb(...(THEMES[current] || THEMES.gold).base);
+        container.innerHTML = `<div class="relative">
+            <button onclick="toggleThemeDropdown()" class="theme-swatch active" style="background:${currentColor}" title="Change theme"></button>
+            <div id="themeDropdown" class="hidden absolute right-0 top-8 bg-[#221f1a] border border-[#4a3f30] rounded-xl p-3 shadow-xl z-50 min-w-[160px]">
+                <div class="grid grid-cols-4 gap-3">${Object.entries(THEMES).map(([name, t]) => {
+                    const color = hexFromRgb(...t.base);
+                    return `<div class="theme-swatch ${name === current ? 'active' : ''}" style="background:${color}" data-theme="${name}" onclick="applyTheme('${name}')" title="${name}"></div>`;
+                }).join('')}</div>
+            </div>
+        </div>`;
+    }
+
+    function toggleThemeDropdown() {
+        document.getElementById('themeDropdown').classList.toggle('hidden');
     }
 
     const FIELD_IDS = ['charName','charPronouns','charLevel','charHeritage','charClass',
