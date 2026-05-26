@@ -5,28 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daggerheart Digital Sheet</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0d0d0d; color: #d4d4d8; font-family: 'Inter', sans-serif; }
-        .card { background: #18181b; border: 1px solid #27272a; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
-        .trait-box { border: 1px solid #3f3f46; border-radius: 4px; padding: 6px; text-align: center; }
-        .trait-label { font-size: 10px; font-weight: 800; color: #a1a1aa; text-transform: uppercase; display: block; }
-        .sub-stat { font-size: 8px; color: #52525b; margin-top: 2px; line-height: 1; }
-        .input-underline { background: transparent; border-bottom: 1px solid #3f3f46; outline: none; text-align: center; color: white; width: 100%; }
-        input, textarea { color: white !important; }
+        body { background-color: #1a1714; color: #e8e0d4; font-family: 'Inter', sans-serif; }
+        .card { background: linear-gradient(145deg, #221f1a, #1e1b16); border: 1px solid #3d362a; border-radius: 12px; padding: 16px; margin-bottom: 14px; box-shadow: 0 2px 8px #0005; }
+        .trait-box { border: 1px solid #4a3f30; border-radius: 8px; padding: 8px 6px; text-align: center; background: #1a1714; }
+        .trait-label { font-size: 9px; font-weight: 700; color: #a89880; text-transform: uppercase; display: block; letter-spacing: 0.5px; font-family: 'Cinzel', serif; }
+        .sub-stat { font-size: 8px; color: #6b5d4d; margin-top: 2px; line-height: 1; }
+        .input-underline { background: transparent; border-bottom: 1px solid #4a3f30; outline: none; text-align: center; color: #f5efe6; width: 100%; }
+        input, textarea { color: #f5efe6 !important; }
+        select { color: #f5efe6 !important; background-color: #1a1714 !important; }
+        h1, h2, .section-title { font-family: 'Cinzel', serif; }
 
-        .dot { width: 18px; height: 18px; border: 2px solid #3f3f46; border-radius: 4px; cursor: pointer; transition: 0.1s; }
-        .dot.filled-hp { background-color: #ef4444; border-color: #ef4444; }
-        .dot.filled-armor { background-color: #3b82f6; border-color: #3b82f6; }
-        .dot.filled-stress { background-color: #a855f7; border-color: #a855f7; }
-        .dot.filled-hope { background-color: #eab308; border-color: #eab308; }
-        .domain-card-selected { background-color: #1e1b4b !important; border: 1px solid #6366f1 !important; box-shadow: 0 0 8px #6366f140; }
+        .dot { width: 20px; height: 20px; border: 2px solid #4a3f30; border-radius: 50%; cursor: pointer; transition: all 0.15s ease; }
+        .dot:hover { border-color: #8b7355; transform: scale(1.1); }
+        .dot.filled-hp { background-color: #c0392b; border-color: #c0392b; box-shadow: 0 0 6px #c0392b60; }
+        .dot.filled-armor { background-color: #2980b9; border-color: #2980b9; box-shadow: 0 0 6px #2980b960; }
+        .dot.filled-stress { background-color: #8e44ad; border-color: #8e44ad; box-shadow: 0 0 6px #8e44ad60; }
+        .dot.filled-hope { background-color: #d4a017; border-color: #d4a017; box-shadow: 0 0 6px #d4a01760; }
+        .domain-card-selected { background-color: #2a2418 !important; border: 1px solid #d4a017 !important; box-shadow: 0 0 12px #d4a01730; }
+
+        .tab-btn { transition: all 0.2s ease; }
+        .tab-btn:hover { opacity: 0.9; }
+        .btn-action { background: linear-gradient(135deg, #8b6914, #a67c1a); border: none; }
+        .btn-action:hover { background: linear-gradient(135deg, #a67c1a, #c49520); }
+        .btn-danger { background: linear-gradient(135deg, #6b1a1a, #8b2020); }
+        .section-border { border-color: #3d362a; }
     </style>
 </head>
 <body class="max-w-md mx-auto p-4 pb-24">
 
-<div class="flex gap-1 mb-4 sticky top-0 z-30 bg-[#0d0d0d] pt-1 pb-2">
-    <button onclick="switchTab('tab-sheet')" id="btn-tab-sheet" class="flex-1 text-[10px] font-bold uppercase py-2 rounded bg-indigo-600">Sheet</button>
-    <button onclick="switchTab('tab-story')" id="btn-tab-story" class="flex-1 text-[10px] font-bold uppercase py-2 rounded bg-zinc-800 text-zinc-500">Story</button>
+<div class="flex gap-2 mb-4 sticky top-0 z-30 bg-[#1a1714] pt-2 pb-3">
+    <button onclick="switchTab('tab-sheet')" id="btn-tab-sheet" class="tab-btn flex-1 text-[10px] font-bold uppercase py-2.5 rounded-full btn-action text-white font-[Cinzel]">Sheet</button>
+    <button onclick="switchTab('tab-story')" id="btn-tab-story" class="tab-btn flex-1 text-[10px] font-bold uppercase py-2.5 rounded-full bg-[#2a2418] text-[#6b5d4d] border border-[#3d362a] font-[Cinzel]">Story</button>
 </div>
 
 <div id="tab-sheet">
@@ -60,42 +71,42 @@
     </div>
 </div>
 
-<div class="card">
+<div class="card border-[#3d362a]">
     <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-status')">
-        <span class="trait-label text-zinc-400">Status</span>
+        <span class="trait-label text-[#d4a017]">Status</span>
         <span class="text-zinc-600 text-[9px]" id="sec-status-tog">▼</span>
     </div>
     <div id="sec-status" class="mt-2 space-y-3">
 
-    <div class="border-red-900/30 border rounded-md p-2">
+    <div class="border-[#4a2020]/50 border rounded-lg p-2">
         <div class="flex justify-between items-center mb-1">
             <span class="trait-label text-red-500">HP (Max: <input type="number" id="hp_max" value="6" class="w-8 bg-transparent">)</span>
         </div>
         <div id="hp_dots" class="flex flex-wrap gap-1.5"></div>
     </div>
 
-    <div class="border-purple-900/30 border rounded-md p-2">
+    <div class="border-[#3d2050]/50 border rounded-lg p-2">
         <div class="flex justify-between items-center mb-1">
             <span class="trait-label text-purple-400">Stress (Max: <input type="number" id="stress_max" value="6" class="w-8 bg-transparent">)</span>
         </div>
         <div id="stress_dots" class="flex flex-wrap gap-1.5"></div>
     </div>
 
-    <div class="border-yellow-900/30 border rounded-md p-2">
+    <div class="border-[#4a3f10]/50 border rounded-lg p-2">
         <div class="flex justify-between items-center mb-1">
             <span class="trait-label text-yellow-500">Hope (Max: <input type="number" id="hope_max" value="6" class="w-8 bg-transparent">)</span>
         </div>
         <div id="hope_dots" class="flex flex-wrap gap-1.5"></div>
     </div>
 
-    <div class="border-blue-900/30 border rounded-md p-2">
+    <div class="border-[#1a3050]/50 border rounded-lg p-2">
         <div class="flex justify-between items-center mb-1">
             <span class="trait-label text-blue-400">Armor (Max: <input type="number" id="armor_max" value="3" class="w-8 bg-transparent">)</span>
         </div>
         <div id="armor_dots" class="flex flex-wrap gap-1.5"></div>
     </div>
 
-    <div class="border-zinc-700 border rounded-md p-2">
+    <div class="border-[#3d362a] border rounded-lg p-2">
         <span class="trait-label text-zinc-500 mb-1">Damage Thresholds</span>
         <div class="flex items-center justify-between gap-1 text-center mt-1">
             <div class="flex-1">
@@ -131,7 +142,7 @@
 
 <div class="card">
     <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-weapons')">
-        <span class="trait-label text-zinc-500">Active Weapons & Armor</span>
+        <span class="trait-label text-[#a89880]">Active Weapons & Armor</span>
         <span class="text-zinc-600 text-[9px]" id="sec-weapons-tog">▼</span>
     </div>
     <div id="sec-weapons" class="mt-2">
@@ -221,7 +232,7 @@
 
 <div class="card">
     <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-gold')">
-        <span class="trait-label text-yellow-600">Gold & Gear</span>
+        <span class="trait-label text-[#d4a017]">Gold & Gear</span>
         <span class="text-zinc-600 text-[9px]" id="sec-gold-tog">▼</span>
     </div>
     <div id="sec-gold" class="mt-2">
@@ -237,40 +248,40 @@
     </div>
     <div class="flex justify-between items-center mb-1">
         <span class="trait-label text-zinc-500">Inventory</span>
-        <button class="bg-zinc-700 text-[9px] px-2 py-1 rounded font-bold uppercase" onclick="addInventoryItem()">+ Add Item</button>
+        <button class="bg-[#2a2418] border border-[#4a3f30] text-[9px] px-3 py-1 rounded-full font-bold uppercase text-[#a89880]" onclick="addInventoryItem()">+ Add Item</button>
     </div>
     <div id="inventoryList" class="space-y-1">
         <div class="text-center text-[10px] text-zinc-600 italic">None</div>
     </div>
     </div>
 </div>
-<div class="card border-indigo-900/40">
+<div class="card border-[#4a3f30]/60">
     <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-abilities')">
         <div class="flex items-center gap-2">
-            <span class="trait-label text-indigo-400">Abilities & Cards</span>
+            <span class="trait-label text-[#d4a017]">Abilities & Cards</span>
             <span class="text-zinc-600 text-[9px]" id="sec-abilities-tog">▼</span>
         </div>
-        <button class="bg-indigo-600 text-[9px] px-2 py-1 rounded font-bold uppercase" onclick="event.stopPropagation(); openDatabase()">+ Add</button>
+        <button class="btn-action text-[9px] px-3 py-1 rounded-full font-bold uppercase text-white" onclick="event.stopPropagation(); openDatabase()">+ Add</button>
     </div>
     <div id="sec-abilities" class="mt-4">
-    <div class="mb-1 flex justify-between items-center"><span class="text-[8px] font-bold text-amber-500 uppercase">Domain Cards</span><span id="domainSelectCount" class="text-[8px] text-zinc-500">0/5 selected</span></div>
+    <div class="mb-1 flex justify-between items-center"><span class="text-[8px] font-bold text-[#d4a017] uppercase font-[Cinzel]">Domain Cards</span><span id="domainSelectCount" class="text-[8px] text-[#6b5d4d]">0/5 selected</span></div>
     <div id="domainCards" class="space-y-2 mb-3">
         <div class="text-center text-[10px] text-zinc-600 italic">None</div>
     </div>
-    <div class="mb-1"><span class="text-[8px] font-bold text-teal-500 uppercase">General</span></div>
+    <div class="mb-1"><span class="text-[8px] font-bold text-[#5daa72] uppercase font-[Cinzel]">General</span></div>
     <div id="generalCards" class="space-y-2">
         <div class="text-center text-[10px] text-zinc-600 italic">None</div>
     </div>
     </div>
 </div>
 
-<div class="card border-cyan-900/40">
+<div class="card border-[#3d362a]">
     <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-experience')">
         <div class="flex items-center gap-2">
-            <span class="trait-label text-cyan-400">Experience</span>
+            <span class="trait-label text-[#a89880]">Experience</span>
             <span class="text-zinc-600 text-[9px]" id="sec-experience-tog">▼</span>
         </div>
-        <button class="bg-cyan-700 text-[9px] px-2 py-1 rounded font-bold uppercase" onclick="event.stopPropagation(); addExperience()">+ Add</button>
+        <button class="btn-action text-[9px] px-3 py-1 rounded-full font-bold uppercase text-white" onclick="event.stopPropagation(); addExperience()">+ Add</button>
     </div>
     <div id="sec-experience" class="mt-2">
         <div id="experienceList" class="space-y-1">
@@ -283,9 +294,9 @@
 
 <div id="tab-story" style="display:none">
 
-<div class="card border-emerald-900/40">
+<div class="card border-[#2a4030]">
     <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-levelup')">
-        <span class="trait-label text-emerald-400">Level Up Notes</span>
+        <span class="trait-label text-[#5daa72]">Level Up Notes</span>
         <span class="text-zinc-600 text-[9px]" id="sec-levelup-tog">▼</span>
     </div>
     <div id="sec-levelup" class="mt-2">
@@ -293,9 +304,9 @@
     </div>
 </div>
 
-<div class="card border-rose-900/40">
+<div class="card border-[#4a2030]">
     <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-backstory')">
-        <span class="trait-label text-rose-400">Backstory</span>
+        <span class="trait-label text-[#c47080]">Backstory</span>
         <span class="text-zinc-600 text-[9px]" id="sec-backstory-tog">▼</span>
     </div>
     <div id="sec-backstory" class="mt-2">
@@ -303,9 +314,9 @@
     </div>
 </div>
 
-<div class="card border-violet-900/40">
+<div class="card border-[#3a2a50]">
     <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-description')">
-        <span class="trait-label text-violet-400">Character Description</span>
+        <span class="trait-label text-[#a080c4]">Character Description</span>
         <span class="text-zinc-600 text-[9px]" id="sec-description-tog">▼</span>
     </div>
     <div id="sec-description" class="mt-2 space-y-2">
@@ -332,9 +343,9 @@
     </div>
 </div>
 
-<div class="card border-amber-900/40">
+<div class="card border-[#4a3f20]">
     <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-connections')">
-        <span class="trait-label text-amber-400">Background & Connections</span>
+        <span class="trait-label text-[#d4a017]">Background & Connections</span>
         <span class="text-zinc-600 text-[9px]" id="sec-connections-tog">▼</span>
     </div>
     <div id="sec-connections" class="mt-2">
@@ -344,23 +355,23 @@
 
 </div>
 
-<div class="fixed bottom-0 left-0 right-0 bg-zinc-900 border-t border-zinc-800 p-2 z-40">
+<div class="fixed bottom-0 left-0 right-0 bg-[#1a1714] border-t border-[#3d362a] p-2 z-40">
     <div class="max-w-md mx-auto flex gap-2">
-        <button id="exportBtn" onclick="saveSheet()" class="flex-1 bg-indigo-600 text-[9px] py-2 rounded font-bold uppercase">⬇ Export</button>
-        <button onclick="loadSheet()" class="flex-1 bg-zinc-700 text-[9px] py-2 rounded font-bold uppercase">⬆ Import</button>
-        <button onclick="clearSheet()" class="flex-1 bg-red-900 text-[9px] py-2 rounded font-bold uppercase">Clear</button>
+        <button id="exportBtn" onclick="saveSheet()" class="flex-1 btn-action text-[9px] py-2.5 rounded-full font-bold uppercase text-white">⬇ Export</button>
+        <button onclick="loadSheet()" class="flex-1 bg-[#2a2418] border border-[#3d362a] text-[9px] py-2.5 rounded-full font-bold uppercase text-[#a89880]">⬆ Import</button>
+        <button onclick="clearSheet()" class="flex-1 btn-danger text-[9px] py-2.5 rounded-full font-bold uppercase text-red-200">Clear</button>
     </div>
 </div>
 
-<div id="cardModal" class="fixed inset-0 bg-black/95 hidden z-50 p-4 overflow-y-auto">
-    <div class="max-w-md mx-auto bg-zinc-900 border border-zinc-700 rounded-lg p-4 shadow-2xl">
+<div id="cardModal" class="fixed inset-0 bg-black/90 hidden z-50 p-4 overflow-y-auto">
+    <div class="max-w-md mx-auto bg-[#221f1a] border border-[#4a3f30] rounded-xl p-4 shadow-2xl">
         <div class="flex justify-between items-center mb-4">
-            <h2 class="font-black text-indigo-400 text-sm uppercase">SRD Library</h2>
-            <button onclick="closeDatabase()" class="text-zinc-500 hover:text-white text-xl">✕</button>
+            <h2 class="font-black text-[#d4a017] text-sm uppercase font-[Cinzel]">SRD Library</h2>
+            <button onclick="closeDatabase()" class="text-[#6b5d4d] hover:text-white text-xl">✕</button>
         </div>
 
         <div class="space-y-3 mb-4">
-            <select id="dataType" class="w-full bg-black border border-zinc-700 rounded p-2 text-xs text-white" onchange="fetchData()">
+            <select id="dataType" class="w-full bg-[#1a1714] border border-[#4a3f30] rounded-lg p-2.5 text-xs" onchange="fetchData()">
                 <option value="">Choose Category...</option>
                 <option value="ancestries.json">Ancestries</option>
                 <option value="communities.json">Communities</option>
@@ -368,7 +379,7 @@
                 <option value="domain-cards.json">Domain Cards</option>
                 <option value="subclasses.json">Subclasses</option>
             </select>
-            <input type="text" id="cardSearch" placeholder="Filter by name..." class="w-full bg-black border border-zinc-700 rounded p-2 text-xs text-white" oninput="filterCards()">
+            <input type="text" id="cardSearch" placeholder="Filter by name..." class="w-full bg-[#1a1714] border border-[#4a3f30] rounded-lg p-2.5 text-xs" oninput="filterCards()">
         </div>
 
         <div id="modalResults" class="space-y-2 max-h-[60vh] overflow-y-auto pr-2">
@@ -428,8 +439,8 @@
     function switchTab(tabId) {
         document.getElementById('tab-sheet').style.display = tabId === 'tab-sheet' ? '' : 'none';
         document.getElementById('tab-story').style.display = tabId === 'tab-story' ? '' : 'none';
-        document.getElementById('btn-tab-sheet').className = `flex-1 text-[10px] font-bold uppercase py-2 rounded ${tabId === 'tab-sheet' ? 'bg-indigo-600' : 'bg-zinc-800 text-zinc-500'}`;
-        document.getElementById('btn-tab-story').className = `flex-1 text-[10px] font-bold uppercase py-2 rounded ${tabId === 'tab-story' ? 'bg-indigo-600' : 'bg-zinc-800 text-zinc-500'}`;
+        document.getElementById('btn-tab-sheet').className = `tab-btn flex-1 text-[10px] font-bold uppercase py-2.5 rounded-full font-[Cinzel] ${tabId === 'tab-sheet' ? 'btn-action text-white' : 'bg-[#2a2418] text-[#6b5d4d] border border-[#3d362a]'}`;
+        document.getElementById('btn-tab-story').className = `tab-btn flex-1 text-[10px] font-bold uppercase py-2.5 rounded-full font-[Cinzel] ${tabId === 'tab-story' ? 'btn-action text-white' : 'bg-[#2a2418] text-[#6b5d4d] border border-[#3d362a]'}`;
     }
 
     function updateAttackBonus() {
@@ -472,8 +483,8 @@
         URL.revokeObjectURL(url);
         const btn = document.getElementById('exportBtn');
         btn.textContent = '✓ Saved!';
-        btn.classList.replace('bg-indigo-600', 'bg-green-600');
-        setTimeout(() => { btn.textContent = '⬇ Export'; btn.classList.replace('bg-green-600', 'bg-indigo-600'); }, 2000);
+        btn.classList.add('bg-green-800');
+        setTimeout(() => { btn.textContent = '⬇ Export'; btn.classList.remove('bg-green-800'); }, 2000);
     }
 
     function loadSheet(silent) {
