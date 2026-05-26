@@ -7,8 +7,27 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --accent-1: #d4a017;
+            --accent-2: #b8860b;
+            --accent-3: #9a7209;
+            --accent-4: #7d5c07;
+            --accent-5: #604605;
+        }
         body { background-color: #1a1714; color: #e8e0d4; font-family: 'Inter', sans-serif; }
-        .card { background: linear-gradient(145deg, #221f1a, #1e1b16); border: 1px solid #3d362a; border-radius: 12px; padding: 16px; margin-bottom: 14px; box-shadow: 0 2px 8px #0005; }
+        .card { background: linear-gradient(145deg, #221f1a, #1e1b16); border: 1px solid #3d362a; border-left: 3px solid #3d362a; border-radius: 12px; padding: 16px; margin-bottom: 14px; box-shadow: 0 2px 8px #0005; }
+        .accent-status { border-left-color: var(--accent-1); }
+        .accent-combat { border-left-color: var(--accent-2); }
+        .accent-gold { border-left-color: var(--accent-3); }
+        .accent-abilities { border-left-color: var(--accent-4); }
+        .accent-experience { border-left-color: var(--accent-5); }
+        .accent-levelup { border-left-color: var(--accent-1); }
+        .accent-backstory { border-left-color: var(--accent-2); }
+        .accent-description { border-left-color: var(--accent-3); }
+        .accent-connections { border-left-color: var(--accent-4); }
+        .theme-dot { color: var(--accent-1); }
+        .btn-action { background: linear-gradient(135deg, var(--accent-4), var(--accent-3)); border: none; }
+        .btn-action:hover { background: linear-gradient(135deg, var(--accent-3), var(--accent-2)); }
         .trait-box { border: 1px solid #4a3f30; border-radius: 8px; padding: 8px 6px; text-align: center; background: #1a1714; }
         .trait-label { font-size: 9px; font-weight: 700; color: #a89880; text-transform: uppercase; display: block; letter-spacing: 0.5px; font-family: 'Cinzel', serif; }
         .sub-stat { font-size: 8px; color: #6b5d4d; margin-top: 2px; line-height: 1; }
@@ -17,142 +36,190 @@
         select { color: #f5efe6 !important; background-color: #1a1714 !important; }
         h1, h2, .section-title { font-family: 'Cinzel', serif; }
 
-        .dot { width: 20px; height: 20px; border: 2px solid #4a3f30; border-radius: 50%; cursor: pointer; transition: all 0.15s ease; }
+        .dot { width: 24px; height: 24px; border: 2px solid #4a3f30; border-radius: 50%; cursor: pointer; transition: all 0.15s ease; }
         .dot:hover { border-color: #8b7355; transform: scale(1.1); }
         .dot.filled-hp { background-color: #c0392b; border-color: #c0392b; box-shadow: 0 0 6px #c0392b60; }
         .dot.filled-armor { background-color: #2980b9; border-color: #2980b9; box-shadow: 0 0 6px #2980b960; }
         .dot.filled-stress { background-color: #8e44ad; border-color: #8e44ad; box-shadow: 0 0 6px #8e44ad60; }
         .dot.filled-hope { background-color: #d4a017; border-color: #d4a017; box-shadow: 0 0 6px #d4a01760; }
-        .domain-card-selected { background-color: #2a2418 !important; border: 1px solid #d4a017 !important; box-shadow: 0 0 12px #d4a01730; }
+        .domain-card-selected { background-color: #2a2418 !important; border: 1px solid var(--accent-1) !important; animation: shimmer 3s ease-in-out infinite; }
+        @keyframes shimmer {
+            0%, 100% { box-shadow: 0 0 8px color-mix(in srgb, var(--accent-1) 15%, transparent), inset 0 0 6px color-mix(in srgb, var(--accent-1) 8%, transparent); }
+            50% { box-shadow: 0 0 18px color-mix(in srgb, var(--accent-1) 30%, transparent), inset 0 0 12px color-mix(in srgb, var(--accent-1) 15%, transparent); }
+        }
 
         .tab-btn { transition: all 0.2s ease; }
         .tab-btn:hover { opacity: 0.9; }
-        .btn-action { background: linear-gradient(135deg, #8b6914, #a67c1a); border: none; }
-        .btn-action:hover { background: linear-gradient(135deg, #a67c1a, #c49520); }
+
+        /* Theme picker */
+        .theme-swatch { width: 18px; height: 18px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; }
+        .theme-swatch:hover { transform: scale(1.2); }
+        .theme-swatch.active { border-color: #fff; box-shadow: 0 0 6px rgba(255,255,255,0.3); }
         .btn-danger { background: linear-gradient(135deg, #6b1a1a, #8b2020); }
         .section-border { border-color: #3d362a; }
+
+        /* Chevron rotation */
+        .toggle-icon { display: inline-block; transition: transform 0.25s ease; }
+        .toggle-icon.collapsed { transform: rotate(-90deg); }
+
+        /* Modal backdrop */
+        .modal-overlay { backdrop-filter: blur(4px); background: rgba(0,0,0,0.85); }
+        .modal-panel { background: linear-gradient(145deg, #252118, #1e1b16); border: 1px solid #4a3f30; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+
+        /* Sheet cards (added to sheet) */
+        .sheet-card { background: linear-gradient(145deg, #1a1714, #1e1b16); border: 1px solid #3d362a; border-left: 3px solid #3d362a; border-radius: 10px; padding: 12px 14px; transition: border-color 0.2s; }
+        .sheet-card:hover { border-color: #5a4d3a; }
     </style>
 </head>
-<body class="max-w-md mx-auto p-4 pb-24">
+<body class="max-w-2xl mx-auto p-4 pb-24">
 
-<div class="flex gap-2 mb-4 sticky top-0 z-30 bg-[#1a1714] pt-2 pb-3">
-    <button onclick="switchTab('tab-sheet')" id="btn-tab-sheet" class="tab-btn flex-1 text-[10px] font-bold uppercase py-2.5 rounded-full btn-action text-white font-[Cinzel]">Sheet</button>
-    <button onclick="switchTab('tab-story')" id="btn-tab-story" class="tab-btn flex-1 text-[10px] font-bold uppercase py-2.5 rounded-full bg-[#2a2418] text-[#6b5d4d] border border-[#3d362a] font-[Cinzel]">Story</button>
-</div>
+<!-- Nav Bar -->
+<nav class="sticky top-0 z-30 bg-[#1a1714]/95 backdrop-blur border-b border-[#3d362a] -mx-4 px-4 py-2 mb-4 flex items-center justify-between">
+    <span class="font-[Cinzel] text-[11px] tracking-widest uppercase" data-theme-level="1" style="color:#d4a017">Daggerheart</span>
+    <div class="flex items-center gap-3">
+        <div id="themePicker" class="flex gap-1.5 items-center"></div>
+        <div class="flex gap-1">
+            <button onclick="switchTab('tab-sheet')" id="btn-tab-sheet" class="tab-btn text-[10px] font-bold uppercase px-5 py-2 rounded-full btn-action text-white font-[Cinzel]">Sheet</button>
+            <button onclick="switchTab('tab-story')" id="btn-tab-story" class="tab-btn text-[10px] font-bold uppercase px-5 py-2 rounded-full bg-[#2a2418] text-[#6b5d4d] border border-[#3d362a] font-[Cinzel]">Story</button>
+        </div>
+    </div>
+</nav>
 
 <div id="tab-sheet">
 
-<div class="card bg-zinc-900/50">
-    <div class="grid grid-cols-2 gap-4">
-        <div class="col-span-2">
-            <input id="charName" type="text" placeholder="CHARACTER NAME" class="input-underline text-xl font-black text-left">
+<!-- Hero Header -->
+<div class="relative rounded-xl overflow-hidden mb-4 p-5 pb-4" style="background: linear-gradient(135deg, #2a2418 0%, #1e1b16 40%, #221f1a 100%); border: 1px solid #4a3f30;">
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%224%22 height=%224%22><rect width=%224%22 height=%224%22 fill=%22%23fff%22 fill-opacity=%220.03%22/><rect width=%221%22 height=%221%22 fill=%22%23fff%22 fill-opacity=%220.06%22/></svg>');"></div>
+    <input id="charName" type="text" placeholder="CHARACTER NAME" class="relative bg-transparent border-none outline-none text-2xl font-black text-[#f5efe6] w-full font-[Cinzel] tracking-wide mb-3">
+    <div class="relative grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-3">
+        <div>
+            <div class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel] mb-1">Pronouns</div>
+            <input id="charPronouns" type="text" placeholder="—" class="input-underline text-sm text-left">
         </div>
-        <input id="charPronouns" type="text" placeholder="PRONOUNS" class="input-underline text-xs text-left">
-        <input id="charLevel" type="number" placeholder="LEVEL" class="input-underline text-xs text-left" value="1">
-        <input id="charHeritage" type="text" placeholder="HERITAGE" class="input-underline text-xs text-left">
-        <input id="charClass" type="text" placeholder="CLASS & SUBCLASS" class="input-underline text-xs text-left">
+        <div>
+            <div class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel] mb-1">Level</div>
+            <input id="charLevel" type="number" placeholder="—" class="input-underline text-sm text-left" value="1">
+        </div>
+        <div>
+            <div class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel] mb-1">Heritage</div>
+            <input id="charHeritage" type="text" placeholder="—" class="input-underline text-sm text-left">
+        </div>
+        <div>
+            <div class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel] mb-1">Class & Subclass</div>
+            <input id="charClass" type="text" placeholder="—" class="input-underline text-sm text-left">
+        </div>
     </div>
 </div>
 
-<div class="grid grid-cols-4 gap-2 mb-4">
-    <div class="trait-box col-span-1 border-indigo-500/50">
-        <span class="trait-label text-indigo-400">EVASION</span>
-        <input id="track_ev" type="number" class="w-full bg-transparent text-lg font-bold text-center" value="10">
+<!-- Attributes -->
+<div class="grid grid-cols-3 gap-2 mb-4">
+    <div class="trait-box"><span class="trait-label text-[10px]">Agility</span><input id="t_agi" type="text" class="w-full bg-transparent text-center text-lg font-bold" value="0"></div>
+    <div class="trait-box"><span class="trait-label text-[10px]">Strength</span><input id="t_str" type="text" class="w-full bg-transparent text-center text-lg font-bold" value="0"></div>
+    <div class="trait-box"><span class="trait-label text-[10px]">Finesse</span><input id="t_fin" type="text" class="w-full bg-transparent text-center text-lg font-bold" value="0"></div>
+    <div class="trait-box"><span class="trait-label text-[10px]">Instinct</span><input id="t_inst" type="text" class="w-full bg-transparent text-center text-lg font-bold" value="0"></div>
+    <div class="trait-box"><span class="trait-label text-[10px]">Presence</span><input id="t_pres" type="text" class="w-full bg-transparent text-center text-lg font-bold" value="0"></div>
+    <div class="trait-box"><span class="trait-label text-[10px]">Knowledge</span><input id="t_know" type="text" class="w-full bg-transparent text-center text-lg font-bold" value="0"></div>
+</div>
+
+<div class="card accent-status">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-status')">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="1" style="background-color:#d4a017"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="1" style="color:#d4a017">Vitals & Trackers</h2>
+        </div>
+        <span class="text-zinc-500 text-xs toggle-icon" id="sec-status-tog">▼</span>
     </div>
-    <div class="col-span-3 grid grid-cols-3 gap-2">
-        <div class="trait-box"><span class="trait-label">Agility</span><input id="t_agi" type="text" class="w-full bg-transparent text-center" value="0"></div>
-        <div class="trait-box"><span class="trait-label">Strength</span><input id="t_str" type="text" class="w-full bg-transparent text-center" value="0"></div>
-        <div class="trait-box"><span class="trait-label">Finesse</span><input id="t_fin" type="text" class="w-full bg-transparent text-center" value="0"></div>
+    <div id="sec-status" class="space-y-3">
+
+    <!-- Evasion -->
+    <div class="bg-[#14141c] border border-indigo-500/40 rounded-xl p-4 flex items-center justify-between">
+        <span class="text-sm font-bold text-indigo-400 font-[Cinzel] uppercase tracking-wide">Evasion</span>
+        <input id="track_ev" type="number" class="w-20 bg-transparent text-2xl font-black text-center text-indigo-300" value="10">
     </div>
-    <div class="col-span-4 grid grid-cols-3 gap-2">
-        <div class="trait-box"><span class="trait-label">Instinct</span><input id="t_inst" type="text" class="w-full bg-transparent text-center" value="0"></div>
-        <div class="trait-box"><span class="trait-label">Presence</span><input id="t_pres" type="text" class="w-full bg-transparent text-center" value="0"></div>
-        <div class="trait-box"><span class="trait-label">Knowledge</span><input id="t_know" type="text" class="w-full bg-transparent text-center" value="0"></div>
+
+    <!-- HP -->
+    <div class="bg-[#1c1414] border border-[#4a2020]/40 rounded-xl p-4">
+        <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-bold text-red-400 font-[Cinzel] uppercase tracking-wide">HP</span>
+            <span class="text-xs text-zinc-500">Max: <input type="number" id="hp_max" value="6" class="w-8 bg-transparent text-right font-bold focus:outline-none text-sm"></span>
+        </div>
+        <div id="hp_dots" class="flex flex-wrap gap-2"></div>
+    </div>
+
+    <!-- Stress -->
+    <div class="bg-[#19141c] border border-[#3d2050]/40 rounded-xl p-4">
+        <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-bold text-purple-400 font-[Cinzel] uppercase tracking-wide">Stress</span>
+            <span class="text-xs text-zinc-500">Max: <input type="number" id="stress_max" value="6" class="w-8 bg-transparent text-right font-bold focus:outline-none text-sm"></span>
+        </div>
+        <div id="stress_dots" class="flex flex-wrap gap-2"></div>
+    </div>
+
+    <!-- Hope -->
+    <div class="bg-[#1c1a14] border border-[#4a3f10]/40 rounded-xl p-4">
+        <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-bold text-yellow-500 font-[Cinzel] uppercase tracking-wide">Hope</span>
+            <span class="text-xs text-zinc-500">Max: <input type="number" id="hope_max" value="6" class="w-8 bg-transparent text-right font-bold focus:outline-none text-sm"></span>
+        </div>
+        <div id="hope_dots" class="flex flex-wrap gap-2"></div>
+    </div>
+
+    <!-- Armor -->
+    <div class="bg-[#14181c] border border-[#1a3050]/40 rounded-xl p-4">
+        <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-bold text-blue-400 font-[Cinzel] uppercase tracking-wide">Armor</span>
+            <span class="text-xs text-zinc-500">Max: <input type="number" id="armor_max" value="3" class="w-8 bg-transparent text-right font-bold focus:outline-none text-sm"></span>
+        </div>
+        <div id="armor_dots" class="flex flex-wrap gap-2"></div>
+    </div>
+
+    <!-- Damage Thresholds -->
+    <div class="bg-black/20 border border-[#363026] rounded-xl p-4">
+        <div class="text-sm font-bold text-zinc-400 tracking-wider uppercase font-[Cinzel] mb-3">Damage Thresholds</div>
+        <div class="grid grid-cols-2 gap-3 text-center mb-3">
+            <div class="bg-black/40 border border-zinc-800 p-3 rounded-lg">
+                <div class="text-xs font-bold text-gray-400 uppercase">MAJOR</div>
+                <div id="thresh_major" class="text-2xl font-black text-indigo-400 mt-1">0</div>
+                <div class="text-[10px] text-zinc-600">2 HP</div>
+            </div>
+            <div class="bg-black/40 border border-zinc-800 p-3 rounded-lg">
+                <div class="text-xs font-bold text-gray-400 uppercase">SEVERE</div>
+                <div id="thresh_severe" class="text-2xl font-black text-indigo-400 mt-1">0</div>
+                <div class="text-[10px] text-zinc-600">3 HP</div>
+            </div>
+        </div>
+        <div class="space-y-2">
+            <div class="flex items-center justify-between bg-black/40 px-3 py-2 rounded-lg border border-zinc-800">
+                <span class="text-xs text-zinc-400 font-medium">MAJOR EXTRA</span>
+                <input id="thresh_major_extra" type="number" value="0" class="w-14 bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-center text-sm font-bold outline-none" oninput="updateThresholds()">
+            </div>
+            <div class="flex items-center justify-between bg-black/40 px-3 py-2 rounded-lg border border-zinc-800">
+                <span class="text-xs text-zinc-400 font-medium">SEVERE EXTRA</span>
+                <input id="thresh_severe_extra" type="number" value="0" class="w-14 bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-center text-sm font-bold outline-none" oninput="updateThresholds()">
+            </div>
+        </div>
+        <div class="text-[10px] text-zinc-600 text-center mt-3">Auto: Armor Base + Level + Extra</div>
+    </div>
+
     </div>
 </div>
 
-<div class="card border-[#3d362a]">
-    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-status')">
-        <span class="trait-label text-[#d4a017]">Status</span>
-        <span class="text-zinc-600 text-[9px]" id="sec-status-tog">▼</span>
-    </div>
-    <div id="sec-status" class="mt-2 space-y-3">
-
-    <div class="border-[#4a2020]/50 border rounded-lg p-2">
-        <div class="flex justify-between items-center mb-1">
-            <span class="trait-label text-red-500">HP (Max: <input type="number" id="hp_max" value="6" class="w-8 bg-transparent">)</span>
+<div class="card accent-combat">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-weapons')">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="2" style="background-color:#b8860b"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="2" style="color:#b8860b">Active Weapons & Armor</h2>
         </div>
-        <div id="hp_dots" class="flex flex-wrap gap-1.5"></div>
-    </div>
-
-    <div class="border-[#3d2050]/50 border rounded-lg p-2">
-        <div class="flex justify-between items-center mb-1">
-            <span class="trait-label text-purple-400">Stress (Max: <input type="number" id="stress_max" value="6" class="w-8 bg-transparent">)</span>
-        </div>
-        <div id="stress_dots" class="flex flex-wrap gap-1.5"></div>
-    </div>
-
-    <div class="border-[#4a3f10]/50 border rounded-lg p-2">
-        <div class="flex justify-between items-center mb-1">
-            <span class="trait-label text-yellow-500">Hope (Max: <input type="number" id="hope_max" value="6" class="w-8 bg-transparent">)</span>
-        </div>
-        <div id="hope_dots" class="flex flex-wrap gap-1.5"></div>
-    </div>
-
-    <div class="border-[#1a3050]/50 border rounded-lg p-2">
-        <div class="flex justify-between items-center mb-1">
-            <span class="trait-label text-blue-400">Armor (Max: <input type="number" id="armor_max" value="3" class="w-8 bg-transparent">)</span>
-        </div>
-        <div id="armor_dots" class="flex flex-wrap gap-1.5"></div>
-    </div>
-
-    <div class="border-[#3d362a] border rounded-lg p-2">
-        <span class="trait-label text-zinc-500 mb-1">Damage Thresholds</span>
-        <div class="flex items-center justify-between gap-1 text-center mt-1">
-            <div class="flex-1">
-                <div class="text-[9px] font-bold text-gray-400">MAJOR</div>
-                <div class="text-[7px] text-gray-600">2 HP</div>
-            </div>
-            <div class="w-16">
-                <div id="thresh_major" class="w-full bg-gray-800 border border-gray-700 rounded py-1 text-center font-bold text-indigo-400 text-sm">0</div>
-            </div>
-            <div class="flex-1">
-                <div class="text-[9px] font-bold text-gray-400">SEVERE</div>
-                <div class="text-[7px] text-gray-600">3 HP</div>
-            </div>
-            <div class="w-16">
-                <div id="thresh_severe" class="w-full bg-gray-800 border border-gray-700 rounded py-1 text-center font-bold text-indigo-400 text-sm">0</div>
-            </div>
-        </div>
-        <div class="flex items-center justify-between gap-1 text-center mt-2">
-            <div class="flex-1">
-                <div class="text-[7px] text-zinc-600">MAJOR EXTRA</div>
-                <input id="thresh_major_extra" type="number" value="0" class="w-12 mx-auto bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center text-[10px] outline-none" oninput="updateThresholds()">
-            </div>
-            <div class="flex-1">
-                <div class="text-[7px] text-zinc-600">SEVERE EXTRA</div>
-                <input id="thresh_severe_extra" type="number" value="0" class="w-12 mx-auto bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center text-[10px] outline-none" oninput="updateThresholds()">
-            </div>
-        </div>
-        <div class="text-[7px] text-zinc-600 text-center mt-1">Auto: Armor Base + Level + Extra</div>
-    </div>
-
-    </div>
-</div>
-
-<div class="card">
-    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-weapons')">
-        <span class="trait-label text-[#a89880]">Active Weapons & Armor</span>
-        <span class="text-zinc-600 text-[9px]" id="sec-weapons-tog">▼</span>
+        <span class="text-zinc-500 text-xs toggle-icon" id="sec-weapons-tog">▼</span>
     </div>
     <div id="sec-weapons" class="mt-2">
     <div class="space-y-4">
-        <div class="border-b border-zinc-800 pb-2">
-            <input id="wep1_name" type="text" placeholder="Weapon Name" class="bg-transparent text-sm w-full font-bold outline-none">
-            <div class="grid grid-cols-4 gap-2 text-[10px] text-zinc-500 mt-1">
+        <div class="border-b border-zinc-800 pb-3">
+            <input id="wep1_name" type="text" placeholder="Weapon Name" class="bg-transparent text-base w-full font-bold outline-none">
+            <div class="grid grid-cols-4 gap-2 text-zinc-500 mt-2">
                 <div class="text-center">
-                    <div class="text-[7px] text-zinc-600 mb-0.5">TRAIT</div>
-                    <select id="wep1_trait" class="w-full bg-black/40 border border-zinc-800 rounded px-0.5 py-0.5 text-center outline-none text-[9px]" onchange="updateAttackBonus()">
+                    <div class="text-[10px] text-zinc-600 mb-1">TRAIT</div>
+                    <select id="wep1_trait" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-xs" onchange="updateAttackBonus()">
                         <option value="">—</option>
                         <option value="t_agi">Agility</option>
                         <option value="t_str">Strength</option>
@@ -163,129 +230,134 @@
                     </select>
                 </div>
                 <div class="text-center">
-                    <div class="text-[7px] text-zinc-600 mb-0.5">RANGE</div>
-                    <input id="wep1_range" type="text" placeholder="—" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center outline-none">
+                    <div class="text-[10px] text-zinc-600 mb-1">RANGE</div>
+                    <input id="wep1_range" type="text" placeholder="—" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-xs">
                 </div>
                 <div class="text-center">
-                    <div class="text-[7px] text-zinc-600 mb-0.5">DAMAGE</div>
-                    <input id="wep1_dmg" type="text" placeholder="—" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center outline-none">
+                    <div class="text-[10px] text-zinc-600 mb-1">DAMAGE</div>
+                    <input id="wep1_dmg" type="text" placeholder="—" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-xs">
                 </div>
                 <div class="text-center">
-                    <div class="text-[7px] text-zinc-600 mb-0.5">ATK BONUS</div>
-                    <div id="wep1_atk" class="w-full bg-gray-800 border border-gray-700 rounded py-0.5 text-center font-bold text-indigo-400 text-[10px]">—</div>
+                    <div class="text-[10px] text-zinc-600 mb-1">ATK BONUS</div>
+                    <div id="wep1_atk" class="w-full bg-gray-800 border border-gray-700 rounded py-1.5 text-center font-bold text-indigo-400 text-sm">—</div>
+                </div>
+            </div>
+        </div>
+        <div class="border-b border-zinc-800 pb-3">
+            <input id="wep2_name" type="text" placeholder="Weapon Name" class="bg-transparent text-base w-full font-bold outline-none">
+            <div class="grid grid-cols-4 gap-2 text-zinc-500 mt-2">
+                <div class="text-center">
+                    <div class="text-[10px] text-zinc-600 mb-1">TRAIT</div>
+                    <select id="wep2_trait" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-xs" onchange="updateAttackBonus()">
+                        <option value="">—</option>
+                        <option value="t_agi">Agility</option>
+                        <option value="t_str">Strength</option>
+                        <option value="t_fin">Finesse</option>
+                        <option value="t_inst">Instinct</option>
+                        <option value="t_pres">Presence</option>
+                        <option value="t_know">Knowledge</option>
+                    </select>
+                </div>
+                <div class="text-center">
+                    <div class="text-[10px] text-zinc-600 mb-1">RANGE</div>
+                    <input id="wep2_range" type="text" placeholder="—" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-xs">
+                </div>
+                <div class="text-center">
+                    <div class="text-[10px] text-zinc-600 mb-1">DAMAGE</div>
+                    <input id="wep2_dmg" type="text" placeholder="—" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-xs">
+                </div>
+                <div class="text-center">
+                    <div class="text-[10px] text-zinc-600 mb-1">ATK BONUS</div>
+                    <div id="wep2_atk" class="w-full bg-gray-800 border border-gray-700 rounded py-1.5 text-center font-bold text-indigo-400 text-sm">—</div>
                 </div>
             </div>
         </div>
         <div>
-            <input id="wep2_name" type="text" placeholder="Weapon Name" class="bg-transparent text-sm w-full font-bold outline-none">
-            <div class="grid grid-cols-4 gap-2 text-[10px] text-zinc-500 mt-1">
+            <input id="armor_name" type="text" placeholder="Armor Name" class="bg-transparent text-base w-full font-bold outline-none">
+            <div class="grid grid-cols-3 gap-2 text-zinc-500 mt-2">
                 <div class="text-center">
-                    <div class="text-[7px] text-zinc-600 mb-0.5">TRAIT</div>
-                    <select id="wep2_trait" class="w-full bg-black/40 border border-zinc-800 rounded px-0.5 py-0.5 text-center outline-none text-[9px]" onchange="updateAttackBonus()">
-                        <option value="">—</option>
-                        <option value="t_agi">Agility</option>
-                        <option value="t_str">Strength</option>
-                        <option value="t_fin">Finesse</option>
-                        <option value="t_inst">Instinct</option>
-                        <option value="t_pres">Presence</option>
-                        <option value="t_know">Knowledge</option>
-                    </select>
+                    <div class="text-[10px] text-zinc-600 mb-1">MAJOR</div>
+                    <input id="armor_thresh_major" type="number" placeholder="0" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-sm" value="0" oninput="updateThresholds()">
                 </div>
                 <div class="text-center">
-                    <div class="text-[7px] text-zinc-600 mb-0.5">RANGE</div>
-                    <input id="wep2_range" type="text" placeholder="—" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center outline-none">
+                    <div class="text-[10px] text-zinc-600 mb-1">SEVERE</div>
+                    <input id="armor_thresh_severe" type="number" placeholder="0" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-sm" value="0" oninput="updateThresholds()">
                 </div>
                 <div class="text-center">
-                    <div class="text-[7px] text-zinc-600 mb-0.5">DAMAGE</div>
-                    <input id="wep2_dmg" type="text" placeholder="—" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center outline-none">
-                </div>
-                <div class="text-center">
-                    <div class="text-[7px] text-zinc-600 mb-0.5">ATK BONUS</div>
-                    <div id="wep2_atk" class="w-full bg-gray-800 border border-gray-700 rounded py-0.5 text-center font-bold text-indigo-400 text-[10px]">—</div>
+                    <div class="text-[10px] text-zinc-600 mb-1">SCORE</div>
+                    <input id="armor_score" type="text" placeholder="0" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-sm">
                 </div>
             </div>
-        </div>
-        <div class="border-t border-zinc-800 pt-2">
-            <input id="armor_name" type="text" placeholder="Armor Name" class="bg-transparent text-sm w-full font-bold outline-none">
-            <div class="grid grid-cols-3 gap-2 text-[10px] text-zinc-500 mt-1">
-                <div class="text-center">
-                    <div class="text-[7px] text-zinc-600 mb-0.5">MAJOR</div>
-                    <input id="armor_thresh_major" type="number" placeholder="0" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center outline-none" value="0" oninput="updateThresholds()">
-                </div>
-                <div class="text-center">
-                    <div class="text-[7px] text-zinc-600 mb-0.5">SEVERE</div>
-                    <input id="armor_thresh_severe" type="number" placeholder="0" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center outline-none" value="0" oninput="updateThresholds()">
-                </div>
-                <div class="text-center">
-                    <div class="text-[7px] text-zinc-600 mb-0.5">SCORE</div>
-                    <input id="armor_score" type="text" placeholder="0" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-0.5 text-center outline-none">
-                </div>
-            </div>
-            <div class="mt-1">
-                <div class="text-[7px] text-zinc-600 mb-0.5">FEATURE</div>
-                <input id="armor_feature" type="text" placeholder="Armor feature..." class="w-full bg-black/40 border border-zinc-800 rounded px-2 py-0.5 text-[10px] outline-none">
+            <div class="mt-2">
+                <div class="text-[10px] text-zinc-600 mb-1">FEATURE</div>
+                <input id="armor_feature" type="text" placeholder="Armor feature..." class="w-full bg-black/40 border border-zinc-800 rounded px-3 py-1.5 text-xs outline-none">
             </div>
         </div>
     </div>
     </div>
 </div>
 
-<div class="card">
-    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-gold')">
-        <span class="trait-label text-[#d4a017]">Gold & Gear</span>
-        <span class="text-zinc-600 text-[9px]" id="sec-gold-tog">▼</span>
+<div class="card accent-gold">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-gold')">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="3" style="background-color:#9a7209"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="3" style="color:#9a7209">Gold & Gear</h2>
+        </div>
+        <span class="text-zinc-500 text-xs toggle-icon" id="sec-gold-tog">▼</span>
     </div>
     <div id="sec-gold" class="mt-2">
-    <div class="grid grid-cols-2 gap-2 mb-3">
-        <div class="bg-black/40 p-1 rounded text-center">
-            <span class="text-[8px] text-zinc-500">HANDFULS</span>
-            <input id="gold_hand" type="number" class="w-full bg-transparent text-center text-sm" value="0">
+    <div class="grid grid-cols-2 gap-3 mb-4">
+        <div class="bg-black/40 p-3 rounded-lg text-center">
+            <span class="text-[10px] text-zinc-500 uppercase tracking-wide">HANDFULS</span>
+            <input id="gold_hand" type="number" class="w-full bg-transparent text-center text-lg font-bold" value="0">
         </div>
-        <div class="bg-black/40 p-1 rounded text-center">
-            <span class="text-[8px] text-zinc-500">BAGS</span>
-            <input id="gold_bags" type="number" class="w-full bg-transparent text-center text-sm" value="0">
+        <div class="bg-black/40 p-3 rounded-lg text-center">
+            <span class="text-[10px] text-zinc-500 uppercase tracking-wide">BAGS</span>
+            <input id="gold_bags" type="number" class="w-full bg-transparent text-center text-lg font-bold" value="0">
         </div>
     </div>
-    <div class="flex justify-between items-center mb-1">
-        <span class="trait-label text-zinc-500">Inventory</span>
-        <button class="bg-[#2a2418] border border-[#4a3f30] text-[9px] px-3 py-1 rounded-full font-bold uppercase text-[#a89880]" onclick="addInventoryItem()">+ Add Item</button>
+    <div class="flex justify-between items-center mb-2">
+        <span class="text-xs font-bold text-zinc-500 uppercase font-[Cinzel] tracking-wide">Inventory</span>
+        <button class="bg-[#2a2418] border border-[#4a3f30] text-xs px-4 py-1.5 rounded-full font-bold uppercase text-[#a89880]" onclick="addInventoryItem()">+ Add Item</button>
     </div>
-    <div id="inventoryList" class="space-y-1">
-        <div class="text-center text-[10px] text-zinc-600 italic">None</div>
+    <div id="inventoryList" class="space-y-2">
+        <div class="text-center text-xs text-zinc-600 italic">None</div>
     </div>
     </div>
 </div>
-<div class="card border-[#4a3f30]/60">
-    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-abilities')">
+<div class="card accent-abilities">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-abilities')">
         <div class="flex items-center gap-2">
-            <span class="trait-label text-[#d4a017]">Abilities & Cards</span>
-            <span class="text-zinc-600 text-[9px]" id="sec-abilities-tog">▼</span>
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="4" style="background-color:#7d5c07"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="4" style="color:#7d5c07">Abilities & Cards</h2>
+            <span class="text-zinc-500 text-xs toggle-icon" id="sec-abilities-tog">▼</span>
         </div>
         <button class="btn-action text-[9px] px-3 py-1 rounded-full font-bold uppercase text-white" onclick="event.stopPropagation(); openDatabase()">+ Add</button>
     </div>
     <div id="sec-abilities" class="mt-4">
-    <div class="mb-1 flex justify-between items-center"><span class="text-[8px] font-bold text-[#d4a017] uppercase font-[Cinzel]">Domain Cards</span><span id="domainSelectCount" class="text-[8px] text-[#6b5d4d]">0/5 selected</span></div>
-    <div id="domainCards" class="space-y-2 mb-3">
-        <div class="text-center text-[10px] text-zinc-600 italic">None</div>
+    <div class="mb-2 flex justify-between items-center"><span class="text-xs font-bold text-[#d4a017] uppercase font-[Cinzel]">Domain Cards</span><span id="domainSelectCount" class="text-xs text-[#6b5d4d]">0/5 selected</span></div>
+    <div id="domainCards" class="space-y-2 mb-4">
+        <div class="text-center text-xs text-zinc-600 italic">None</div>
     </div>
-    <div class="mb-1"><span class="text-[8px] font-bold text-[#5daa72] uppercase font-[Cinzel]">General</span></div>
+    <div class="mb-2"><span class="text-xs font-bold text-[#5daa72] uppercase font-[Cinzel]">General</span></div>
     <div id="generalCards" class="space-y-2">
-        <div class="text-center text-[10px] text-zinc-600 italic">None</div>
+        <div class="text-center text-xs text-zinc-600 italic">None</div>
     </div>
     </div>
 </div>
 
-<div class="card border-[#3d362a]">
-    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-experience')">
+<div class="card accent-experience">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-experience')">
         <div class="flex items-center gap-2">
-            <span class="trait-label text-[#a89880]">Experience</span>
-            <span class="text-zinc-600 text-[9px]" id="sec-experience-tog">▼</span>
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="5" style="background-color:#604605"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="5" style="color:#604605">Experience</h2>
+            <span class="text-zinc-500 text-xs toggle-icon" id="sec-experience-tog">▼</span>
         </div>
         <button class="btn-action text-[9px] px-3 py-1 rounded-full font-bold uppercase text-white" onclick="event.stopPropagation(); addExperience()">+ Add</button>
     </div>
     <div id="sec-experience" class="mt-2">
-        <div id="experienceList" class="space-y-1">
-            <div class="text-center text-[10px] text-zinc-600 italic">None</div>
+        <div id="experienceList" class="space-y-2">
+            <div class="text-center text-xs text-zinc-600 italic">None</div>
         </div>
     </div>
 </div>
@@ -294,84 +366,96 @@
 
 <div id="tab-story" style="display:none">
 
-<div class="card border-[#2a4030]">
-    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-levelup')">
-        <span class="trait-label text-[#5daa72]">Level Up Notes</span>
-        <span class="text-zinc-600 text-[9px]" id="sec-levelup-tog">▼</span>
+<div class="card accent-levelup">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-levelup')">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="1" style="background-color:#d4a017"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="1" style="color:#d4a017">Level Up Notes</h2>
+        </div>
+        <span class="text-zinc-500 text-xs toggle-icon" id="sec-levelup-tog">▼</span>
     </div>
     <div id="sec-levelup" class="mt-2">
-        <textarea id="levelupNotes" placeholder="Track level-up choices, stat increases, new abilities..." class="w-full bg-black/40 border border-zinc-800 rounded p-2 text-xs h-28 outline-none text-zinc-300"></textarea>
+        <textarea id="levelupNotes" placeholder="Track level-up choices, stat increases, new abilities..." class="w-full bg-black/40 border border-zinc-800 rounded p-3 text-sm h-32 outline-none text-zinc-300"></textarea>
     </div>
 </div>
 
-<div class="card border-[#4a2030]">
-    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-backstory')">
-        <span class="trait-label text-[#c47080]">Backstory</span>
-        <span class="text-zinc-600 text-[9px]" id="sec-backstory-tog">▼</span>
+<div class="card accent-backstory">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-backstory')">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="2" style="background-color:#b8860b"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="2" style="color:#b8860b">Backstory</h2>
+        </div>
+        <span class="text-zinc-500 text-xs toggle-icon" id="sec-backstory-tog">▼</span>
     </div>
     <div id="sec-backstory" class="mt-2">
-        <textarea id="backstory" placeholder="Your character's history, motivations, connections..." class="w-full bg-black/40 border border-zinc-800 rounded p-2 text-xs h-36 outline-none text-zinc-300"></textarea>
+        <textarea id="backstory" placeholder="Your character's history, motivations, connections..." class="w-full bg-black/40 border border-zinc-800 rounded p-3 text-sm h-40 outline-none text-zinc-300"></textarea>
     </div>
 </div>
 
-<div class="card border-[#3a2a50]">
-    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-description')">
-        <span class="trait-label text-[#a080c4]">Character Description</span>
-        <span class="text-zinc-600 text-[9px]" id="sec-description-tog">▼</span>
+<div class="card accent-description">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-description')">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="3" style="background-color:#9a7209"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="3" style="color:#9a7209">Character Description</h2>
+        </div>
+        <span class="text-zinc-500 text-xs toggle-icon" id="sec-description-tog">▼</span>
     </div>
-    <div id="sec-description" class="mt-2 space-y-2">
+    <div id="sec-description" class="mt-2 space-y-3">
         <div>
-            <div class="text-[8px] text-zinc-600 mb-0.5">CLOTHES</div>
-            <input id="desc_clothes" type="text" placeholder="extravagant, fancy, loud, oversized, ragged, sleek, wild..." class="w-full bg-black/40 border border-zinc-800 rounded px-2 py-1 text-[11px] outline-none">
+            <div class="text-[10px] text-zinc-600 mb-1 uppercase tracking-wide">CLOTHES</div>
+            <input id="desc_clothes" type="text" placeholder="extravagant, fancy, loud, oversized, ragged, sleek, wild..." class="w-full bg-black/40 border border-zinc-800 rounded px-3 py-2 text-sm outline-none">
         </div>
         <div>
-            <div class="text-[8px] text-zinc-600 mb-0.5">EYES</div>
-            <input id="desc_eyes" type="text" placeholder="carnations, earth, endless ocean, fire, ivy, lilacs, night..." class="w-full bg-black/40 border border-zinc-800 rounded px-2 py-1 text-[11px] outline-none">
+            <div class="text-[10px] text-zinc-600 mb-1 uppercase tracking-wide">EYES</div>
+            <input id="desc_eyes" type="text" placeholder="carnations, earth, endless ocean, fire, ivy, lilacs, night..." class="w-full bg-black/40 border border-zinc-800 rounded px-3 py-2 text-sm outline-none">
         </div>
         <div>
-            <div class="text-[8px] text-zinc-600 mb-0.5">BODY</div>
-            <input id="desc_body" type="text" placeholder="broad, carved, curvy, lanky, rotund, short, stocky, tall..." class="w-full bg-black/40 border border-zinc-800 rounded px-2 py-1 text-[11px] outline-none">
+            <div class="text-[10px] text-zinc-600 mb-1 uppercase tracking-wide">BODY</div>
+            <input id="desc_body" type="text" placeholder="broad, carved, curvy, lanky, rotund, short, stocky, tall..." class="w-full bg-black/40 border border-zinc-800 rounded px-3 py-2 text-sm outline-none">
         </div>
         <div>
-            <div class="text-[8px] text-zinc-600 mb-0.5">SKIN</div>
-            <input id="desc_skin" type="text" placeholder="ashes, clover, falling snow, fine sand, obsidian, rose..." class="w-full bg-black/40 border border-zinc-800 rounded px-2 py-1 text-[11px] outline-none">
+            <div class="text-[10px] text-zinc-600 mb-1 uppercase tracking-wide">SKIN</div>
+            <input id="desc_skin" type="text" placeholder="ashes, clover, falling snow, fine sand, obsidian, rose..." class="w-full bg-black/40 border border-zinc-800 rounded px-3 py-2 text-sm outline-none">
         </div>
         <div>
-            <div class="text-[8px] text-zinc-600 mb-0.5">ATTITUDE</div>
-            <input id="desc_attitude" type="text" placeholder="a barkeep, a magician, a ringmaster, a rock star..." class="w-full bg-black/40 border border-zinc-800 rounded px-2 py-1 text-[11px] outline-none">
+            <div class="text-[10px] text-zinc-600 mb-1 uppercase tracking-wide">ATTITUDE</div>
+            <input id="desc_attitude" type="text" placeholder="a barkeep, a magician, a ringmaster, a rock star..." class="w-full bg-black/40 border border-zinc-800 rounded px-3 py-2 text-sm outline-none">
         </div>
     </div>
 </div>
 
-<div class="card border-[#4a3f20]">
-    <div class="flex justify-between items-center cursor-pointer" onclick="toggleSection('sec-connections')">
-        <span class="trait-label text-[#d4a017]">Background & Connections</span>
-        <span class="text-zinc-600 text-[9px]" id="sec-connections-tog">▼</span>
+<div class="card accent-connections">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-connections')">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="4" style="background-color:#7d5c07"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="4" style="color:#7d5c07">Background & Connections</h2>
+        </div>
+        <span class="text-zinc-500 text-xs toggle-icon" id="sec-connections-tog">▼</span>
     </div>
     <div id="sec-connections" class="mt-2">
-        <textarea id="connections" placeholder="Background questions, connections to other characters, bonds, motivations..." class="w-full bg-black/40 border border-zinc-800 rounded p-2 text-xs h-40 outline-none text-zinc-300"></textarea>
+        <textarea id="connections" placeholder="Background questions, connections to other characters, bonds, motivations..." class="w-full bg-black/40 border border-zinc-800 rounded p-3 text-sm h-44 outline-none text-zinc-300"></textarea>
     </div>
 </div>
 
 </div>
 
-<div class="fixed bottom-0 left-0 right-0 bg-[#1a1714] border-t border-[#3d362a] p-2 z-40">
-    <div class="max-w-md mx-auto flex gap-2">
-        <button id="exportBtn" onclick="saveSheet()" class="flex-1 btn-action text-[9px] py-2.5 rounded-full font-bold uppercase text-white">⬇ Export</button>
-        <button onclick="loadSheet()" class="flex-1 bg-[#2a2418] border border-[#3d362a] text-[9px] py-2.5 rounded-full font-bold uppercase text-[#a89880]">⬆ Import</button>
-        <button onclick="clearSheet()" class="flex-1 btn-danger text-[9px] py-2.5 rounded-full font-bold uppercase text-red-200">Clear</button>
+<div class="fixed bottom-0 left-0 right-0 bg-[#1a1714]/95 backdrop-blur border-t border-[#3d362a] p-3 z-40">
+    <div class="max-w-2xl mx-auto flex gap-3">
+        <button id="exportBtn" onclick="saveSheet()" class="flex-1 btn-action text-xs py-3 rounded-xl font-bold uppercase text-white flex items-center justify-center gap-1.5"><span>⬇</span> Export</button>
+        <button onclick="loadSheet()" class="flex-1 bg-[#2a2418] border border-[#3d362a] text-xs py-3 rounded-xl font-bold uppercase text-[#a89880] flex items-center justify-center gap-1.5"><span>⬆</span> Import</button>
+        <button onclick="clearSheet()" class="flex-1 btn-danger text-xs py-3 rounded-xl font-bold uppercase text-red-200 flex items-center justify-center gap-1.5"><span>🗑</span> Clear</button>
     </div>
 </div>
 
-<div id="cardModal" class="fixed inset-0 bg-black/90 hidden z-50 p-4 overflow-y-auto">
-    <div class="max-w-md mx-auto bg-[#221f1a] border border-[#4a3f30] rounded-xl p-4 shadow-2xl">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="font-black text-[#d4a017] text-sm uppercase font-[Cinzel]">SRD Library</h2>
-            <button onclick="closeDatabase()" class="text-[#6b5d4d] hover:text-white text-xl">✕</button>
+<div id="cardModal" class="fixed inset-0 modal-overlay hidden z-50 p-4 overflow-y-auto">
+    <div class="max-w-lg mx-auto modal-panel p-5 mt-8 mb-8">
+        <div class="flex justify-between items-center border-b border-[#363026] pb-3 mb-4">
+            <h2 class="font-black text-[#d4a017] text-base uppercase font-[Cinzel] tracking-wide">SRD Library</h2>
+            <button onclick="closeDatabase()" class="text-[#6b5d4d] hover:text-white text-2xl leading-none">✕</button>
         </div>
 
-        <div class="space-y-3 mb-4">
-            <select id="dataType" class="w-full bg-[#1a1714] border border-[#4a3f30] rounded-lg p-2.5 text-xs" onchange="fetchData()">
+        <div class="grid grid-cols-2 gap-3 mb-4">
+            <select id="dataType" class="col-span-2 sm:col-span-1 bg-[#1a1714] border border-[#4a3f30] rounded-lg p-3 text-sm" onchange="fetchData()">
                 <option value="">Choose Category...</option>
                 <option value="ancestries.json">Ancestries</option>
                 <option value="communities.json">Communities</option>
@@ -379,10 +463,10 @@
                 <option value="domain-cards.json">Domain Cards</option>
                 <option value="subclasses.json">Subclasses</option>
             </select>
-            <input type="text" id="cardSearch" placeholder="Filter by name..." class="w-full bg-[#1a1714] border border-[#4a3f30] rounded-lg p-2.5 text-xs" oninput="filterCards()">
+            <input type="text" id="cardSearch" placeholder="Filter by name..." class="col-span-2 sm:col-span-1 bg-[#1a1714] border border-[#4a3f30] rounded-lg p-3 text-sm" oninput="filterCards()">
         </div>
 
-        <div id="modalResults" class="space-y-2 max-h-[60vh] overflow-y-auto pr-2">
+        <div id="modalResults" class="space-y-2 max-h-[60vh] overflow-y-auto pr-1">
         </div>
     </div>
 </div>
@@ -397,6 +481,48 @@
     let savedCardsData = [];
 
     const SAVE_KEY = 'dh_sheet_v1';
+    const THEME_KEY = 'dh_theme';
+
+    // Theme system
+    const THEMES = {
+        gold:    { base: [212, 160, 23] },
+        red:     { base: [192, 57, 43] },
+        blue:    { base: [41, 128, 185] },
+        navy:    { base: [44, 62, 110] },
+        purple:  { base: [142, 68, 173] },
+        green:   { base: [39, 174, 96] },
+        teal:    { base: [22, 160, 133] },
+        rose:    { base: [196, 112, 128] },
+    };
+
+    function hexFromRgb(r, g, b) {
+        return '#' + [r, g, b].map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+    }
+
+    function applyTheme(name) {
+        const theme = THEMES[name] || THEMES.gold;
+        const [r, g, b] = theme.base;
+        const color = hexFromRgb(r, g, b);
+        for (let i = 1; i <= 5; i++) {
+            document.documentElement.style.setProperty(`--accent-${i}`, color);
+        }
+        // Update section header dots and titles
+        document.querySelectorAll('[data-theme-level]').forEach(el => {
+            el.style.color = color;
+            if (el.classList.contains('theme-dot-el')) el.style.backgroundColor = color;
+        });
+        // Update active swatch
+        document.querySelectorAll('.theme-swatch').forEach(s => s.classList.toggle('active', s.dataset.theme === name));
+        localStorage.setItem(THEME_KEY, name);
+    }
+
+    function renderThemePicker() {
+        const container = document.getElementById('themePicker');
+        container.innerHTML = Object.entries(THEMES).map(([name, t]) => {
+            const color = hexFromRgb(...t.base);
+            return `<div class="theme-swatch" style="background:${color}" data-theme="${name}" onclick="applyTheme('${name}')" title="${name}"></div>`;
+        }).join('');
+    }
 
     const FIELD_IDS = ['charName','charPronouns','charLevel','charHeritage','charClass',
         'track_ev','t_agi','t_str','t_fin','t_inst','t_pres','t_know',
@@ -430,7 +556,7 @@
     }
 
     function gatherData() {
-        const data = { fields: {}, textareas: {}, dots: getDotStates(), cards: savedCardsData, experience: getExperienceData(), inventory: getInventoryData(), selectedDomain: Array.from(selectedDomainCards) };
+        const data = { fields: {}, textareas: {}, dots: getDotStates(), cards: savedCardsData, experience: getExperienceData(), inventory: getInventoryData(), selectedDomain: Array.from(selectedDomainCards), theme: localStorage.getItem(THEME_KEY) || 'gold' };
         FIELD_IDS.forEach(id => { const el = document.getElementById(id); if (el) data.fields[id] = el.value; });
         TEXTAREA_IDS.forEach(id => { const el = document.getElementById(id); if (el) data.textareas[id] = el.value; });
         return data;
@@ -439,8 +565,8 @@
     function switchTab(tabId) {
         document.getElementById('tab-sheet').style.display = tabId === 'tab-sheet' ? '' : 'none';
         document.getElementById('tab-story').style.display = tabId === 'tab-story' ? '' : 'none';
-        document.getElementById('btn-tab-sheet').className = `tab-btn flex-1 text-[10px] font-bold uppercase py-2.5 rounded-full font-[Cinzel] ${tabId === 'tab-sheet' ? 'btn-action text-white' : 'bg-[#2a2418] text-[#6b5d4d] border border-[#3d362a]'}`;
-        document.getElementById('btn-tab-story').className = `tab-btn flex-1 text-[10px] font-bold uppercase py-2.5 rounded-full font-[Cinzel] ${tabId === 'tab-story' ? 'btn-action text-white' : 'bg-[#2a2418] text-[#6b5d4d] border border-[#3d362a]'}`;
+        document.getElementById('btn-tab-sheet').className = `tab-btn text-[10px] font-bold uppercase px-5 py-2 rounded-full font-[Cinzel] ${tabId === 'tab-sheet' ? 'btn-action text-white' : 'bg-[#2a2418] text-[#6b5d4d] border border-[#3d362a]'}`;
+        document.getElementById('btn-tab-story').className = `tab-btn text-[10px] font-bold uppercase px-5 py-2 rounded-full font-[Cinzel] ${tabId === 'tab-story' ? 'btn-action text-white' : 'bg-[#2a2418] text-[#6b5d4d] border border-[#3d362a]'}`;
     }
 
     function updateAttackBonus() {
@@ -538,6 +664,8 @@
             });
         }
         updateThresholds();
+        // Restore theme
+        if (data.theme) applyTheme(data.theme);
         // Restore selected domain cards
         selectedDomainCards.clear();
         if (data.selectedDomain && data.selectedDomain.length) {
@@ -742,7 +870,7 @@
             const alreadyAdded = addedCards.has(cardKey);
 
             const div = document.createElement('div');
-            div.className = `p-3 bg-black border rounded mb-2 transition-all ${alreadyAdded ? 'opacity-40 cursor-default' : 'cursor-pointer'}`;
+            div.className = `p-4 bg-black/60 border rounded-lg mb-2 transition-all ${alreadyAdded ? 'opacity-40 cursor-default' : 'cursor-pointer hover:scale-[1.01]'}`;
             if (dc) {
                 div.style.borderColor = dc.border;
                 div.style.backgroundColor = dc.bg;
@@ -767,25 +895,25 @@
                 };
             }
 
-            const addedBadge = alreadyAdded ? '<span class="text-[8px] bg-zinc-700 text-zinc-400 px-1.5 py-0.5 rounded">✓ Added</span>' : '';
+            const addedBadge = alreadyAdded ? '<span class="text-[9px] bg-zinc-700 text-zinc-400 px-2 py-0.5 rounded">✓ Added</span>' : '';
 
             const domainBadge = isDomainCards
-                ? `<img src="${dc.icon}" class="w-4 h-4" alt="${item.domain}">
-                   <span class="text-[8px] font-bold uppercase px-1 rounded" style="color:${dc.text}">${item.domain}</span>
-                   <span class="text-[8px] text-zinc-500">Lvl ${item.level} · Recall ${item.recallCost}</span>`
+                ? `<img src="${dc.icon}" class="w-5 h-5" alt="${item.domain}">
+                   <span class="text-[10px] font-bold uppercase px-1 rounded" style="color:${dc.text}">${item.domain}</span>
+                   <span class="text-[10px] text-zinc-500">Lvl ${item.level} · Recall ${item.recallCost}</span>`
                 : '';
 
             const showDesc = !['communities.json','ancestries.json','classes.json'].includes(category);
 
             div.innerHTML = `
-            ${label ? `<div class="text-[12px] font-bold uppercase ${tierColor} mb-0.5">${label}${item._classInfo ? ` <span class="text-zinc-500 text-[9px] normal-case">(${item._classInfo})</span>` : ''}</div>` : ''}
-            ${domainBadge ? `<div class="flex gap-2 items-center mb-0.5">${domainBadge}</div>` : ''}
+            ${label ? `<div class="text-xs font-bold uppercase ${tierColor} mb-1">${label}${item._classInfo ? ` <span class="text-zinc-500 text-[10px] normal-case">(${item._classInfo})</span>` : ''}</div>` : ''}
+            ${domainBadge ? `<div class="flex gap-2 items-center mb-1">${domainBadge}</div>` : ''}
             <div class="flex items-center gap-2 mb-1">
-                <span class="text-[12px] font-black uppercase" ${dc ? `style="color:${dc.text}"` : 'class="text-indigo-300"'}>${name}</span>
+                <span class="text-sm font-black uppercase" ${dc ? `style="color:${dc.text}"` : 'class="text-indigo-300"'}>${name}</span>
                 ${addedBadge}
             </div>
-            ${showDesc ? `<p class="text-[11px] text-zinc-400 line-clamp-3">${desc}</p>` : ''}
-            ${feature ? `<p class="text-[11px] text-zinc-300 mt-1">${feature}</p>` : ''}
+            ${showDesc ? `<p class="text-xs text-zinc-400 line-clamp-3 leading-relaxed">${desc}</p>` : ''}
+            ${feature ? `<p class="text-xs text-zinc-300 mt-1 leading-relaxed">${feature}</p>` : ''}
         `;
             container.appendChild(div);
         });
@@ -806,32 +934,31 @@
 
         const id = 'card-' + Math.random().toString(36).substr(2, 9);
         const dc = isDomain ? domainColor(domain) : null;
-        const borderStyle = dc ? `style="border-left-color:${dc.border}"` : 'style="border-left-color:#0d9488"';
 
         const meta = '';
 
         const html = `
-        <div class="p-3 bg-zinc-900 border-l-2 relative mb-2" ${borderStyle} id="${id}" data-card-name="${cardKey}" data-level="${level || 0}">
+        <div class="sheet-card relative mb-2" style="border-left-color:${dc ? dc.border : '#0d9488'}" id="${id}" data-card-name="${cardKey}" data-level="${level || 0}">
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-1.5 cursor-pointer" onclick="toggleCard('${id}')">
-                    ${isDomain ? `<button onclick="event.stopPropagation(); toggleDomainSelect('${id}')" class="text-zinc-600 hover:text-yellow-400 text-[14px] leading-none" id="${id}-sel" title="Select for loadout">☆</button>` : ''}
-                    ${dc ? `<img src="${dc.icon}" class="w-4 h-4" alt="${domain}">` : ''}
-                    <span class="text-[10px] font-black uppercase" ${dc ? `style="color:${dc.text}"` : ''}>${name}</span>
+                    ${isDomain ? `<button onclick="event.stopPropagation(); toggleDomainSelect('${id}')" class="text-zinc-600 hover:text-yellow-400 text-base leading-none" id="${id}-sel" title="Select for loadout">☆</button>` : ''}
+                    ${dc ? `<img src="${dc.icon}" class="w-5 h-5" alt="${domain}">` : ''}
+                    <span class="text-xs font-black uppercase" ${dc ? `style="color:${dc.text}"` : ''}>${name}</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    ${isDomain ? `<span class="text-[8px] font-bold uppercase" style="color:${dc.text}">${domain}</span>` : ''}
-                    ${isDomain ? `<span class="text-[8px] text-zinc-500 whitespace-nowrap">Lvl ${level} | Recall ${recallCost}</span>` : ''}
-                    ${!isDomain ? `<span class="text-[8px] text-zinc-500 uppercase">${CATEGORY_LABELS[category] || category}</span>` : ''}
+                    ${isDomain ? `<span class="text-[10px] font-bold uppercase" style="color:${dc.text}">${domain}</span>` : ''}
+                    ${isDomain ? `<span class="text-[10px] text-zinc-500 whitespace-nowrap">Lvl ${level} | Recall ${recallCost}</span>` : ''}
+                    ${!isDomain ? `<span class="text-[10px] text-zinc-500 uppercase">${CATEGORY_LABELS[category] || category}</span>` : ''}
                     ${isDomain ? `<button onclick="moveCard('${id}',-1)" class="text-zinc-600 hover:text-white text-[10px]" style="display:none">▲</button>
                     <button onclick="moveCard('${id}',1)" class="text-zinc-600 hover:text-white text-[10px]" style="display:none">▼</button>` : ''}
-                    <button onclick="toggleCard('${id}')" class="text-zinc-500 hover:text-white text-[9px]" id="${id}-tog">▼</button>
-                    <button onclick="removeCard('${id}')" class="text-zinc-700 hover:text-red-500 text-xs">✕</button>
+                    <span onclick="toggleCard('${id}')" class="text-zinc-500 hover:text-white text-xs cursor-pointer toggle-icon" id="${id}-tog">▼</span>
+                    <button onclick="removeCard('${id}')" class="text-zinc-700 hover:text-red-500 text-sm">✕</button>
                 </div>
             </div>
-            <div id="${id}-body" class="mt-1">
+            <div id="${id}-body" class="mt-2">
                 ${meta}
-                ${feature ? `<div class="leading-tight mb-1">${feature.replace(/text-zinc-200/g, 'text-amber-400')}</div>` : ''}
-                ${desc ? `<div class="text-[10px] text-zinc-500 leading-tight">${desc}</div>` : ''}
+                ${feature ? `<div class="leading-relaxed mb-1 text-xs">${feature.replace(/text-zinc-200/g, 'text-amber-400')}</div>` : ''}
+                ${desc ? `<div class="text-xs text-zinc-500 leading-relaxed">${desc}</div>` : ''}
             </div>
         </div>
     `;
@@ -894,9 +1021,9 @@
         const q = qty || '1';
         const html = `
         <div class="flex items-center gap-2" id="${id}">
-            <input type="text" value="${val}" placeholder="Item..." class="flex-1 bg-black/40 border border-zinc-800 rounded px-2 py-1 text-[11px] text-zinc-300 outline-none" oninput="autoCache()">
-            <input type="text" value="${q}" placeholder="x1" class="w-12 bg-black/40 border border-zinc-800 rounded px-2 py-1 text-[11px] text-zinc-300 text-center outline-none" oninput="autoCache()">
-            <button onclick="removeInventoryItem('${id}')" class="text-zinc-700 hover:text-red-500 text-xs">✕</button>
+            <input type="text" value="${val}" placeholder="Item..." class="flex-1 bg-black/40 border border-zinc-800 rounded px-3 py-2 text-sm text-zinc-300 outline-none" oninput="autoCache()">
+            <input type="text" value="${q}" placeholder="x1" class="w-14 bg-black/40 border border-zinc-800 rounded px-2 py-2 text-sm text-zinc-300 text-center outline-none" oninput="autoCache()">
+            <button onclick="removeInventoryItem('${id}')" class="text-zinc-700 hover:text-red-500 text-sm">✕</button>
         </div>`;
         container.insertAdjacentHTML('beforeend', html);
         if (!text && !qty) autoCache();
@@ -926,9 +1053,9 @@
         const v = value || '';
         const html = `
         <div class="flex items-center gap-2" id="${id}">
-            <input type="text" value="${n}" placeholder="Name..." class="flex-1 bg-black/40 border border-zinc-800 rounded px-2 py-1 text-[11px] text-zinc-300 outline-none" oninput="autoCache()">
-            <input type="text" value="${v}" placeholder="+0" class="w-12 bg-black/40 border border-zinc-800 rounded px-2 py-1 text-[11px] text-zinc-300 text-center outline-none" oninput="autoCache()">
-            <button onclick="removeExperience('${id}')" class="text-zinc-700 hover:text-red-500 text-xs">✕</button>
+            <input type="text" value="${n}" placeholder="Name..." class="flex-1 bg-black/40 border border-zinc-800 rounded px-3 py-2 text-sm text-zinc-300 outline-none" oninput="autoCache()">
+            <input type="text" value="${v}" placeholder="+0" class="w-14 bg-black/40 border border-zinc-800 rounded px-2 py-2 text-sm text-zinc-300 text-center outline-none" oninput="autoCache()">
+            <button onclick="removeExperience('${id}')" class="text-zinc-700 hover:text-red-500 text-sm">✕</button>
         </div>`;
         container.insertAdjacentHTML('beforeend', html);
         if (!name && !value) autoCache();
@@ -955,7 +1082,7 @@
         const tog = document.getElementById(id + '-tog');
         const hidden = el.style.display === 'none';
         el.style.display = hidden ? '' : 'none';
-        tog.textContent = hidden ? '▼' : '▶';
+        tog.classList.toggle('collapsed', !hidden);
     }
 
     function removeCard(id) {
@@ -989,7 +1116,7 @@
         const tog = document.getElementById(id + '-tog');
         const hidden = body.style.display === 'none';
         body.style.display = hidden ? '' : 'none';
-        tog.textContent = hidden ? '▼' : '▶';
+        tog.classList.toggle('collapsed', !hidden);
     }
 
     function filterCards() {
@@ -1016,6 +1143,8 @@
     }
 
     window.onload = () => {
+        renderThemePicker();
+        applyTheme(localStorage.getItem(THEME_KEY) || 'gold');
         ['hp', 'stress', 'hope', 'armor'].forEach(t => {
             const input = document.getElementById(`${t}_max`);
             if(input) {
