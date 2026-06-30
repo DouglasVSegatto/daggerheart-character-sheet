@@ -479,6 +479,7 @@
     let selectedDomainCards = new Set();
 
     let savedCardsData = [];
+    let _restoring = false;
 
     const SAVE_KEY = 'dh_sheet_v1';
     const THEME_KEY = 'dh_theme';
@@ -614,6 +615,7 @@
     }
 
     function autoCache() {
+        if (_restoring) return;
         localStorage.setItem(SAVE_KEY, JSON.stringify(gatherData()));
     }
 
@@ -663,37 +665,42 @@
     }
 
     function applyData(data) {
-        FIELD_IDS.forEach(id => { const el = document.getElementById(id); if (el && data.fields?.[id] !== undefined) el.value = data.fields[id]; });
-        TEXTAREA_IDS.forEach(id => { const el = document.getElementById(id); if (el && data.textareas?.[id] !== undefined) el.value = data.textareas[id]; });
-        ['hp','stress','hope','armor'].forEach(t => renderDots(t, document.getElementById(`${t}_max`)?.value || 0));
-        setDotStates(data.dots);
-        document.getElementById('domainCards').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
-        document.getElementById('generalCards').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
-        addedCards.clear();
-        savedCardsData = data.cards || [];
-        savedCardsData.forEach(c => addCardToSheet(c));
-        // Restore experience
-        document.getElementById('experienceList').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
-        if (data.experience && data.experience.length) {
-            data.experience.forEach(e => addExperience(e.name, e.value));
-        }
-        // Restore inventory
-        document.getElementById('inventoryList').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
-        if (data.inventory && data.inventory.length) {
-            data.inventory.forEach(item => {
-                if (typeof item === 'string') addInventoryItem(item, '1');
-                else addInventoryItem(item.name, item.qty);
-            });
-        }
-        updateThresholds();
-        // Restore theme
-        if (data.theme) applyTheme(data.theme);
-        // Restore selected domain cards
-        selectedDomainCards.clear();
-        if (data.selectedDomain && data.selectedDomain.length) {
-            data.selectedDomain.forEach(name => selectedDomainCards.add(name));
-            updateDomainSelection();
-            reorderDomainCards();
+        _restoring = true;
+        try {
+            FIELD_IDS.forEach(id => { const el = document.getElementById(id); if (el && data.fields?.[id] !== undefined) el.value = data.fields[id]; });
+            TEXTAREA_IDS.forEach(id => { const el = document.getElementById(id); if (el && data.textareas?.[id] !== undefined) el.value = data.textareas[id]; });
+            ['hp','stress','hope','armor'].forEach(t => renderDots(t, document.getElementById(`${t}_max`)?.value || 0));
+            setDotStates(data.dots);
+            document.getElementById('domainCards').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
+            document.getElementById('generalCards').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
+            addedCards.clear();
+            savedCardsData = data.cards || [];
+            savedCardsData.forEach(c => addCardToSheet(c));
+            // Restore experience
+            document.getElementById('experienceList').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
+            if (data.experience && data.experience.length) {
+                data.experience.forEach(e => addExperience(e.name, e.value));
+            }
+            // Restore inventory
+            document.getElementById('inventoryList').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
+            if (data.inventory && data.inventory.length) {
+                data.inventory.forEach(item => {
+                    if (typeof item === 'string') addInventoryItem(item, '1');
+                    else addInventoryItem(item.name, item.qty);
+                });
+            }
+            updateThresholds();
+            // Restore theme
+            if (data.theme) applyTheme(data.theme);
+            // Restore selected domain cards
+            selectedDomainCards.clear();
+            if (data.selectedDomain && data.selectedDomain.length) {
+                data.selectedDomain.forEach(name => selectedDomainCards.add(name));
+                updateDomainSelection();
+                reorderDomainCards();
+            }
+        } finally {
+            _restoring = false;
         }
     }
 
@@ -1165,6 +1172,7 @@
     }
 
     window.onload = () => {
+        _restoring = true;
         renderThemePicker();
         applyTheme(localStorage.getItem(THEME_KEY) || 'gold');
         ['hp', 'stress', 'hope', 'armor'].forEach(t => {
@@ -1177,11 +1185,12 @@
         // Auto-load on start
         const raw = localStorage.getItem(SAVE_KEY);
         if (raw) loadSheet(true);
-        // Auto-cache on any input change
-        document.addEventListener('input', () => { updateThresholds(); updateAttackBonus(); autoCache(); });
-        document.addEventListener('change', () => { updateThresholds(); updateAttackBonus(); autoCache(); });
         updateThresholds();
         updateAttackBonus();
+        _restoring = false;
+        // Auto-cache on any input change (registered after restore completes)
+        document.addEventListener('input', () => { updateThresholds(); updateAttackBonus(); autoCache(); });
+        document.addEventListener('change', () => { updateThresholds(); updateAttackBonus(); autoCache(); });
     }
 </script>
 </body>
