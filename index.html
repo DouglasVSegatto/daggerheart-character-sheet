@@ -479,10 +479,13 @@
 </div>
 
 <div class="fixed bottom-0 left-0 right-0 bg-[#1a1714]/95 backdrop-blur border-t border-[#3d362a] p-3 z-40">
-    <div class="max-w-2xl mx-auto flex gap-3">
-        <button id="exportBtn" onclick="saveSheet()" class="flex-1 btn-action text-xs py-3 rounded-xl font-bold uppercase text-white flex items-center justify-center gap-1.5"><span>⬇</span> Export</button>
-        <button onclick="loadSheet()" class="flex-1 bg-[#2a2418] border border-[#3d362a] text-xs py-3 rounded-xl font-bold uppercase text-[#a89880] flex items-center justify-center gap-1.5"><span>⬆</span> Import</button>
-        <button onclick="clearSheet()" class="flex-1 btn-danger text-xs py-3 rounded-xl font-bold uppercase text-red-200 flex items-center justify-center gap-1.5"><span>🗑</span> Clear</button>
+    <div class="max-w-2xl mx-auto">
+        <div class="flex gap-3">
+            <button id="exportBtn" onclick="saveSheet()" class="flex-1 btn-action text-xs py-3 rounded-xl font-bold uppercase text-white flex items-center justify-center gap-1.5"><span>⬇</span> Export</button>
+            <button onclick="loadSheet()" class="flex-1 bg-[#2a2418] border border-[#3d362a] text-xs py-3 rounded-xl font-bold uppercase text-[#a89880] flex items-center justify-center gap-1.5"><span>⬆</span> Import</button>
+            <button onclick="clearSheet()" class="flex-1 btn-danger text-xs py-3 rounded-xl font-bold uppercase text-red-200 flex items-center justify-center gap-1.5"><span>🗑</span> Clear</button>
+        </div>
+        <div id="lastExportInfo" class="text-center text-[10px] text-zinc-600 mt-1.5"></div>
     </div>
 </div>
 
@@ -522,6 +525,17 @@
 
     const SAVE_KEY = 'dh_sheet_v1';
     const THEME_KEY = 'dh_theme';
+    const EXPORT_KEY = 'dh_last_export';
+
+    function updateExportIndicator() {
+        const el = document.getElementById('lastExportInfo');
+        const ts = localStorage.getItem(EXPORT_KEY);
+        if (!ts) { el.textContent = 'Last export: never'; return; }
+        const days = Math.floor((Date.now() - parseInt(ts)) / 86400000);
+        let text = days === 0 ? 'Last export: today' : days === 1 ? 'Last export: yesterday' : `Last export: ${days} days ago`;
+        el.textContent = text;
+        el.style.color = days >= 7 ? '#b8860b' : '';
+    }
 
     // Theme system
     const THEMES = {
@@ -618,7 +632,7 @@
     }
 
     function gatherData() {
-        const data = { fields: {}, textareas: {}, dots: getDotStates(), cards: savedCardsData, experience: getExperienceData(), inventory: getInventoryData(), selectedDomain: Array.from(selectedDomainCards), theme: localStorage.getItem(THEME_KEY) || 'gold' };
+        const data = { fields: {}, textareas: {}, dots: getDotStates(), cards: savedCardsData, experience: getExperienceData(), inventory: getInventoryData(), selectedDomain: Array.from(selectedDomainCards), theme: localStorage.getItem(THEME_KEY) || 'gold', lastExport: localStorage.getItem(EXPORT_KEY) || null };
         FIELD_IDS.forEach(id => { const el = document.getElementById(id); if (el) data.fields[id] = el.value; });
         TEXTAREA_IDS.forEach(id => { const el = document.getElementById(id); if (el) data.textareas[id] = el.value; });
         return data;
@@ -673,6 +687,8 @@
         a.download = `${charName}_${date}.json`;
         a.click();
         URL.revokeObjectURL(url);
+        localStorage.setItem(EXPORT_KEY, Date.now().toString());
+        updateExportIndicator();
         const btn = document.getElementById('exportBtn');
         btn.textContent = '✓ Saved!';
         btn.classList.add('bg-green-800');
@@ -691,8 +707,10 @@
                 reader.onload = (ev) => {
                     try {
                         const data = JSON.parse(ev.target.result);
+                        if (data.lastExport) localStorage.setItem(EXPORT_KEY, data.lastExport);
                         applyData(data);
                         localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+                        updateExportIndicator();
                         alert('Sheet loaded from file!');
                     } catch { alert('Invalid file.'); }
                 };
@@ -1233,6 +1251,7 @@
         if (raw) loadSheet(true);
         updateThresholds();
         updateAttackBonus();
+        updateExportIndicator();
         _restoring = false;
         // Auto-cache on any input change (registered after restore completes)
         document.addEventListener('input', () => { updateThresholds(); updateAttackBonus(); autoCache(); });
