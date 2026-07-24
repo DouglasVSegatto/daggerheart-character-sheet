@@ -1,0 +1,61 @@
+import { THEME_KEY } from './state.js';
+
+export const THEMES = {
+    gold:    { base: [212, 160, 23] },
+    red:     { base: [192, 57, 43] },
+    blue:    { base: [41, 128, 185] },
+    navy:    { base: [44, 62, 110] },
+    purple:  { base: [142, 68, 173] },
+    green:   { base: [39, 174, 96] },
+    teal:    { base: [22, 160, 133] },
+    rose:    { base: [196, 112, 128] },
+    silver:  { base: [149, 165, 166] },
+    bronze:  { base: [176, 122, 60] },
+};
+
+export function hexFromRgb(r, g, b) {
+    return '#' + [r, g, b].map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+}
+
+export function applyTheme(name) {
+    const theme = THEMES[name] || THEMES.gold;
+    const [r, g, b] = theme.base;
+    const color = hexFromRgb(r, g, b);
+    for (let i = 1; i <= 5; i++) {
+        document.documentElement.style.setProperty(`--accent-${i}`, color);
+    }
+    document.querySelectorAll('[data-theme-level]').forEach(el => {
+        el.style.color = color;
+        if (el.classList.contains('theme-dot-el')) el.style.backgroundColor = color;
+    });
+    document.querySelectorAll('.theme-swatch').forEach(s => s.classList.toggle('active', s.dataset.theme === name));
+    localStorage.setItem(THEME_KEY, name);
+    const btn = document.querySelector('#themePicker > div > button');
+    if (btn) btn.style.background = color;
+    const dd = document.getElementById('themeDropdown');
+    if (dd) dd.classList.add('hidden');
+}
+
+export function renderThemePicker() {
+    const container = document.getElementById('themePicker');
+    const current = localStorage.getItem(THEME_KEY) || 'gold';
+    const currentColor = hexFromRgb(...(THEMES[current] || THEMES.gold).base);
+    container.innerHTML = `<div class="relative">
+        <button class="theme-swatch active" style="background:${currentColor}" title="Change theme" id="themeToggleBtn"></button>
+        <div id="themeDropdown" class="hidden absolute right-0 top-8 bg-[#221f1a] border border-[#4a3f30] rounded-xl p-3 shadow-xl z-50 min-w-[160px]">
+            <div class="grid grid-cols-4 gap-3">${Object.entries(THEMES).map(([name, t]) => {
+                const color = hexFromRgb(...t.base);
+                return `<div class="theme-swatch ${name === current ? 'active' : ''}" style="background:${color}" data-theme="${name}" title="${name}"></div>`;
+            }).join('')}</div>
+        </div>
+    </div>`;
+
+    document.getElementById('themeToggleBtn').addEventListener('click', toggleThemeDropdown);
+    container.querySelectorAll('[data-theme]').forEach(el => {
+        el.addEventListener('click', () => applyTheme(el.dataset.theme));
+    });
+}
+
+function toggleThemeDropdown() {
+    document.getElementById('themeDropdown').classList.toggle('hidden');
+}
