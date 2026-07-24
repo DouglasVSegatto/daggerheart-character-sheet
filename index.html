@@ -132,10 +132,16 @@
     </div>
     <div id="sec-status" class="space-y-3">
 
-    <!-- Evasion -->
-    <div class="bg-[#14141c] border border-indigo-500/40 rounded-xl p-4 flex items-center justify-between">
-        <span class="text-sm font-bold text-indigo-400 font-[Cinzel] uppercase tracking-wide">Evasion</span>
-        <input id="track_ev" type="number" class="w-20 bg-transparent text-2xl font-black text-center text-indigo-300" value="10">
+    <!-- Evasion & Proficiency -->
+    <div class="grid grid-cols-2 gap-3">
+        <div class="bg-[#14141c] border border-indigo-500/40 rounded-xl p-4 flex items-center justify-between">
+            <span class="text-sm font-bold text-indigo-400 font-[Cinzel] uppercase tracking-wide">Evasion</span>
+            <input id="track_ev" type="number" class="w-16 bg-transparent text-2xl font-black text-center text-indigo-300" value="10">
+        </div>
+        <div class="bg-[#14141c] border border-emerald-500/40 rounded-xl p-4 flex items-center justify-between">
+            <span class="text-sm font-bold text-emerald-400 font-[Cinzel] uppercase tracking-wide">Proficiency</span>
+            <input id="track_prof" type="number" class="w-16 bg-transparent text-2xl font-black text-center text-emerald-300" value="0">
+        </div>
     </div>
 
     <!-- HP -->
@@ -601,7 +607,7 @@
     }
 
     const FIELD_IDS = ['charName','charPronouns','charLevel','charHeritage','charClass',
-        'track_ev','t_agi','t_str','t_fin','t_inst','t_pres','t_know',
+        'track_ev','track_prof','t_agi','t_str','t_fin','t_inst','t_pres','t_know',
         'hp_max','stress_max','hope_max','armor_max',
         'wep1_name','wep1_trait','wep1_range','wep1_dmg','wep2_name','wep2_trait','wep2_range','wep2_dmg',
         'armor_name','armor_thresh_major','armor_thresh_severe','armor_score','armor_feature',
