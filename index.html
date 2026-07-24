@@ -16,26 +16,24 @@
             --accent-5: #604605;
         }
         body { background-color: #1a1714; color: #e8e0d4; font-family: 'Inter', sans-serif; }
-        .card { background: linear-gradient(145deg, #221f1a, #1e1b16); border: 1px solid #3d362a; border-left: 3px solid #3d362a; border-radius: 12px; padding: 16px; margin-bottom: 14px; box-shadow: 0 2px 8px #0005; }
-        .accent-status { border-left-color: var(--accent-1); }
-        .accent-combat { border-left-color: var(--accent-2); }
-        .accent-gold { border-left-color: var(--accent-3); }
-        .accent-abilities { border-left-color: var(--accent-4); }
-        .accent-experience { border-left-color: var(--accent-5); }
-        .accent-levelup { border-left-color: var(--accent-1); }
-        .accent-backstory { border-left-color: var(--accent-2); }
-        .accent-description { border-left-color: var(--accent-3); }
-        .accent-connections { border-left-color: var(--accent-4); }
-        .theme-dot { color: var(--accent-1); }
+        .card { background: linear-gradient(145deg, #221f1a, #1e1b16); border: 1px solid #3d362a; border-left: 3px solid transparent; border-radius: 12px; padding: 16px; margin-bottom: 14px; box-shadow: 0 2px 8px #0005; transition: border-left-color 0.2s, border-left-width 0.2s, box-shadow 0.2s; }
+        .accent-status:hover { border-left-color: var(--accent-1); }
+        .accent-combat:hover { border-left-color: var(--accent-2); }
+        .accent-gold:hover { border-left-color: var(--accent-3); }
+        .accent-abilities:hover { border-left-color: var(--accent-4); }
+        .accent-experience:hover { border-left-color: var(--accent-5); }
+        .accent-levelup:hover { border-left-color: var(--accent-1); }
+        .accent-backstory:hover { border-left-color: var(--accent-2); }
+        .accent-description:hover { border-left-color: var(--accent-3); }
+        .accent-connections:hover { border-left-color: var(--accent-4); }
         .btn-action { background: linear-gradient(135deg, var(--accent-4), var(--accent-3)); border: none; }
         .btn-action:hover { background: linear-gradient(135deg, var(--accent-3), var(--accent-2)); }
         .trait-box { border: 1px solid #4a3f30; border-radius: 8px; padding: 8px 6px; text-align: center; background: #1a1714; }
         .trait-label { font-size: 9px; font-weight: 700; color: #a89880; text-transform: uppercase; display: block; letter-spacing: 0.5px; font-family: 'Cinzel', serif; }
-        .sub-stat { font-size: 8px; color: #6b5d4d; margin-top: 2px; line-height: 1; }
         .input-underline { background: transparent; border-bottom: 1px solid #4a3f30; outline: none; text-align: center; color: #f5efe6; width: 100%; }
         input, textarea { color: #f5efe6 !important; }
         select { color: #f5efe6 !important; background-color: #1a1714 !important; }
-        h1, h2, .section-title { font-family: 'Cinzel', serif; }
+        h1, h2 { font-family: 'Cinzel', serif; }
 
         .dot { width: 24px; height: 24px; border: 2px solid #4a3f30; border-radius: 50%; cursor: pointer; transition: all 0.15s ease; }
         .dot:hover { border-color: #8b7355; transform: scale(1.1); }
@@ -57,7 +55,6 @@
         .theme-swatch:hover { transform: scale(1.15); }
         .theme-swatch.active { border-color: #fff; box-shadow: 0 0 6px rgba(255,255,255,0.3); }
         .btn-danger { background: linear-gradient(135deg, #6b1a1a, #8b2020); }
-        .section-border { border-color: #3d362a; }
 
         /* Chevron rotation */
         .toggle-icon { display: inline-block; transition: transform 0.25s ease; }
@@ -70,6 +67,10 @@
         /* Sheet cards (added to sheet) */
         .sheet-card { background: linear-gradient(145deg, #1a1714, #1e1b16); border: 1px solid #3d362a; border-left: 3px solid #3d362a; border-radius: 10px; padding: 12px 14px; transition: border-color 0.2s; }
         .sheet-card:hover { border-color: #5a4d3a; }
+
+        /* Drag & drop reordering */
+        .dragging { opacity: 0.4; }
+        .drag-over { border-top: 2px solid var(--accent-1); }
     </style>
 </head>
 <body class="max-w-2xl mx-auto p-4 pb-24">
@@ -123,7 +124,8 @@
     <div class="trait-box"><span class="trait-label text-[10px]">Knowledge</span><input id="t_know" type="text" class="w-full bg-transparent text-center text-lg font-bold" value="0"></div>
 </div>
 
-<div class="card accent-status">
+<div id="sheetSortable">
+<div class="card accent-status" data-sortable-id="vitals">
     <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-status')">
         <div class="flex items-center gap-2">
             <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="1" style="background-color:#d4a017"></div>
@@ -212,7 +214,7 @@
     </div>
 </div>
 
-<div class="card accent-combat">
+<div class="card accent-combat" data-sortable-id="weapons">
     <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-weapons')">
         <div class="flex items-center gap-2">
             <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="2" style="background-color:#b8860b"></div>
@@ -305,7 +307,7 @@
     </div>
 </div>
 
-<div class="card accent-gold">
+<div class="card accent-gold" data-sortable-id="gold">
     <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-gold')">
         <div class="flex items-center gap-2">
             <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="3" style="background-color:#9a7209"></div>
@@ -333,7 +335,7 @@
     </div>
     </div>
 </div>
-<div class="card accent-abilities">
+<div class="card accent-abilities" data-sortable-id="abilities">
     <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-abilities')">
         <div class="flex items-center gap-2">
             <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="4" style="background-color:#7d5c07"></div>
@@ -354,7 +356,7 @@
     </div>
 </div>
 
-<div class="card accent-experience">
+<div class="card accent-experience" data-sortable-id="experience">
     <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-experience')">
         <div class="flex items-center gap-2">
             <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="5" style="background-color:#604605"></div>
@@ -368,6 +370,7 @@
             <div class="text-center text-xs text-zinc-600 italic">None</div>
         </div>
     </div>
+</div>
 </div>
 
 </div>

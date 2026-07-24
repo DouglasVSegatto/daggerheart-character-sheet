@@ -5,6 +5,7 @@ import { renderDots, updateThresholds, updateAttackBonus } from './trackers.js';
 import { openDatabase, closeDatabase, fetchData, filterCards } from './cards.js';
 import { addInventoryItem, addExperience } from './inventory.js';
 import { autoCache, saveSheet, loadSheet, clearSheet, updateExportIndicator } from './save.js';
+import { initSortable } from './sort.js';
 
 // Expose to global for inline handlers (we'll migrate these to addEventListener below)
 window.switchTab = switchTab;
@@ -45,4 +46,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('input', () => { updateThresholds(); updateAttackBonus(); autoCache(); });
     document.addEventListener('change', () => { updateThresholds(); updateAttackBonus(); autoCache(); });
+
+    initSortable('sheetSortable');
 });
