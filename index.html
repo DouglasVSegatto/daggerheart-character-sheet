@@ -100,6 +100,12 @@
         [data-mode="light"] .border-gray-700 { border-color: #c8c0d8 !important; }
         [data-mode="light"] .bg-zinc-900 { background-color: #f0ebe3 !important; }
         [data-mode="light"] .border-zinc-700 { border-color: #d4c9b8 !important; }
+        [data-mode="light"] .bg-\[\#2a2418\] { background-color: #f0ebe3 !important; border-color: #d4c9b8 !important; }
+        [data-mode="light"] .text-\[\#f5efe6\] { color: #2a2418 !important; }
+        [data-mode="light"] .border-\[\#363026\] { border-color: #d4c9b8 !important; }
+        [data-mode="light"] .border-zinc-800 { border-color: #d4c9b8 !important; }
+        [data-mode="light"] .text-zinc-400 { color: #5a5045 !important; }
+        [data-mode="light"] .text-zinc-500 { color: #6b5d4d !important; }
         /* Card detail modal text override */
         .card-detail-content, .card-detail-content * { font-size: 1rem !important; line-height: 1.8 !important; }
         .card-detail-content .text-amber-400 { font-size: 1.1rem !important; font-weight: 700; }
@@ -498,8 +504,25 @@
 
 <div id="tab-support" style="display:none">
 
-<div class="card" style="border-left-color:#d4a017">
-    <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest mb-4" style="color:#d4a017">Resources & Community</h2>
+<div class="card" style="border-left-color:#d4a017" data-theme-border="1">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-howto')">
+        <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="1" style="color:#d4a017">How to Use</h2>
+        <span class="text-zinc-500 text-xs toggle-icon" id="sec-howto-tog">▼</span>
+    </div>
+    <div id="sec-howto" class="text-sm text-zinc-400 space-y-3">
+        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Tabs:</span> Sheet for gameplay stats, Story for narrative/backstory, Support for links & help.</div>
+        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Saving:</span> All changes auto-save to your browser. Use Export to download a backup JSON file. Use Import to restore from a file.</div>
+        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Cards & Abilities:</span> Tap + Add to browse the SRD library. Click any card on your sheet to read it in full. Star up to 5 domain cards for your active loadout.</div>
+        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Gear:</span> Two weapon slots and one armor slot are fixed. Use + Gear to add shields, rings, cloaks, etc.</div>
+        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Inventory:</span> Track gold (handfuls/bags) and add/remove items with quantities.</div>
+        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Theme:</span> Pick an accent color with the color swatch. Use the slide toggle for dark/light mode.</div>
+        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Reorder Sections:</span> Hold and drag any section on the Sheet tab to rearrange the layout to your preference.</div>
+        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Tips:</span> Export often — localStorage is tied to your browser. Clearing browser data will lose unsaved sheets.</div>
+    </div>
+</div>
+
+<div class="card" style="border-left-color:#d4a017" data-theme-border="1">
+    <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest mb-4" data-theme-level="1" style="color:#d4a017">Resources & Community</h2>
     <div class="space-y-3">
 
         <a href="https://douglasvsegatto.github.io/daggerheart-dm-tools/" target="_blank" rel="noopener"

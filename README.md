@@ -6,19 +6,21 @@ A lightweight, mobile-friendly digital character sheet for **Daggerheart TTRPG**
 
 ## Features
 
-- **Tabbed Interface** — Sheet tab for gameplay, Story tab for roleplay/narrative
+- **Tabbed Interface** — Sheet tab for gameplay, Story tab for roleplay/narrative, Support tab for links & help
+- **Dark/Light Mode** — Slide toggle to switch between dark and light themes, persisted to localStorage
 - **Character Info** — Name, pronouns, level, heritage, class & subclass
 - **Attributes** — Evasion, Agility, Strength, Finesse, Instinct, Presence, Knowledge (supports +/- values)
 - **Status Tracking** — Clickable dots for HP, Stress, Hope, and Armor with configurable max values
 - **Damage Thresholds** — Auto-calculated from Armor Base + Character Level + Extras
-- **Weapons & Armor** — Two weapon slots with trait dropdown, range, damage, and auto-calculated attack bonus; armor slot with base thresholds, score, and feature
-- **Gold & Gear** — Handfuls/Bags counters with a dynamic inventory list (add/remove items with quantity)
+- **Gear** — Two weapon slots with trait dropdown, range, damage, and auto-calculated attack bonus; armor slot with base thresholds, score, and feature; dynamic "Additional Gear" items (name, bonus, description) for shields, rings, cloaks, etc.
+- **Gold & Inventory** — Handfuls/Bags counters with a dynamic inventory list (add/remove items with quantity)
 - **Abilities & Cards** — Pull directly from the [Daggerheart SRD data](https://github.com/daggersearch/daggerheart-data) with support for:
   - **Domain Cards** — Color-coded by domain with icons, sorted by level, showing recall cost. Select up to 5 cards as your active loadout (★)
   - **Communities** — Name and feature
   - **Ancestries** — Name and feature
   - **Classes** — Hope features and class features, with domain info
   - **Subclasses** — Flattened by tier (Foundation, Specialization, Mastery) as individual cards
+- **Card Detail Modal** — Click any card on your sheet to open a full-screen readable overlay with larger text
 - **Experience Tracking** — Add name + value pairs (e.g. Eagle Eye +2)
 - **Character Description** — Clothes, eyes, body, skin, attitude fields with Daggerheart guide suggestions
 - **Background & Connections** — Free-text area for character bonds and questions
@@ -31,6 +33,7 @@ A lightweight, mobile-friendly digital character sheet for **Daggerheart TTRPG**
 - **Export/Import** — Save your sheet as a JSON file (`CharacterName_YYYY-MM-DD.json`) or load one back in
 - **Clear** — Reset the entire sheet with confirmation
 - **Loadout Protection** — Cannot delete a domain card while it's in your active loadout
+- **How to Use Guide** — Built-in help section in the Support tab explaining all features
 
 ## Domain Colors & Icons
 
@@ -77,7 +80,17 @@ Open `index.html` in a browser.
 ## Project Structure
 
 ```
-├── index.html          # The entire application
+├── index.html          # Main HTML page
+├── js/
+│   ├── app.js          # Entry point, initialization
+│   ├── cards.js        # SRD card fetching, display, detail modal
+│   ├── inventory.js    # Inventory, experience, and gear item management
+│   ├── save.js         # Auto-cache, export, import, clear
+│   ├── sort.js         # Drag & drop section reordering
+│   ├── state.js        # Shared state, constants, domain colors
+│   ├── theme.js        # Accent color picker and dark/light mode toggle
+│   ├── trackers.js     # HP/Stress/Hope/Armor dots, thresholds, attack bonus
+│   └── ui.js           # Tab switching, section collapse
 ├── images/             # Domain icons
 │   ├── arcana.png
 │   ├── blade.png
@@ -99,7 +112,7 @@ Card data is fetched live from the [daggersearch/daggerheart-data](https://githu
 
 ## Tech Stack
 
-- HTML + vanilla JavaScript
+- HTML + vanilla JavaScript (ES modules)
 - [Tailwind CSS](https://tailwindcss.com/) (via CDN)
-- localStorage for auto-caching
+- localStorage for auto-caching and theme persistence
 - GitHub raw content API for SRD data

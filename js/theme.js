@@ -30,6 +30,9 @@ export function applyTheme(name) {
         el.style.color = color;
         if (el.classList.contains('theme-dot-el')) el.style.backgroundColor = color;
     });
+    document.querySelectorAll('[data-theme-border]').forEach(el => {
+        el.style.borderLeftColor = color;
+    });
     document.querySelectorAll('.theme-swatch').forEach(s => s.classList.toggle('active', s.dataset.theme === name));
     localStorage.setItem(THEME_KEY, name);
     const btn = document.querySelector('#themePicker > div > button');
