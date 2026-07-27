@@ -1,5 +1,7 @@
 import { THEME_KEY } from './state.js';
 
+const MODE_KEY = 'dh_mode';
+
 export const THEMES = {
     gold:    { base: [212, 160, 23] },
     red:     { base: [192, 57, 43] },
@@ -58,4 +60,21 @@ export function renderThemePicker() {
 
 function toggleThemeDropdown() {
     document.getElementById('themeDropdown').classList.toggle('hidden');
+}
+
+export function toggleMode() {
+    const body = document.body;
+    const isLight = body.getAttribute('data-mode') === 'light';
+    const newMode = isLight ? 'dark' : 'light';
+    body.setAttribute('data-mode', newMode);
+    localStorage.setItem(MODE_KEY, newMode);
+    document.getElementById('modeToggleIcon').textContent = newMode === 'light' ? '☀️' : '🌙';
+}
+
+export function initMode() {
+    const saved = localStorage.getItem(MODE_KEY) || 'dark';
+    document.body.setAttribute('data-mode', saved);
+    const chk = document.getElementById('modeToggleChk');
+    if (chk) chk.checked = saved === 'light';
+    document.getElementById('modeToggleIcon').textContent = saved === 'light' ? '☀️' : '🌙';
 }

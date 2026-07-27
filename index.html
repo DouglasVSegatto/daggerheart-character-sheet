@@ -71,14 +71,48 @@
         /* Drag & drop reordering */
         .dragging { opacity: 0.4; }
         .drag-over { border-top: 2px solid var(--accent-1); }
+
+        /* Light mode overrides */
+        [data-mode="light"] { background-color: #f5f0e8; color: #2a2418; }
+        [data-mode="light"] .card { background: linear-gradient(145deg, #ffffff, #f9f5ef); border-color: #d4c9b8; box-shadow: 0 2px 8px #0001; }
+        [data-mode="light"] .trait-box { background: #fff; border-color: #d4c9b8; }
+        [data-mode="light"] .trait-label { color: #6b5d4d; }
+        [data-mode="light"] .input-underline { border-bottom-color: #d4c9b8; color: #2a2418; }
+        [data-mode="light"] input, [data-mode="light"] textarea { color: #2a2418 !important; }
+        [data-mode="light"] select { color: #2a2418 !important; background-color: #fff !important; }
+        [data-mode="light"] .sheet-card { background: linear-gradient(145deg, #fff, #f9f5ef); border-color: #d4c9b8; }
+        [data-mode="light"] .modal-panel { background: linear-gradient(145deg, #fff, #f9f5ef); border-color: #d4c9b8; }
+        [data-mode="light"] .modal-overlay { background: rgba(0,0,0,0.4); }
+        [data-mode="light"] .domain-card-selected { background-color: #f5f0e0 !important; }
+        [data-mode="light"] nav { background-color: rgba(245,240,232,0.95) !important; border-color: #d4c9b8 !important; }
+        [data-mode="light"] .fixed.bottom-0 { background-color: rgba(245,240,232,0.95) !important; border-color: #d4c9b8 !important; }
+        [data-mode="light"] .bg-\[\#14141c\] { background-color: #eef0f8 !important; }
+        [data-mode="light"] .bg-\[\#1c1414\] { background-color: #faf0f0 !important; }
+        [data-mode="light"] .bg-\[\#19141c\] { background-color: #f5f0fa !important; }
+        [data-mode="light"] .bg-\[\#1c1a14\] { background-color: #faf8f0 !important; }
+        [data-mode="light"] .bg-\[\#14181c\] { background-color: #f0f5fa !important; }
+        [data-mode="light"] .bg-black\/40 { background-color: rgba(0,0,0,0.05) !important; }
+        [data-mode="light"] .bg-black\/20 { background-color: rgba(0,0,0,0.03) !important; }
+        [data-mode="light"] .relative.rounded-xl.overflow-hidden.mb-4.p-5 { background: linear-gradient(135deg, #f9f5ef 0%, #fff 40%, #f5f0e8 100%) !important; border-color: #d4c9b8 !important; }
+        [data-mode="light"] #charName { color: #2a2418 !important; }
+        [data-mode="light"] .tab-btn.bg-\[\#2a2418\] { background-color: #f0ebe3 !important; color: #6b5d4d !important; border-color: #d4c9b8 !important; }
+        [data-mode="light"] .bg-gray-800 { background-color: #e8e4f0 !important; }
+        [data-mode="light"] .border-gray-700 { border-color: #c8c0d8 !important; }
+        [data-mode="light"] .bg-zinc-900 { background-color: #f0ebe3 !important; }
+        [data-mode="light"] .border-zinc-700 { border-color: #d4c9b8 !important; }
     </style>
 </head>
 <body class="max-w-2xl mx-auto p-4 pb-24">
 
 <!-- Nav Bar -->
 <nav class="sticky top-0 z-30 bg-[#1a1714]/95 backdrop-blur border-b border-[#3d362a] -mx-4 px-4 py-2 mb-4 flex items-center justify-between">
-    <span class="font-[Cinzel] text-[11px] tracking-widest uppercase" data-theme-level="1" style="color:#d4a017">Daggerheart</span>
+    <span class="font-[Cinzel] text-[14px] tracking-widest uppercase font-black italic" data-theme-level="1" style="color:#d4a017">Daggerheart</span>
     <div class="flex items-center gap-3">
+<label class="relative inline-flex items-center cursor-pointer" title="Toggle light/dark mode">
+            <input type="checkbox" id="modeToggleChk" class="sr-only peer" onchange="toggleMode()">
+            <div class="w-11 h-6 bg-[#3d362a] peer-checked:bg-[#d4c9b8] rounded-full transition-colors"></div>
+            <div id="modeToggleThumb" class="absolute left-0.5 top-0.5 w-5 h-5 rounded-full bg-[#1a1714] flex items-center justify-center text-[11px] transition-transform peer-checked:translate-x-5 peer-checked:bg-white"><span id="modeToggleIcon">🌙</span></div>
+        </label>
         <div id="themePicker" class="flex gap-1.5 items-center"></div>
         <div class="flex gap-1">
             <button onclick="switchTab('tab-sheet')" id="btn-tab-sheet" class="tab-btn text-[10px] font-bold uppercase px-5 py-2 rounded-full btn-action text-white font-[Cinzel]">Sheet</button>
@@ -218,7 +252,7 @@
     <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-weapons')">
         <div class="flex items-center gap-2">
             <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="2" style="background-color:#b8860b"></div>
-            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="2" style="color:#b8860b">Active Weapons & Armor</h2>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="2" style="color:#b8860b">Gear</h2>
         </div>
         <span class="text-zinc-500 text-xs toggle-icon" id="sec-weapons-tog">▼</span>
     </div>
@@ -304,6 +338,15 @@
             </div>
         </div>
     </div>
+    <div class="border-t border-[#363026] mt-4 pt-4">
+        <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold text-zinc-500 uppercase font-[Cinzel] tracking-wide">Additional Gear</span>
+            <button class="btn-action text-xs px-4 py-1.5 rounded-full font-bold uppercase text-white" onclick="addGearItem()">+ Gear</button>
+        </div>
+        <div id="gearItemList" class="space-y-2">
+            <div class="text-center text-xs text-zinc-600 italic">None</div>
+        </div>
+    </div>
     </div>
 </div>
 
@@ -311,7 +354,7 @@
     <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-gold')">
         <div class="flex items-center gap-2">
             <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="3" style="background-color:#9a7209"></div>
-            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="3" style="color:#9a7209">Gold & Gear</h2>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="3" style="color:#9a7209">Gold & Inventory</h2>
         </div>
         <span class="text-zinc-500 text-xs toggle-icon" id="sec-gold-tog">▼</span>
     </div>
@@ -328,7 +371,7 @@
     </div>
     <div class="flex justify-between items-center mb-2">
         <span class="text-xs font-bold text-zinc-500 uppercase font-[Cinzel] tracking-wide">Inventory</span>
-        <button class="bg-[#2a2418] border border-[#4a3f30] text-xs px-4 py-1.5 rounded-full font-bold uppercase text-[#a89880]" onclick="addInventoryItem()">+ Add Item</button>
+        <button class="btn-action text-xs px-4 py-1.5 rounded-full font-bold uppercase text-white" onclick="addInventoryItem()">+ Add Item</button>
     </div>
     <div id="inventoryList" class="space-y-2">
         <div class="text-center text-xs text-zinc-600 italic">None</div>
@@ -342,7 +385,7 @@
             <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="4" style="color:#7d5c07">Abilities & Cards</h2>
             <span class="text-zinc-500 text-xs toggle-icon" id="sec-abilities-tog">▼</span>
         </div>
-        <button class="btn-action text-[9px] px-3 py-1 rounded-full font-bold uppercase text-white" onclick="event.stopPropagation(); openDatabase()">+ Add</button>
+        <button class="btn-action text-xs px-3 py-1 rounded-full font-bold uppercase text-white" onclick="event.stopPropagation(); openDatabase()">+ Add</button>
     </div>
     <div id="sec-abilities" class="mt-4">
     <div class="mb-2 flex justify-between items-center"><span class="text-xs font-bold text-[#d4a017] uppercase font-[Cinzel]">Domain Cards</span><span id="domainSelectCount" class="text-xs text-[#6b5d4d]">0/5 selected</span></div>
@@ -363,7 +406,7 @@
             <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="5" style="color:#604605">Experience</h2>
             <span class="text-zinc-500 text-xs toggle-icon" id="sec-experience-tog">▼</span>
         </div>
-        <button class="btn-action text-[9px] px-3 py-1 rounded-full font-bold uppercase text-white" onclick="event.stopPropagation(); addExperience()">+ Add</button>
+        <button class="btn-action text-xs px-3 py-1 rounded-full font-bold uppercase text-white" onclick="event.stopPropagation(); addExperience()">+ Add</button>
     </div>
     <div id="sec-experience" class="mt-2">
         <div id="experienceList" class="space-y-2">

@@ -1,7 +1,7 @@
 import { SAVE_KEY, EXPORT_KEY, THEME_KEY, FIELD_IDS, TEXTAREA_IDS, _restoring, setRestoring, addedCards, selectedDomainCards, savedCardsData, setSavedCardsData } from './state.js';
 import { getDotStates, setDotStates, renderDots, updateThresholds } from './trackers.js';
 import { addCardToSheet, updateDomainSelection, reorderDomainCards } from './cards.js';
-import { addExperience, getExperienceData, addInventoryItem, getInventoryData } from './inventory.js';
+import { addExperience, getExperienceData, addInventoryItem, getInventoryData, addGearItem, getGearData } from './inventory.js';
 import { applyTheme } from './theme.js';
 
 export function autoCache() {
@@ -13,7 +13,8 @@ export function gatherData() {
     const data = {
         fields: {}, textareas: {}, dots: getDotStates(),
         cards: savedCardsData, experience: getExperienceData(),
-        inventory: getInventoryData(), selectedDomain: Array.from(selectedDomainCards),
+        inventory: getInventoryData(), gear: getGearData(),
+        selectedDomain: Array.from(selectedDomainCards),
         theme: localStorage.getItem(THEME_KEY) || 'gold',
         lastExport: localStorage.getItem(EXPORT_KEY) || null
     };
@@ -44,6 +45,10 @@ export function applyData(data) {
                 if (typeof item === 'string') addInventoryItem(item, '1');
                 else addInventoryItem(item.name, item.qty);
             });
+        }
+        document.getElementById('gearItemList').innerHTML = '<div class="text-center text-xs text-zinc-600 italic">None</div>';
+        if (data.gear && data.gear.length) {
+            data.gear.forEach(g => addGearItem(g.name, g.bonus, g.desc));
         }
         updateThresholds();
         if (data.theme) applyTheme(data.theme);
@@ -126,6 +131,7 @@ export function clearSheet() {
     document.getElementById('domainSelectCount').textContent = '0/5 selected';
     document.getElementById('experienceList').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
     document.getElementById('inventoryList').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
+    document.getElementById('gearItemList').innerHTML = '<div class="text-center text-xs text-zinc-600 italic">None</div>';
     autoCache();
     alert('Sheet cleared!');
 }

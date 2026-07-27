@@ -1,9 +1,9 @@
 import { SAVE_KEY, THEME_KEY, setRestoring } from './state.js';
-import { renderThemePicker, applyTheme } from './theme.js';
+import { renderThemePicker, applyTheme, toggleMode, initMode } from './theme.js';
 import { switchTab, toggleSection, toggleCard } from './ui.js';
 import { renderDots, updateThresholds, updateAttackBonus } from './trackers.js';
 import { openDatabase, closeDatabase, fetchData, filterCards } from './cards.js';
-import { addInventoryItem, addExperience } from './inventory.js';
+import { addInventoryItem, addExperience, addGearItem } from './inventory.js';
 import { autoCache, saveSheet, loadSheet, clearSheet, updateExportIndicator } from './save.js';
 import { initSortable } from './sort.js';
 
@@ -19,13 +19,16 @@ window.fetchData = fetchData;
 window.filterCards = filterCards;
 window.addInventoryItem = addInventoryItem;
 window.addExperience = addExperience;
+window.addGearItem = addGearItem;
 window.saveSheet = saveSheet;
 window.loadSheet = loadSheet;
 window.clearSheet = clearSheet;
 window.autoCache = autoCache;
+window.toggleMode = toggleMode;
 
 window.addEventListener('DOMContentLoaded', () => {
     setRestoring(true);
+    initMode();
     renderThemePicker();
     applyTheme(localStorage.getItem(THEME_KEY) || 'gold');
 
