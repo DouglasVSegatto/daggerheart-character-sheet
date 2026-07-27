@@ -66,6 +66,15 @@ export async function fetchData() {
     const file = document.getElementById('dataType').value;
     if (!file) return;
     document.getElementById('cardSearch').value = '';
+    document.getElementById('cardSearch').classList.remove('hidden');
+
+    const domainFilter = document.getElementById('domainFilter');
+    const levelFilter = document.getElementById('levelFilter');
+    const isDomainCards = file === 'domain-cards.json';
+    domainFilter.classList.toggle('hidden', !isDomainCards);
+    levelFilter.classList.toggle('hidden', !isDomainCards);
+    domainFilter.value = '';
+    levelFilter.value = '';
 
     const container = document.getElementById('modalResults');
     container.innerHTML = '<div class="text-center py-10 text-[10px] text-zinc-500 animate-pulse uppercase">Fetching Data...</div>';
@@ -128,10 +137,16 @@ export async function fetchData() {
 
 export function filterCards() {
     const query = document.getElementById('cardSearch').value.toLowerCase();
+    const domainVal = document.getElementById('domainFilter')?.value || '';
+    const levelVal = document.getElementById('levelFilter')?.value || '';
     const filtered = currentData.filter(c => {
         const n = t(c.name || c.title || '').toLowerCase();
         const label = (c._display || '').toLowerCase();
-        return n.includes(query) || label.includes(query);
+        const domain = (c.domain || '').toLowerCase();
+        if (query && !n.includes(query) && !label.includes(query) && !domain.includes(query)) return false;
+        if (domainVal && (c.domain || '') !== domainVal) return false;
+        if (levelVal && String(c.level || '') !== levelVal) return false;
+        return true;
     });
     displayResults(filtered);
 }
@@ -222,7 +237,7 @@ export function addCardToSheet(opts) {
     const dc = isDomain ? domainColor(domain) : null;
 
     const html = `
-    <div class="sheet-card relative mb-2" style="border-left-color:${dc ? dc.border : '#0d9488'}" id="${id}" data-card-name="${cardKey}" data-level="${level || 0}">
+    <div class="sheet-card relative mb-2" style="border-left-color:${dc ? '#3d362a' : 'var(--accent-1)'}" id="${id}" data-card-name="${cardKey}" data-level="${level || 0}" data-domain-border="${dc ? dc.border : ''}">
         <div class="flex justify-between items-center">
             <div class="flex items-center gap-1.5 cursor-pointer card-toggle" data-id="${id}">
                 ${isDomain ? `<button class="text-zinc-600 hover:text-yellow-400 text-base leading-none domain-sel-btn" data-id="${id}" id="${id}-sel" title="Select for loadout">☆</button>` : ''}
@@ -282,9 +297,11 @@ export function removeCard(id) {
 export function toggleDomainSelect(id) {
     const el = document.getElementById(id);
     const cardName = el.getAttribute('data-card-name');
+    const domainBorder = el.getAttribute('data-domain-border');
     if (selectedDomainCards.has(cardName)) {
         selectedDomainCards.delete(cardName);
         el.classList.remove('domain-card-selected');
+        el.style.borderLeftColor = '#3d362a';
         const btn = document.getElementById(id + '-sel');
         btn.textContent = '☆';
         btn.classList.remove('text-yellow-400');
@@ -292,6 +309,7 @@ export function toggleDomainSelect(id) {
         if (selectedDomainCards.size >= 5) { alert('Max 5 domain cards can be selected.'); return; }
         selectedDomainCards.add(cardName);
         el.classList.add('domain-card-selected');
+        if (domainBorder) el.style.borderLeftColor = domainBorder;
         const btn = document.getElementById(id + '-sel');
         btn.textContent = '★';
         btn.classList.add('text-yellow-400');
@@ -316,12 +334,15 @@ export function reorderDomainCards() {
 export function updateDomainSelection() {
     document.querySelectorAll('#domainCards > div[data-card-name]').forEach(el => {
         const name = el.getAttribute('data-card-name');
+        const domainBorder = el.getAttribute('data-domain-border');
         const selBtn = el.querySelector('[id$="-sel"]');
         if (selectedDomainCards.has(name)) {
             el.classList.add('domain-card-selected');
+            if (domainBorder) el.style.borderLeftColor = domainBorder;
             if (selBtn) { selBtn.textContent = '★'; selBtn.classList.add('text-yellow-400'); }
         } else {
             el.classList.remove('domain-card-selected');
+            el.style.borderLeftColor = '#3d362a';
             if (selBtn) { selBtn.textContent = '☆'; selBtn.classList.remove('text-yellow-400'); }
         }
     });
