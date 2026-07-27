@@ -37,7 +37,7 @@ export function applyData(data) {
         savedCardsData.forEach(c => addCardToSheet(c));
         document.getElementById('experienceList').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
         if (data.experience && data.experience.length) {
-            data.experience.forEach(e => addExperience(e.name, e.value));
+            data.experience.forEach(e => addExperience(e.name, e.value, e.desc));
         }
         document.getElementById('inventoryList').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
         if (data.inventory && data.inventory.length) {
