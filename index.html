@@ -100,6 +100,9 @@
         [data-mode="light"] .border-gray-700 { border-color: #c8c0d8 !important; }
         [data-mode="light"] .bg-zinc-900 { background-color: #f0ebe3 !important; }
         [data-mode="light"] .border-zinc-700 { border-color: #d4c9b8 !important; }
+        /* Card detail modal text override */
+        .card-detail-content, .card-detail-content * { font-size: 1rem !important; line-height: 1.8 !important; }
+        .card-detail-content .text-amber-400 { font-size: 1.1rem !important; font-weight: 700; }
     </style>
 </head>
 <body class="max-w-2xl mx-auto p-4 pb-24">
@@ -539,6 +542,17 @@
             <button onclick="clearSheet()" class="flex-1 btn-danger text-xs py-3 rounded-xl font-bold uppercase text-red-200 flex items-center justify-center gap-1.5"><span>🗑</span> Clear</button>
         </div>
         <div id="lastExportInfo" class="text-center text-[10px] text-zinc-600 mt-1.5"></div>
+    </div>
+</div>
+
+<!-- Card Detail Modal -->
+<div id="cardDetailModal" class="fixed inset-0 modal-overlay hidden z-50 p-4 overflow-y-auto flex items-center justify-center" onclick="closeCardDetail()">
+    <div class="w-full max-w-2xl modal-panel p-8 rounded-xl border border-[#3d362a] bg-[#1e1b16]" onclick="event.stopPropagation()">
+        <div class="flex justify-between items-center border-b border-[#363026] pb-4 mb-5">
+            <h2 id="cardDetailTitle" class="font-black text-xl uppercase font-[Cinzel] tracking-wide"></h2>
+            <button onclick="closeCardDetail()" class="text-[#6b5d4d] hover:text-white text-2xl leading-none">✕</button>
+        </div>
+        <div id="cardDetailBody" class="card-detail-content"></div>
     </div>
 </div>
 

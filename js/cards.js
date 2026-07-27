@@ -2,6 +2,22 @@ import { GITHUB_RAW, DOMAIN_COLORS, CATEGORY_LABELS, currentData, setCurrentData
 import { autoCache } from './save.js';
 import { toggleCard } from './ui.js';
 
+export function openCardDetail(id) {
+    const el = document.getElementById(id);
+    const title = el.querySelector('.text-xs.font-black')?.textContent || '';
+    const body = document.getElementById(id + '-body');
+    document.getElementById('cardDetailTitle').textContent = title;
+    const titleEl = document.getElementById('cardDetailTitle');
+    const color = el.querySelector('.text-xs.font-black')?.style.color;
+    if (color) titleEl.style.color = color;
+    document.getElementById('cardDetailBody').innerHTML = body.innerHTML;
+    document.getElementById('cardDetailModal').classList.remove('hidden');
+}
+
+export function closeCardDetail() {
+    document.getElementById('cardDetailModal').classList.add('hidden');
+}
+
 function t(val) {
     if (!val) return '';
     if (typeof val === 'string') return val;
@@ -234,7 +250,7 @@ export function addCardToSheet(opts) {
     cardEl.querySelectorAll('.card-toggle').forEach(el => {
         el.addEventListener('click', (e) => {
             if (e.target.classList.contains('domain-sel-btn')) return;
-            toggleCard(id);
+            openCardDetail(id);
         });
     });
     cardEl.querySelector('.card-remove').addEventListener('click', () => removeCard(id));
