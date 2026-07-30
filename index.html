@@ -15,7 +15,8 @@
 <body class="max-w-2xl mx-auto p-4 pb-24">
 
 <!-- Nav Bar -->
-<nav class="sticky top-0 z-30 bg-[#1a1714]/95 backdrop-blur border-b border-[#3d362a] -mx-4 px-4 py-2 mb-4 flex items-center justify-between">
+<nav class="fixed top-0 left-0 right-0 z-30 bg-[#1a1714]/95 backdrop-blur border-b border-[#3d362a] px-4 py-2">
+    <div class="max-w-2xl mx-auto flex items-center justify-between">
     <span class="font-[Cinzel] text-[14px] tracking-widest uppercase font-black italic leading-tight" data-theme-level="1" style="color:#d4a017">Dagger<br>heart</span>
     <div class="flex items-center gap-3">
 <label class="relative inline-flex items-center cursor-pointer" title="Toggle light/dark mode">
@@ -30,9 +31,10 @@
             <button onclick="switchTab('tab-support')" id="btn-tab-support" class="tab-btn text-[10px] font-bold uppercase px-5 py-2 rounded-full bg-[#2a2418] text-[#6b5d4d] border border-[#3d362a] font-[Cinzel]">Support</button>
         </div>
     </div>
+    </div>
 </nav>
 
-<div id="tab-sheet">
+<div id="tab-sheet" class="mt-14">
 
 <!-- Hero Header -->
 <div class="hero-header relative rounded-xl overflow-hidden mb-4 p-5 pb-4">
@@ -327,7 +329,7 @@
 
 </div>
 
-<div id="tab-story" style="display:none">
+<div id="tab-story" class="mt-14" style="display:none">
 
 <div class="card accent-levelup">
     <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-levelup')">
@@ -402,7 +404,7 @@
 
 </div>
 
-<div id="tab-support" style="display:none">
+<div id="tab-support" class="mt-14" style="display:none">
 
 <div class="card" style="border-left-color:#d4a017" data-theme-border="1">
     <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-howto')">
