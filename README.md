@@ -81,6 +81,11 @@ Open `index.html` in a browser.
 
 ```
 ├── index.html          # Main HTML page
+├── css/
+│   ├── base.css        # Variables, typography, inputs, layout
+│   ├── components.css  # Cards, dots/trackers, modals, buttons, tabs
+│   ├── themes.css      # Dark/light mode overrides
+│   └── textures.css    # Background grain, vignette, atmosphere
 ├── js/
 │   ├── app.js          # Entry point, initialization
 │   ├── cards.js        # SRD card fetching, display, detail modal

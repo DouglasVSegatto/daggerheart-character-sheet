@@ -7,119 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗡️</text></svg>">
-    <style>
-        :root {
-            --accent-1: #d4a017;
-            --accent-2: #b8860b;
-            --accent-3: #9a7209;
-            --accent-4: #7d5c07;
-            --accent-5: #604605;
-        }
-        body { background-color: #1a1714; color: #e8e0d4; font-family: 'Inter', sans-serif; }
-        .card { background: linear-gradient(145deg, #221f1a, #1e1b16); border: 1px solid #3d362a; border-left: 3px solid transparent; border-radius: 12px; padding: 16px; margin-bottom: 14px; box-shadow: 0 2px 8px #0005; transition: border-left-color 0.2s, border-left-width 0.2s, box-shadow 0.2s; }
-        .accent-status:hover { border-left-color: var(--accent-1); }
-        .accent-combat:hover { border-left-color: var(--accent-2); }
-        .accent-gold:hover { border-left-color: var(--accent-3); }
-        .accent-abilities:hover { border-left-color: var(--accent-4); }
-        .accent-experience:hover { border-left-color: var(--accent-5); }
-        .accent-levelup:hover { border-left-color: var(--accent-1); }
-        .accent-backstory:hover { border-left-color: var(--accent-2); }
-        .accent-description:hover { border-left-color: var(--accent-3); }
-        .accent-connections:hover { border-left-color: var(--accent-4); }
-        .btn-action { background: linear-gradient(135deg, var(--accent-4), var(--accent-3)); border: none; }
-        .btn-action:hover { background: linear-gradient(135deg, var(--accent-3), var(--accent-2)); }
-        .trait-box { border: 1px solid #4a3f30; border-radius: 8px; padding: 8px 6px; text-align: center; background: #1a1714; }
-        .trait-label { font-size: 9px; font-weight: 700; color: #a89880; text-transform: uppercase; display: block; letter-spacing: 0.5px; font-family: 'Cinzel', serif; }
-        .input-underline { background: transparent; border-bottom: 1px solid #4a3f30; outline: none; text-align: center; color: #f5efe6; width: 100%; }
-        input, textarea { color: #f5efe6 !important; }
-        select { color: #f5efe6 !important; background-color: #1a1714 !important; }
-        h1, h2 { font-family: 'Cinzel', serif; }
-
-        .dot { width: 24px; height: 24px; border: 2px solid #4a3f30; border-radius: 50%; cursor: pointer; transition: all 0.15s ease; }
-        .dot:hover { border-color: #8b7355; transform: scale(1.1); }
-        .dot.filled-hp { background-color: #c0392b; border-color: #c0392b; box-shadow: 0 0 6px #c0392b60; }
-        .dot.filled-armor { background-color: #2980b9; border-color: #2980b9; box-shadow: 0 0 6px #2980b960; }
-        .dot.filled-stress { background-color: #8e44ad; border-color: #8e44ad; box-shadow: 0 0 6px #8e44ad60; }
-        .dot.filled-hope { background-color: #d4a017; border-color: #d4a017; box-shadow: 0 0 6px #d4a01760; }
-        .domain-card-selected { background-color: #2a2418 !important; border: 1px solid var(--accent-1) !important; animation: shimmer 3s ease-in-out infinite; }
-        @keyframes shimmer {
-            0%, 100% { box-shadow: 0 0 8px color-mix(in srgb, var(--accent-1) 15%, transparent), inset 0 0 6px color-mix(in srgb, var(--accent-1) 8%, transparent); }
-            50% { box-shadow: 0 0 18px color-mix(in srgb, var(--accent-1) 30%, transparent), inset 0 0 12px color-mix(in srgb, var(--accent-1) 15%, transparent); }
-        }
-
-        .tab-btn { transition: all 0.2s ease; }
-        .tab-btn:hover { opacity: 0.9; }
-
-        /* Theme picker */
-        .theme-swatch { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; }
-        .theme-swatch:hover { transform: scale(1.15); }
-        .theme-swatch.active { border-color: #fff; box-shadow: 0 0 6px rgba(255,255,255,0.3); }
-        .btn-danger { background: linear-gradient(135deg, #6b1a1a, #8b2020); }
-
-        /* Chevron rotation */
-        .toggle-icon { display: inline-block; transition: transform 0.25s ease; }
-        .toggle-icon.collapsed { transform: rotate(-90deg); }
-
-        /* Modal backdrop */
-        .modal-overlay { backdrop-filter: blur(4px); background: rgba(0,0,0,0.85); }
-        .modal-panel { background: linear-gradient(145deg, #252118, #1e1b16); border: 1px solid #4a3f30; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
-
-        /* Sheet cards (added to sheet) */
-        .sheet-card { background: linear-gradient(145deg, #1a1714, #1e1b16); border: 1px solid #3d362a; border-left: 3px solid #3d362a; border-radius: 10px; padding: 12px 14px; transition: border-color 0.2s; }
-        .sheet-card:hover { border-color: #5a4d3a; }
-        #domainCards .sheet-card { opacity: 0.5; }
-        #domainCards .domain-card-selected.sheet-card { opacity: 1; }
-
-        /* Drag & drop reordering */
-        .dragging { opacity: 0.4; }
-        .drag-over { border-top: 2px solid var(--accent-1); }
-
-        /* Light mode overrides */
-        [data-mode="light"] { background-color: #f5f0e8; color: #2a2418; }
-        [data-mode="light"] .card { background: linear-gradient(145deg, #ffffff, #f9f5ef); border-color: #d4c9b8; box-shadow: 0 2px 8px #0001; }
-        [data-mode="light"] .trait-box { background: #fff; border-color: #d4c9b8; }
-        [data-mode="light"] .trait-label { color: #6b5d4d; }
-        [data-mode="light"] .input-underline { border-bottom-color: #d4c9b8; color: #2a2418; }
-        [data-mode="light"] input, [data-mode="light"] textarea { color: #2a2418 !important; }
-        [data-mode="light"] select { color: #2a2418 !important; background-color: #fff !important; }
-        [data-mode="light"] .sheet-card { background: linear-gradient(145deg, #fff, #f9f5ef); border-color: #d4c9b8; }
-        [data-mode="light"] .modal-panel { background: linear-gradient(145deg, #fff, #f9f5ef); border-color: #d4c9b8; }
-        [data-mode="light"] .modal-panel select, [data-mode="light"] .modal-panel input { background-color: #fff !important; border-color: #d4c9b8 !important; color: #2a2418 !important; }
-        [data-mode="light"] .modal-panel .bg-black\/60 { background-color: rgba(0,0,0,0.03) !important; }
-        [data-mode="light"] .modal-panel .border-zinc-800 { border-color: #d4c9b8 !important; }
-        [data-mode="light"] .modal-panel .hover\:border-indigo-500:hover { border-color: #6366f1 !important; }
-        [data-mode="light"] .modal-panel .text-indigo-300 { color: #4338ca !important; }
-        [data-mode="light"] .modal-panel .text-zinc-400 { color: #5a5045 !important; }
-        [data-mode="light"] .modal-panel .text-zinc-500 { color: #6b5d4d !important; }
-        [data-mode="light"] .modal-panel .text-zinc-300 { color: #3d3530 !important; }
-        [data-mode="light"] .modal-overlay { background: rgba(0,0,0,0.4); }
-        [data-mode="light"] .domain-card-selected { background-color: #f5f0e0 !important; }
-        [data-mode="light"] nav { background-color: rgba(245,240,232,0.95) !important; border-color: #d4c9b8 !important; }
-        [data-mode="light"] .fixed.bottom-0 { background-color: rgba(245,240,232,0.95) !important; border-color: #d4c9b8 !important; }
-        [data-mode="light"] .bg-\[\#14141c\] { background-color: #eef0f8 !important; }
-        [data-mode="light"] .bg-\[\#1c1414\] { background-color: #faf0f0 !important; }
-        [data-mode="light"] .bg-\[\#19141c\] { background-color: #f5f0fa !important; }
-        [data-mode="light"] .bg-\[\#1c1a14\] { background-color: #faf8f0 !important; }
-        [data-mode="light"] .bg-\[\#14181c\] { background-color: #f0f5fa !important; }
-        [data-mode="light"] .bg-black\/40 { background-color: rgba(0,0,0,0.05) !important; }
-        [data-mode="light"] .bg-black\/20 { background-color: rgba(0,0,0,0.03) !important; }
-        [data-mode="light"] .relative.rounded-xl.overflow-hidden.mb-4.p-5 { background: linear-gradient(135deg, #f9f5ef 0%, #fff 40%, #f5f0e8 100%) !important; border-color: #d4c9b8 !important; }
-        [data-mode="light"] #charName { color: #2a2418 !important; }
-        [data-mode="light"] .tab-btn.bg-\[\#2a2418\] { background-color: #f0ebe3 !important; color: #6b5d4d !important; border-color: #d4c9b8 !important; }
-        [data-mode="light"] .bg-gray-800 { background-color: #e8e4f0 !important; }
-        [data-mode="light"] .border-gray-700 { border-color: #c8c0d8 !important; }
-        [data-mode="light"] .bg-zinc-900 { background-color: #f0ebe3 !important; }
-        [data-mode="light"] .border-zinc-700 { border-color: #d4c9b8 !important; }
-        [data-mode="light"] .bg-\[\#2a2418\] { background-color: #f0ebe3 !important; border-color: #d4c9b8 !important; }
-        [data-mode="light"] .text-\[\#f5efe6\] { color: #2a2418 !important; }
-        [data-mode="light"] .border-\[\#363026\] { border-color: #d4c9b8 !important; }
-        [data-mode="light"] .border-zinc-800 { border-color: #d4c9b8 !important; }
-        [data-mode="light"] .text-zinc-400 { color: #5a5045 !important; }
-        [data-mode="light"] .text-zinc-500 { color: #6b5d4d !important; }
-        /* Card detail modal text override */
-        .card-detail-content, .card-detail-content * { font-size: 1rem !important; line-height: 1.8 !important; }
-        .card-detail-content .text-amber-400 { font-size: 1.1rem !important; font-weight: 700; }
-    </style>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/themes.css">
+    <link rel="stylesheet" href="css/textures.css">
 </head>
 <body class="max-w-2xl mx-auto p-4 pb-24">
 
@@ -144,8 +35,7 @@
 <div id="tab-sheet">
 
 <!-- Hero Header -->
-<div class="relative rounded-xl overflow-hidden mb-4 p-5 pb-4" style="background: linear-gradient(135deg, #2a2418 0%, #1e1b16 40%, #221f1a 100%); border: 1px solid #4a3f30;">
-    <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%224%22 height=%224%22><rect width=%224%22 height=%224%22 fill=%22%23fff%22 fill-opacity=%220.03%22/><rect width=%221%22 height=%221%22 fill=%22%23fff%22 fill-opacity=%220.06%22/></svg>');"></div>
+<div class="hero-header relative rounded-xl overflow-hidden mb-4 p-5 pb-4">
     <input id="charName" type="text" placeholder="CHARACTER NAME" class="relative bg-transparent border-none outline-none text-2xl font-black text-[#f5efe6] w-full font-[Cinzel] tracking-wide mb-3">
     <div class="relative grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-3">
         <div>
