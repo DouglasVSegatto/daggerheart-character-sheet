@@ -96,7 +96,7 @@
     <div class="bg-[#1c1414] border border-[#4a2020]/40 rounded-xl p-4">
         <div class="flex items-center justify-between mb-2">
             <span class="text-sm font-bold text-red-400 font-[Cinzel] uppercase tracking-wide">HP</span>
-            <span class="text-xs text-zinc-500">Max: <input type="number" id="hp_max" value="6" class="w-8 bg-transparent text-right font-bold focus:outline-none text-sm"></span>
+            <span class="text-xs text-zinc-500">Max: <input type="number" id="hp_max" value="6" min="0" class="w-8 bg-transparent text-right font-bold focus:outline-none text-sm"></span>
         </div>
         <div id="hp_dots" class="flex flex-wrap gap-2"></div>
     </div>
@@ -105,7 +105,7 @@
     <div class="bg-[#19141c] border border-[#3d2050]/40 rounded-xl p-4">
         <div class="flex items-center justify-between mb-2">
             <span class="text-sm font-bold text-purple-400 font-[Cinzel] uppercase tracking-wide">Stress</span>
-            <span class="text-xs text-zinc-500">Max: <input type="number" id="stress_max" value="6" class="w-8 bg-transparent text-right font-bold focus:outline-none text-sm"></span>
+            <span class="text-xs text-zinc-500">Max: <input type="number" id="stress_max" value="6" min="0" class="w-8 bg-transparent text-right font-bold focus:outline-none text-sm"></span>
         </div>
         <div id="stress_dots" class="flex flex-wrap gap-2"></div>
     </div>
@@ -114,7 +114,7 @@
     <div class="bg-[#1c1a14] border border-[#4a3f10]/40 rounded-xl p-4">
         <div class="flex items-center justify-between mb-2">
             <span class="text-sm font-bold text-yellow-500 font-[Cinzel] uppercase tracking-wide">Hope</span>
-            <span class="text-xs text-zinc-500">Max: <input type="number" id="hope_max" value="6" class="w-8 bg-transparent text-right font-bold focus:outline-none text-sm"></span>
+            <span class="text-xs text-zinc-500">Max: <input type="number" id="hope_max" value="6" min="0" class="w-8 bg-transparent text-right font-bold focus:outline-none text-sm"></span>
         </div>
         <div id="hope_dots" class="flex flex-wrap gap-2"></div>
     </div>
@@ -123,14 +123,22 @@
     <div class="bg-[#14181c] border border-[#1a3050]/40 rounded-xl p-4">
         <div class="flex items-center justify-between mb-2">
             <span class="text-sm font-bold text-blue-400 font-[Cinzel] uppercase tracking-wide">Armor</span>
-            <span class="text-xs text-zinc-500">Max: <input type="number" id="armor_max" value="3" class="w-8 bg-transparent text-right font-bold focus:outline-none text-sm"></span>
+            <span class="text-xs text-zinc-500">Max: <input type="number" id="armor_max" value="3" min="0" class="w-8 bg-transparent text-right font-bold focus:outline-none text-sm"></span>
         </div>
         <div id="armor_dots" class="flex flex-wrap gap-2"></div>
     </div>
 
     <!-- Damage Thresholds -->
     <div class="bg-black/20 border border-[#363026] rounded-xl p-4">
-        <div class="text-sm font-bold text-zinc-400 tracking-wider uppercase font-[Cinzel] mb-3">Damage Thresholds</div>
+        <div class="flex items-center justify-between mb-3">
+            <div class="text-sm font-bold text-zinc-400 tracking-wider uppercase font-[Cinzel]">Damage Thresholds</div>
+            <button class="info-btn" onclick="document.getElementById('info-thresh').classList.toggle('open')">i</button>
+        </div>
+        <div id="info-thresh" class="info-popup">
+            <div>• Thresholds = Armor Base + Level + Extra</div>
+            <div>• Each level you gain adds +1 to both Major and Severe</div>
+            <div>• Use Extra for bonuses from abilities, items, or other effects</div>
+        </div>
         <div class="grid grid-cols-2 gap-3 text-center mb-3">
             <div class="bg-black/40 border border-zinc-800 p-3 rounded-lg">
                 <div class="text-xs font-bold text-gray-400 uppercase">MAJOR</div>
@@ -165,9 +173,17 @@
             <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="2" style="background-color:#b8860b"></div>
             <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="2" style="color:#b8860b">Gear</h2>
         </div>
-        <span class="text-zinc-500 text-xs toggle-icon" id="sec-weapons-tog">▼</span>
+        <div class="flex items-center gap-2">
+            <button class="info-btn" onclick="event.stopPropagation(); document.getElementById('info-gear').classList.toggle('open')">i</button>
+            <span class="text-zinc-500 text-xs toggle-icon" id="sec-weapons-tog">▼</span>
+        </div>
     </div>
     <div id="sec-weapons" class="mt-2">
+    <div id="info-gear" class="info-popup mb-3">
+        <div>• <strong>Atk Bonus</strong> — equals your selected trait's modifier, updates automatically</div>
+        <div>• <strong>Armor</strong> — Major/Severe values feed directly into your Damage Thresholds</div>
+        <div>• <strong>Additional Gear</strong> — use for any equippable item (rings, cloaks, shields, etc.)</div>
+    </div>
     <div class="space-y-4">
         <div class="border-b border-zinc-800 pb-3">
             <input id="wep1_name" type="text" placeholder="Weapon Name" class="bg-transparent text-base w-full font-bold outline-none">
@@ -282,7 +298,7 @@
     </div>
     <div class="flex justify-between items-center mb-2">
         <span class="text-xs font-bold text-zinc-500 uppercase font-[Cinzel] tracking-wide">Inventory</span>
-        <button class="btn-action text-xs px-4 py-1.5 rounded-full font-bold uppercase text-white" onclick="addInventoryItem()">+ Add Item</button>
+        <button class="btn-action text-xs px-4 py-1.5 rounded-full font-bold uppercase text-white" onclick="addInventoryItem()">+ Add</button>
     </div>
     <div id="inventoryList" class="space-y-2">
         <div class="text-center text-xs text-zinc-600 italic">None</div>
@@ -296,9 +312,20 @@
             <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="4" style="color:#7d5c07">Abilities & Cards</h2>
             <span class="text-zinc-500 text-xs toggle-icon" id="sec-abilities-tog">▼</span>
         </div>
-        <button class="btn-action text-xs px-3 py-1 rounded-full font-bold uppercase text-white" onclick="event.stopPropagation(); openDatabase()">+ Add</button>
+        <div class="flex items-center gap-2">
+            <button class="info-btn" onclick="event.stopPropagation(); document.getElementById('info-abilities').classList.toggle('open')">i</button>
+            <button class="btn-action text-xs px-4 py-1.5 rounded-full font-bold uppercase text-white" onclick="event.stopPropagation(); openDatabase()">+ Add</button>
+        </div>
     </div>
     <div id="sec-abilities" class="mt-4">
+    <div id="info-abilities" class="info-popup mb-3">
+        <div class="font-bold text-xs mb-1" style="color:var(--accent-1)">Domain Cards</div>
+        <div>• Star (★) up to 5 cards as your active loadout</div>
+        <div>• Selected cards auto-sort to the top by level (ascending)</div>
+        <div>• Non-selected cards are grayed out — spend Recall to pull them to your hand</div>
+        <div class="font-bold text-xs mt-2 mb-1" style="color:var(--accent-1)">General</div>
+        <div>• Any card that isn’t a Domain Card (ancestry, community, class features, etc.)</div>
+    </div>
     <div class="mb-2 flex justify-between items-center"><span class="text-xs font-bold text-[#d4a017] uppercase font-[Cinzel]">Domain Cards</span><span id="domainSelectCount" class="text-xs text-[#6b5d4d]">0/5 selected</span></div>
     <div id="domainCards" class="space-y-2 mb-4">
         <div class="text-center text-xs text-zinc-600 italic">None</div>
@@ -317,7 +344,7 @@
             <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="5" style="color:#604605">Experience</h2>
             <span class="text-zinc-500 text-xs toggle-icon" id="sec-experience-tog">▼</span>
         </div>
-        <button class="btn-action text-xs px-3 py-1 rounded-full font-bold uppercase text-white" onclick="event.stopPropagation(); addExperience()">+ Add</button>
+        <button class="btn-action text-xs px-4 py-1.5 rounded-full font-bold uppercase text-white" onclick="event.stopPropagation(); addExperience()">+ Add</button>
     </div>
     <div id="sec-experience" class="mt-2">
         <div id="experienceList" class="space-y-2">

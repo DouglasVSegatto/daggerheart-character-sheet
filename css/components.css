@@ -223,3 +223,38 @@
 /* Drag & drop reordering */
 .dragging { opacity: 0.4; }
 .drag-over { border-top: 2px solid var(--accent-1); }
+
+/* Info tooltip */
+.info-btn {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid #4a3f30;
+    background: transparent;
+    color: #6b5d4d;
+    font-size: 10px;
+    font-weight: 700;
+    font-style: italic;
+    font-family: 'Cinzel', serif;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+}
+.info-btn:hover { border-color: var(--accent-1); color: var(--accent-1); }
+.info-popup {
+    display: none;
+    background: #1e1b16;
+    border: 1px solid #4a3f30;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-top: 8px;
+    font-size: 11px;
+    color: #a89880;
+    line-height: 1.6;
+}
+.info-popup.open { display: block; }
+[data-mode="light"] .info-btn { border-color: #d4c9b8; color: #8b7d6b; }
+[data-mode="light"] .info-btn:hover { border-color: var(--accent-1); color: var(--accent-1); }
+[data-mode="light"] .info-popup { background: #fff; border-color: #d4c9b8; color: #6b5d4d; }

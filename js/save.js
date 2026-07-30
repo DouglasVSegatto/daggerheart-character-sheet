@@ -1,5 +1,5 @@
 import { SAVE_KEY, EXPORT_KEY, THEME_KEY, FIELD_IDS, TEXTAREA_IDS, _restoring, setRestoring, addedCards, selectedDomainCards, savedCardsData, setSavedCardsData } from './state.js';
-import { getDotStates, setDotStates, renderDots, updateThresholds } from './trackers.js';
+import { getDotStates, setDotStates, renderDots, updateThresholds, updateAttackBonus } from './trackers.js';
 import { addCardToSheet, updateDomainSelection, reorderDomainCards } from './cards.js';
 import { addExperience, getExperienceData, addInventoryItem, getInventoryData, addGearItem, getGearData } from './inventory.js';
 import { applyTheme } from './theme.js';
@@ -99,8 +99,8 @@ export function loadSheet(silent) {
                     applyData(data);
                     localStorage.setItem(SAVE_KEY, JSON.stringify(data));
                     updateExportIndicator();
-                    alert('Sheet loaded from file!');
-                } catch { alert('Invalid file.'); }
+                    showToast('Sheet loaded!');
+                } catch { showToast('Invalid file.'); }
             };
             reader.readAsText(file);
         };
@@ -117,6 +117,7 @@ export function clearSheet() {
     localStorage.removeItem(SAVE_KEY);
     FIELD_IDS.forEach(id => { const el = document.getElementById(id); if (el) el.value = el.type === 'number' ? '0' : ''; });
     document.getElementById('track_ev').value = '10';
+    document.getElementById('charLevel').value = '1';
     document.getElementById('hp_max').value = '6';
     document.getElementById('stress_max').value = '6';
     document.getElementById('hope_max').value = '6';
@@ -132,8 +133,14 @@ export function clearSheet() {
     document.getElementById('experienceList').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
     document.getElementById('inventoryList').innerHTML = '<div class="text-center text-[10px] text-zinc-600 italic">None</div>';
     document.getElementById('gearItemList').innerHTML = '<div class="text-center text-xs text-zinc-600 italic">None</div>';
+    document.getElementById('armor_thresh_major').value = '0';
+    document.getElementById('armor_thresh_severe').value = '0';
+    document.getElementById('thresh_major_extra').value = '0';
+    document.getElementById('thresh_severe_extra').value = '0';
+    updateThresholds();
+    updateAttackBonus();
     autoCache();
-    alert('Sheet cleared!');
+    showToast('Sheet cleared!');
 }
 
 export function updateExportIndicator() {
@@ -144,4 +151,13 @@ export function updateExportIndicator() {
     let text = days === 0 ? 'Last export: today' : days === 1 ? 'Last export: yesterday' : `Last export: ${days} days ago`;
     el.textContent = text;
     el.style.color = days >= 7 ? '#b8860b' : '';
+}
+
+function showToast(msg) {
+    const toast = document.createElement('div');
+    toast.textContent = msg;
+    toast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#2a2418;color:#f5efe6;border:1px solid #4a3f30;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:opacity 0.2s;';
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.style.opacity = '1');
+    setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 200); }, 1000);
 }
