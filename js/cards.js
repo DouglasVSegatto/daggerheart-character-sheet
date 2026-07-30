@@ -55,7 +55,15 @@ function parseItem(item) {
 
 export function openDatabase() {
     document.getElementById('cardModal').classList.remove('hidden');
-    if (currentData.length) displayResults(currentData);
+    document.getElementById('dataType').value = '';
+    document.getElementById('cardSearch').value = '';
+    document.getElementById('cardSearch').classList.add('hidden');
+    document.getElementById('domainFilter').value = '';
+    document.getElementById('domainFilter').classList.add('hidden');
+    document.getElementById('levelFilter').value = '';
+    document.getElementById('levelFilter').classList.add('hidden');
+    document.getElementById('modalResults').innerHTML = '<div class="text-zinc-600 text-center py-10 text-xs">Select a category above to browse.</div>';
+    setCurrentData([]);
 }
 
 export function closeDatabase() {
