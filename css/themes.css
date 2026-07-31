@@ -41,3 +41,9 @@
 [data-mode="light"] .border-zinc-800 { border-color: #d4c9b8 !important; }
 [data-mode="light"] .text-zinc-400 { color: #5a5045 !important; }
 [data-mode="light"] .text-zinc-500 { color: #6b5d4d !important; }
+
+/* Support tab link hover — follows theme accent */
+.support-link:hover { border-color: color-mix(in srgb, var(--accent-1) 50%, transparent) !important; }
+[data-mode="light"] .support-link { border-color: #d4c9b8 !important; }
+[data-mode="light"] .support-link:hover { border-color: color-mix(in srgb, var(--accent-1) 60%, transparent) !important; }
+.support-link:hover .support-link-title { color: var(--accent-1) !important; }
