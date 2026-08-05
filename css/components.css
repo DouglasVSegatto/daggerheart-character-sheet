@@ -191,6 +191,35 @@
 .tab-btn { transition: all 0.2s ease; }
 .tab-btn:hover { opacity: 0.9; }
 
+/* Classic tab buttons */
+.classic-tab-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 6px 20px;
+    border-radius: 9999px;
+    transition: all 0.2s;
+    background: #2a2418;
+    color: #6b5d4d;
+    border: 1px solid #3d362a;
+}
+.classic-tab-btn.active {
+    background: linear-gradient(135deg, var(--accent-4), var(--accent-3));
+    color: #fff;
+    border-color: transparent;
+}
+[data-mode="light"] .classic-tab-btn {
+    background: #f0ebe3;
+    color: #6b5d4d;
+    border-color: #d4c9b8;
+}
+[data-mode="light"] .classic-tab-btn.active {
+    background: linear-gradient(135deg, var(--accent-4), var(--accent-3));
+    color: #fff;
+    border-color: transparent;
+}
+
 /* Theme picker */
 .theme-swatch {
     width: 28px;
@@ -202,6 +231,33 @@
 }
 .theme-swatch:hover { transform: scale(1.15); }
 .theme-swatch.active { border-color: #fff; box-shadow: 0 0 6px rgba(255,255,255,0.3); }
+
+#themeToggleBtn {
+    width: 32px;
+    height: 32px;
+    border: 2px solid color-mix(in srgb, var(--accent-1) 50%, transparent);
+    box-shadow: 0 0 6px color-mix(in srgb, var(--accent-1) 30%, transparent);
+}
+#themeToggleBtn:hover {
+    transform: none;
+    border-color: var(--accent-1);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--accent-1) 50%, transparent);
+}
+
+[data-mode="scifi"] .theme-swatch {
+    border-radius: 0;
+}
+[data-mode="scifi"] .theme-swatch.active {
+    border-color: #0ea5e9;
+    box-shadow: 0 0 8px rgba(14, 165, 233, 0.5);
+}
+[data-mode="scifi"] #themeToggleBtn {
+    width: 32px;
+    height: 32px;
+    border-radius: 0;
+    border-color: color-mix(in srgb, var(--accent-1) 60%, transparent);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--accent-1) 40%, transparent);
+}
 
 /* Chevron rotation */
 .toggle-icon { display: inline-block; transition: transform 0.25s ease; }

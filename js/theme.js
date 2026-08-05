@@ -37,17 +37,15 @@ export function applyTheme(name) {
     localStorage.setItem(THEME_KEY, name);
     const btn = document.querySelector('#themePicker > div > button');
     if (btn) btn.style.background = color;
-    const dd = document.getElementById('themeDropdown');
-    if (dd) dd.classList.add('hidden');
 }
 
 export function renderThemePicker() {
     const container = document.getElementById('themePicker');
     const current = localStorage.getItem(THEME_KEY) || 'gold';
     const currentColor = hexFromRgb(...(THEMES[current] || THEMES.gold).base);
-    container.innerHTML = `<div class="relative">
-        <button class="theme-swatch active" style="background:${currentColor}" title="Change theme" id="themeToggleBtn"></button>
-        <div id="themeDropdown" class="hidden absolute right-0 top-8 bg-[#221f1a] border border-[#4a3f30] rounded-xl p-3 shadow-xl z-50 min-w-[160px]">
+    container.innerHTML = `<div class="relative flex items-center">
+        <button class="theme-swatch active flex items-center justify-center" style="background:${currentColor}" title="Change theme" id="themeToggleBtn"></button>
+        <div id="themeDropdown" class="hidden absolute right-0 top-10 bg-[#221f1a] border border-[#4a3f30] rounded-xl p-3 shadow-xl z-50 min-w-[160px]">
             <div class="grid grid-cols-4 gap-3">${Object.entries(THEMES).map(([name, t]) => {
                 const color = hexFromRgb(...t.base);
                 return `<div class="theme-swatch ${name === current ? 'active' : ''}" style="background:${color}" data-theme="${name}" title="${name}"></div>`;
@@ -57,12 +55,21 @@ export function renderThemePicker() {
 
     document.getElementById('themeToggleBtn').addEventListener('click', toggleThemeDropdown);
     container.querySelectorAll('[data-theme]').forEach(el => {
-        el.addEventListener('click', () => applyTheme(el.dataset.theme));
+        el.addEventListener('click', (e) => { e.stopPropagation(); applyTheme(el.dataset.theme); });
     });
+    document.addEventListener('click', closeThemeDropdown);
 }
 
-function toggleThemeDropdown() {
+function toggleThemeDropdown(e) {
+    e.stopPropagation();
     document.getElementById('themeDropdown').classList.toggle('hidden');
+}
+
+function closeThemeDropdown(e) {
+    const dd = document.getElementById('themeDropdown');
+    if (!dd || dd.classList.contains('hidden')) return;
+    const picker = document.getElementById('themePicker');
+    if (!picker.contains(e.target)) dd.classList.add('hidden');
 }
 
 const MODE_CYCLE = ['dark', 'light', 'scifi'];

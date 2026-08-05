@@ -95,7 +95,8 @@
 
 /* Tabs */
 [data-mode="scifi"] .tab-btn,
-[data-mode="scifi"] .modern-tab-btn {
+[data-mode="scifi"] .modern-tab-btn,
+[data-mode="scifi"] .classic-tab-btn {
     font-family: 'Orbitron', sans-serif;
     border-color: #1e3a5f !important;
     color: #5b8fa8 !important;
@@ -103,7 +104,8 @@
 }
 
 [data-mode="scifi"] .tab-btn.active,
-[data-mode="scifi"] .modern-tab-btn.active {
+[data-mode="scifi"] .modern-tab-btn.active,
+[data-mode="scifi"] .classic-tab-btn.active {
     color: #0ea5e9 !important;
     border-color: #0ea5e9 !important;
     background: rgba(14, 165, 233, 0.1) !important;
@@ -228,6 +230,14 @@
     border: 1px solid #1e3a5f;
     box-shadow: 0 0 8px rgba(0, 180, 255, 0.1), inset 0 1px 0 rgba(0, 180, 255, 0.05);
     border-radius: 0;
+}
+
+/* Mode toggle button in scifi */
+[data-mode="scifi"] button[title*="Cycle"] {
+    background: #0a0e17 !important;
+    border-color: #1e3a5f !important;
+    width: 32px;
+    height: 32px;
 }
 
 /* Force square corners on all rounded elements */
