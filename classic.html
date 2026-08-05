@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daggerheart Digital Sheet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗡️</text></svg>">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/themes.css">
+    <link rel="stylesheet" href="css/textures.css">
+</head>
+<body class="max-w-2xl mx-auto p-4 pb-24">
+
+<!-- Nav Bar -->
+<nav class="fixed top-0 left-0 right-0 z-30 bg-[#1a1714]/95 backdrop-blur border-b border-[#3d362a] px-4 py-2">
+    <div class="max-w-2xl mx-auto flex items-center justify-between">
+    <span class="font-[Cinzel] text-[14px] tracking-widest uppercase font-black italic leading-tight" data-theme-level="1" style="color:#d4a017">Dagger<br>heart</span>
+    <div class="flex items-center gap-3">
+<label class="relative inline-flex items-center cursor-pointer" title="Toggle light/dark mode">
+            <input type="checkbox" id="modeToggleChk" class="sr-only peer" onchange="toggleMode()">
+            <div class="w-11 h-6 bg-[#3d362a] peer-checked:bg-[#d4c9b8] rounded-full transition-colors"></div>
+            <div id="modeToggleThumb" class="absolute left-0.5 top-0.5 w-5 h-5 rounded-full bg-[#1a1714] flex items-center justify-center text-[11px] transition-transform peer-checked:translate-x-5 peer-checked:bg-white"><span id="modeToggleIcon">🌙</span></div>
+        </label>
+        <div id="themePicker" class="flex gap-1.5 items-center"></div>
+        <div class="flex gap-1">
+            <button onclick="switchTab('tab-sheet')" id="btn-tab-sheet" class="tab-btn text-[10px] font-bold uppercase px-5 py-2 rounded-full btn-action text-white font-[Cinzel]">Sheet</button>
+            <button onclick="switchTab('tab-story')" id="btn-tab-story" class="tab-btn text-[10px] font-bold uppercase px-5 py-2 rounded-full bg-[#2a2418] text-[#6b5d4d] border border-[#3d362a] font-[Cinzel]">Story</button>
+            <button onclick="switchTab('tab-support')" id="btn-tab-support" class="tab-btn text-[10px] font-bold uppercase px-5 py-2 rounded-full bg-[#2a2418] text-[#6b5d4d] border border-[#3d362a] font-[Cinzel]">Support</button>
+        </div>
+        <a href="classicv2.html" class="text-[10px] text-[#6b5d4d] underline cursor-pointer hover:text-[#d4a017] transition-colors">V2 View</a>
+    </div>
+    </div>
+</nav>
+
+<div id="tab-sheet" class="mt-14">
+
+<!-- Hero Header -->
+<div class="hero-header relative rounded-xl overflow-hidden mb-4 p-5 pb-4">
+    <input id="charName" type="text" placeholder="CHARACTER NAME" class="relative bg-transparent border-none outline-none text-2xl font-black text-[#f5efe6] w-full font-[Cinzel] tracking-wide mb-3">
+    <div class="relative grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-3">
+        <div>
+            <div class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel] mb-1">Pronouns</div>
+            <input id="charPronouns" type="text" placeholder="—" class="input-underline text-sm text-left">
+        </div>
+        <div>
+            <div class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel] mb-1">Level</div>
+            <input id="charLevel" type="number" placeholder="—" class="input-underline text-sm text-left" value="1">
+        </div>
+        <div>
+            <div class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel] mb-1">Heritage</div>
+            <input id="charHeritage" type="text" placeholder="—" class="input-underline text-sm text-left">
+        </div>
+        <div>
+            <div class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel] mb-1">Class & Subclass</div>
+            <input id="charClass" type="text" placeholder="—" class="input-underline text-sm text-left">
+        </div>
+    </div>
+</div>
+
+<!-- Attributes -->
+<div class="grid grid-cols-3 gap-2 mb-4">
+    <div class="trait-box"><span class="trait-label text-[10px]">Agility</span><input id="t_agi" type="text" class="w-full bg-transparent text-center text-lg font-bold" value="0"></div>
+    <div class="trait-box"><span class="trait-label text-[10px]">Strength</span><input id="t_str" type="text" class="w-full bg-transparent text-center text-lg font-bold" value="0"></div>
+    <div class="trait-box"><span class="trait-label text-[10px]">Finesse</span><input id="t_fin" type="text" class="w-full bg-transparent text-center text-lg font-bold" value="0"></div>
+    <div class="trait-box"><span class="trait-label text-[10px]">Instinct</span><input id="t_inst" type="text" class="w-full bg-transparent text-center text-lg font-bold" value="0"></div>
+    <div class="trait-box"><span class="trait-label text-[10px]">Presence</span><input id="t_pres" type="text" class="w-full bg-transparent text-center text-lg font-bold" value="0"></div>
+    <div class="trait-box"><span class="trait-label text-[10px]">Knowledge</span><input id="t_know" type="text" class="w-full bg-transparent text-center text-lg font-bold" value="0"></div>
+</div>
+
+<div id="sheetSortable">
+<div class="card accent-status" data-sortable-id="vitals">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-status')">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="1" style="background-color:#d4a017"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="1" style="color:#d4a017">Vitals & Trackers</h2>
+        </div>
+        <span class="text-zinc-500 text-xs toggle-icon" id="sec-status-tog">▼</span>
+    </div>
+    <div id="sec-status" class="space-y-3">
+
+    <!-- Evasion & Proficiency -->
+    <div class="grid grid-cols-2 gap-3">
+        <div class="bg-[#14141c] border border-indigo-500/40 rounded-xl p-4 flex items-center justify-between">
+            <span class="text-sm font-bold text-indigo-400 font-[Cinzel] uppercase tracking-wide">Evasion</span>
+            <input id="track_ev" type="number" class="w-16 bg-transparent text-2xl font-black text-center text-indigo-300" value="10">
+        </div>
+        <div class="bg-[#14141c] border border-emerald-500/40 rounded-xl p-4 flex items-center justify-between">
+            <span class="text-sm font-bold text-emerald-400 font-[Cinzel] uppercase tracking-wide">Proficiency</span>
+            <input id="track_prof" type="number" class="w-16 bg-transparent text-2xl font-black text-center text-emerald-300" value="0">
+        </div>
+    </div>
+
+    <!-- HP -->
+    <div class="bg-[#1c1414] border border-[#4a2020]/40 rounded-xl p-4">
+        <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-bold text-red-400 font-[Cinzel] uppercase tracking-wide">HP</span>
+            <span class="text-xs text-zinc-500">Max: <input type="number" id="hp_max" value="6" min="0" class="w-8 bg-transparent text-right font-bold focus:outline-none text-sm"></span>
+        </div>
+        <div id="hp_dots" class="flex flex-wrap gap-2"></div>
+    </div>
+
+    <!-- Stress -->
+    <div class="bg-[#19141c] border border-[#3d2050]/40 rounded-xl p-4">
+        <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-bold text-purple-400 font-[Cinzel] uppercase tracking-wide">Stress</span>
+            <span class="text-xs text-zinc-500">Max: <input type="number" id="stress_max" value="6" min="0" class="w-8 bg-transparent text-right font-bold focus:outline-none text-sm"></span>
+        </div>
+        <div id="stress_dots" class="flex flex-wrap gap-2"></div>
+    </div>
+
+    <!-- Hope -->
+    <div class="bg-[#1c1a14] border border-[#4a3f10]/40 rounded-xl p-4">
+        <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-bold text-yellow-500 font-[Cinzel] uppercase tracking-wide">Hope</span>
+            <span class="text-xs text-zinc-500">Max: <input type="number" id="hope_max" value="6" min="0" class="w-8 bg-transparent text-right font-bold focus:outline-none text-sm"></span>
+        </div>
+        <div id="hope_dots" class="flex flex-wrap gap-2"></div>
+    </div>
+
+    <!-- Armor -->
+    <div class="bg-[#14181c] border border-[#1a3050]/40 rounded-xl p-4">
+        <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-bold text-blue-400 font-[Cinzel] uppercase tracking-wide">Armor</span>
+            <span class="text-xs text-zinc-500">Max: <input type="number" id="armor_max" value="3" min="0" class="w-8 bg-transparent text-right font-bold focus:outline-none text-sm"></span>
+        </div>
+        <div id="armor_dots" class="flex flex-wrap gap-2"></div>
+    </div>
+
+    <!-- Damage Thresholds -->
+    <div class="bg-black/20 border border-[#363026] rounded-xl p-4">
+        <div class="flex items-center justify-between mb-3">
+            <div class="text-sm font-bold text-zinc-400 tracking-wider uppercase font-[Cinzel]">Damage Thresholds</div>
+            <button class="info-btn" onclick="document.getElementById('info-thresh').classList.toggle('open')">i</button>
+        </div>
+        <div id="info-thresh" class="info-popup">
+            <div>• Thresholds = Armor Base + Level + Extra</div>
+            <div>• Each level you gain adds +1 to both Major and Severe</div>
+            <div>• Use Extra for bonuses from abilities, items, or other effects</div>
+        </div>
+        <div class="grid grid-cols-2 gap-3 text-center mb-3">
+            <div class="bg-black/40 border border-zinc-800 p-3 rounded-lg">
+                <div class="text-xs font-bold text-gray-400 uppercase">MAJOR</div>
+                <div id="thresh_major" class="text-2xl font-black text-indigo-400 mt-1">0</div>
+                <div class="text-[10px] text-zinc-600">2 HP</div>
+            </div>
+            <div class="bg-black/40 border border-zinc-800 p-3 rounded-lg">
+                <div class="text-xs font-bold text-gray-400 uppercase">SEVERE</div>
+                <div id="thresh_severe" class="text-2xl font-black text-indigo-400 mt-1">0</div>
+                <div class="text-[10px] text-zinc-600">3 HP</div>
+            </div>
+        </div>
+        <div class="space-y-2">
+            <div class="flex items-center justify-between bg-black/40 px-3 py-2 rounded-lg border border-zinc-800">
+                <span class="text-xs text-zinc-400 font-medium">MAJOR EXTRA</span>
+                <input id="thresh_major_extra" type="number" value="0" class="w-14 bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-center text-sm font-bold outline-none" oninput="updateThresholds()">
+            </div>
+            <div class="flex items-center justify-between bg-black/40 px-3 py-2 rounded-lg border border-zinc-800">
+                <span class="text-xs text-zinc-400 font-medium">SEVERE EXTRA</span>
+                <input id="thresh_severe_extra" type="number" value="0" class="w-14 bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-center text-sm font-bold outline-none" oninput="updateThresholds()">
+            </div>
+        </div>
+        <div class="text-[10px] text-zinc-600 text-center mt-3">Auto: Armor Base + Level + Extra</div>
+    </div>
+
+    </div>
+</div>
+
+<div class="card accent-combat" data-sortable-id="weapons">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-weapons')">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="2" style="background-color:#b8860b"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="2" style="color:#b8860b">Gear</h2>
+        </div>
+        <div class="flex items-center gap-2">
+            <button class="info-btn" onclick="event.stopPropagation(); document.getElementById('info-gear').classList.toggle('open')">i</button>
+            <span class="text-zinc-500 text-xs toggle-icon" id="sec-weapons-tog">▼</span>
+        </div>
+    </div>
+    <div id="sec-weapons" class="mt-2">
+    <div id="info-gear" class="info-popup mb-3">
+        <div>• <strong>Atk Bonus</strong> — equals your selected trait's modifier, updates automatically</div>
+        <div>• <strong>Armor</strong> — Major/Severe values feed directly into your Damage Thresholds</div>
+        <div>• <strong>Additional Gear</strong> — use for any equippable item (rings, cloaks, shields, etc.)</div>
+    </div>
+    <div class="space-y-4">
+        <div class="border-b border-zinc-800 pb-3">
+            <input id="wep1_name" type="text" placeholder="Weapon Name" class="bg-transparent text-base w-full font-bold outline-none">
+            <div class="grid grid-cols-4 gap-2 text-zinc-500 mt-2">
+                <div class="text-center">
+                    <div class="text-[10px] text-zinc-600 mb-1">TRAIT</div>
+                    <select id="wep1_trait" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-xs" onchange="updateAttackBonus()">
+                        <option value="">—</option>
+                        <option value="t_agi">Agility</option>
+                        <option value="t_str">Strength</option>
+                        <option value="t_fin">Finesse</option>
+                        <option value="t_inst">Instinct</option>
+                        <option value="t_pres">Presence</option>
+                        <option value="t_know">Knowledge</option>
+                    </select>
+                </div>
+                <div class="text-center">
+                    <div class="text-[10px] text-zinc-600 mb-1">RANGE</div>
+                    <input id="wep1_range" type="text" placeholder="—" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-xs">
+                </div>
+                <div class="text-center">
+                    <div class="text-[10px] text-zinc-600 mb-1">DAMAGE</div>
+                    <input id="wep1_dmg" type="text" placeholder="—" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-xs">
+                </div>
+                <div class="text-center">
+                    <div class="text-[10px] text-zinc-600 mb-1">ATK BONUS</div>
+                    <div id="wep1_atk" class="w-full bg-gray-800 border border-gray-700 rounded py-1.5 text-center font-bold text-indigo-400 text-sm">—</div>
+                </div>
+            </div>
+            <div class="mt-2">
+                <div class="text-[10px] text-zinc-600 mb-1">FEATURE</div>
+                <input id="wep1_feature" type="text" placeholder="Weapon feature..." class="w-full bg-black/40 border border-zinc-800 rounded px-3 py-1.5 text-xs outline-none">
+            </div>
+        </div>
+        <div class="border-b border-zinc-800 pb-3">
+            <input id="wep2_name" type="text" placeholder="Weapon Name" class="bg-transparent text-base w-full font-bold outline-none">
+            <div class="grid grid-cols-4 gap-2 text-zinc-500 mt-2">
+                <div class="text-center">
+                    <div class="text-[10px] text-zinc-600 mb-1">TRAIT</div>
+                    <select id="wep2_trait" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-xs" onchange="updateAttackBonus()">
+                        <option value="">—</option>
+                        <option value="t_agi">Agility</option>
+                        <option value="t_str">Strength</option>
+                        <option value="t_fin">Finesse</option>
+                        <option value="t_inst">Instinct</option>
+                        <option value="t_pres">Presence</option>
+                        <option value="t_know">Knowledge</option>
+                    </select>
+                </div>
+                <div class="text-center">
+                    <div class="text-[10px] text-zinc-600 mb-1">RANGE</div>
+                    <input id="wep2_range" type="text" placeholder="—" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-xs">
+                </div>
+                <div class="text-center">
+                    <div class="text-[10px] text-zinc-600 mb-1">DAMAGE</div>
+                    <input id="wep2_dmg" type="text" placeholder="—" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-xs">
+                </div>
+                <div class="text-center">
+                    <div class="text-[10px] text-zinc-600 mb-1">ATK BONUS</div>
+                    <div id="wep2_atk" class="w-full bg-gray-800 border border-gray-700 rounded py-1.5 text-center font-bold text-indigo-400 text-sm">—</div>
+                </div>
+            </div>
+            <div class="mt-2">
+                <div class="text-[10px] text-zinc-600 mb-1">FEATURE</div>
+                <input id="wep2_feature" type="text" placeholder="Weapon feature..." class="w-full bg-black/40 border border-zinc-800 rounded px-3 py-1.5 text-xs outline-none">
+            </div>
+        </div>
+        <div>
+            <input id="armor_name" type="text" placeholder="Armor Name" class="bg-transparent text-base w-full font-bold outline-none">
+            <div class="grid grid-cols-3 gap-2 text-zinc-500 mt-2">
+                <div class="text-center">
+                    <div class="text-[10px] text-zinc-600 mb-1">MAJOR</div>
+                    <input id="armor_thresh_major" type="number" placeholder="0" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-sm" value="0" oninput="updateThresholds()">
+                </div>
+                <div class="text-center">
+                    <div class="text-[10px] text-zinc-600 mb-1">SEVERE</div>
+                    <input id="armor_thresh_severe" type="number" placeholder="0" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-sm" value="0" oninput="updateThresholds()">
+                </div>
+                <div class="text-center">
+                    <div class="text-[10px] text-zinc-600 mb-1">SCORE</div>
+                    <input id="armor_score" type="text" placeholder="0" class="w-full bg-black/40 border border-zinc-800 rounded px-1 py-1.5 text-center outline-none text-sm">
+                </div>
+            </div>
+            <div class="mt-2">
+                <div class="text-[10px] text-zinc-600 mb-1">FEATURE</div>
+                <input id="armor_feature" type="text" placeholder="Armor feature..." class="w-full bg-black/40 border border-zinc-800 rounded px-3 py-1.5 text-xs outline-none">
+            </div>
+        </div>
+    </div>
+    <div class="border-t border-[#363026] mt-4 pt-4">
+        <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold text-zinc-500 uppercase font-[Cinzel] tracking-wide">Additional Gear</span>
+            <button class="btn-action text-xs px-4 py-1.5 rounded-full font-bold uppercase text-white" onclick="addGearItem()">+ Gear</button>
+        </div>
+        <div id="gearItemList" class="space-y-2">
+            <div class="text-center text-xs text-zinc-600 italic">None</div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="card accent-gold" data-sortable-id="gold">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-gold')">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="3" style="background-color:#9a7209"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="3" style="color:#9a7209">Gold & Inventory</h2>
+        </div>
+        <span class="text-zinc-500 text-xs toggle-icon" id="sec-gold-tog">▼</span>
+    </div>
+    <div id="sec-gold" class="mt-2">
+    <div class="grid grid-cols-2 gap-3 mb-4">
+        <div class="bg-black/40 p-3 rounded-lg text-center">
+            <span class="text-[10px] text-zinc-500 uppercase tracking-wide">HANDFULS</span>
+            <input id="gold_hand" type="number" class="w-full bg-transparent text-center text-lg font-bold" value="0">
+        </div>
+        <div class="bg-black/40 p-3 rounded-lg text-center">
+            <span class="text-[10px] text-zinc-500 uppercase tracking-wide">BAGS</span>
+            <input id="gold_bags" type="number" class="w-full bg-transparent text-center text-lg font-bold" value="0">
+        </div>
+    </div>
+    <div class="flex justify-between items-center mb-2">
+        <span class="text-xs font-bold text-zinc-500 uppercase font-[Cinzel] tracking-wide">Inventory</span>
+        <button class="btn-action text-xs px-4 py-1.5 rounded-full font-bold uppercase text-white" onclick="addInventoryItem()">+ Add</button>
+    </div>
+    <div id="inventoryList" class="space-y-2">
+        <div class="text-center text-xs text-zinc-600 italic">None</div>
+    </div>
+    </div>
+</div>
+<div class="card accent-abilities" data-sortable-id="abilities">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-abilities')">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="4" style="background-color:#7d5c07"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="4" style="color:#7d5c07">Abilities & Cards</h2>
+            <span class="text-zinc-500 text-xs toggle-icon" id="sec-abilities-tog">▼</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <button class="info-btn" onclick="event.stopPropagation(); document.getElementById('info-abilities').classList.toggle('open')">i</button>
+            <button class="btn-action text-xs px-4 py-1.5 rounded-full font-bold uppercase text-white" onclick="event.stopPropagation(); openDatabase()">+ Add</button>
+        </div>
+    </div>
+    <div id="sec-abilities" class="mt-4">
+    <div id="info-abilities" class="info-popup mb-3">
+        <div class="font-bold text-xs mb-1" style="color:var(--accent-1)">Domain Cards</div>
+        <div>• Star (★) up to 5 cards as your active loadout</div>
+        <div>• Selected cards auto-sort to the top by level (ascending)</div>
+        <div>• Non-selected cards are grayed out — spend Recall to pull them to your hand</div>
+        <div class="font-bold text-xs mt-2 mb-1" style="color:var(--accent-1)">General</div>
+        <div>• Any card that isn’t a Domain Card (ancestry, community, class features, etc.)</div>
+    </div>
+    <div class="mb-2 flex justify-between items-center"><span class="text-xs font-bold text-[#d4a017] uppercase font-[Cinzel]">Domain Cards</span><span id="domainSelectCount" class="text-xs text-[#6b5d4d]">0/5 selected</span></div>
+    <div id="domainCards" class="space-y-2 mb-4">
+        <div class="text-center text-xs text-zinc-600 italic">None</div>
+    </div>
+    <div class="mb-2"><span class="text-xs font-bold uppercase font-[Cinzel]" data-theme-level="1" style="color:#d4a017">General</span></div>
+    <div id="generalCards" class="space-y-2">
+        <div class="text-center text-xs text-zinc-600 italic">None</div>
+    </div>
+    </div>
+</div>
+
+<div class="card accent-experience" data-sortable-id="experience">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-experience')">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="5" style="background-color:#604605"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="5" style="color:#604605">Experience</h2>
+            <span class="text-zinc-500 text-xs toggle-icon" id="sec-experience-tog">▼</span>
+        </div>
+        <button class="btn-action text-xs px-4 py-1.5 rounded-full font-bold uppercase text-white" onclick="event.stopPropagation(); addExperience()">+ Add</button>
+    </div>
+    <div id="sec-experience" class="mt-2">
+        <div id="experienceList" class="space-y-2">
+            <div class="text-center text-xs text-zinc-600 italic">None</div>
+        </div>
+    </div>
+</div>
+</div>
+
+</div>
+
+<div id="tab-story" class="mt-14" style="display:none">
+
+<div class="card accent-levelup">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-levelup')">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="1" style="background-color:#d4a017"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="1" style="color:#d4a017">Level Up Notes</h2>
+        </div>
+        <span class="text-zinc-500 text-xs toggle-icon" id="sec-levelup-tog">▼</span>
+    </div>
+    <div id="sec-levelup" class="mt-2">
+        <textarea id="levelupNotes" placeholder="Track level-up choices, stat increases, new abilities..." class="w-full bg-black/40 border border-zinc-800 rounded p-3 text-sm h-32 outline-none text-zinc-300"></textarea>
+    </div>
+</div>
+
+<div class="card accent-backstory">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-backstory')">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="2" style="background-color:#b8860b"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="2" style="color:#b8860b">Backstory</h2>
+        </div>
+        <span class="text-zinc-500 text-xs toggle-icon" id="sec-backstory-tog">▼</span>
+    </div>
+    <div id="sec-backstory" class="mt-2">
+        <textarea id="backstory" placeholder="Your character's history, motivations, connections..." class="w-full bg-black/40 border border-zinc-800 rounded p-3 text-sm h-40 outline-none text-zinc-300"></textarea>
+    </div>
+</div>
+
+<div class="card accent-description">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-description')">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="3" style="background-color:#9a7209"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="3" style="color:#9a7209">Character Description</h2>
+        </div>
+        <span class="text-zinc-500 text-xs toggle-icon" id="sec-description-tog">▼</span>
+    </div>
+    <div id="sec-description" class="mt-2 space-y-3">
+        <div>
+            <div class="text-[10px] text-zinc-600 mb-1 uppercase tracking-wide">CLOTHES</div>
+            <input id="desc_clothes" type="text" placeholder="extravagant, fancy, loud, oversized, ragged, sleek, wild..." class="w-full bg-black/40 border border-zinc-800 rounded px-3 py-2 text-sm outline-none">
+        </div>
+        <div>
+            <div class="text-[10px] text-zinc-600 mb-1 uppercase tracking-wide">EYES</div>
+            <input id="desc_eyes" type="text" placeholder="carnations, earth, endless ocean, fire, ivy, lilacs, night..." class="w-full bg-black/40 border border-zinc-800 rounded px-3 py-2 text-sm outline-none">
+        </div>
+        <div>
+            <div class="text-[10px] text-zinc-600 mb-1 uppercase tracking-wide">BODY</div>
+            <input id="desc_body" type="text" placeholder="broad, carved, curvy, lanky, rotund, short, stocky, tall..." class="w-full bg-black/40 border border-zinc-800 rounded px-3 py-2 text-sm outline-none">
+        </div>
+        <div>
+            <div class="text-[10px] text-zinc-600 mb-1 uppercase tracking-wide">SKIN</div>
+            <input id="desc_skin" type="text" placeholder="ashes, clover, falling snow, fine sand, obsidian, rose..." class="w-full bg-black/40 border border-zinc-800 rounded px-3 py-2 text-sm outline-none">
+        </div>
+        <div>
+            <div class="text-[10px] text-zinc-600 mb-1 uppercase tracking-wide">ATTITUDE</div>
+            <input id="desc_attitude" type="text" placeholder="a barkeep, a magician, a ringmaster, a rock star..." class="w-full bg-black/40 border border-zinc-800 rounded px-3 py-2 text-sm outline-none">
+        </div>
+    </div>
+</div>
+
+<div class="card accent-connections">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-connections')">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="4" style="background-color:#7d5c07"></div>
+            <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="4" style="color:#7d5c07">Background & Connections</h2>
+        </div>
+        <span class="text-zinc-500 text-xs toggle-icon" id="sec-connections-tog">▼</span>
+    </div>
+    <div id="sec-connections" class="mt-2">
+        <textarea id="connections" placeholder="Background questions, connections to other characters, bonds, motivations..." class="w-full bg-black/40 border border-zinc-800 rounded p-3 text-sm h-44 outline-none text-zinc-300"></textarea>
+    </div>
+</div>
+
+</div>
+
+<div id="tab-support" class="mt-14" style="display:none">
+
+<div class="card" style="border-left-color:#d4a017" data-theme-border="1">
+    <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest mb-4" data-theme-level="1" style="color:#d4a017">Support the Creator</h2>
+    <div class="space-y-3">
+        <a href="https://buymeacoffee.com/segatto" target="_blank" rel="noopener"
+           class="support-link flex items-start gap-3 p-4 bg-black/40 border border-zinc-800 rounded-xl transition-colors group">
+            <span class="text-2xl text-[#f5efe6] support-link-title transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="m12,8.07h0s0-.01,0-.01c-.01,0-.03.02-.04.03h.02Z"/><path d="m11.98,20.58h.01s.02-.03.03-.04c-.02,0-.03.02-.05.04Z"/><path d="m12.01,20.7h0s-.03-.02-.05-.02c.01,0,.03.01.04.02Z"/><path d="m14.26,20.04c.23-.21.37-.51.4-.82l.78-8.29c-.35-.12-.7-.2-1.1-.2-.69,0-1.24.24-1.88.51-.72.31-1.53.66-2.59.66-.44,0-.88-.06-1.31-.18l.73,7.5c.03.31.17.61.4.82.23.21.53.33.85.33,0,0,1.04.05,1.38.05.37,0,1.49-.05,1.49-.05.31,0,.62-.12.85-.33Z"/><path d="m12.01,8.05s-.01-.01-.02-.02h.01s0,.02,0,.02Z"/><path d="m18.74,6.79c-.1-.5-.32-.97-.83-1.15-.16-.06-.35-.08-.48-.2-.13-.12-.16-.3-.19-.48-.05-.32-.1-.63-.16-.94-.05-.27-.09-.57-.21-.82-.16-.33-.5-.53-.83-.66-.17-.06-.34-.12-.52-.16-.83-.22-1.71-.3-2.56-.35-1.03-.06-2.06-.04-3.08.05-.76.07-1.57.15-2.29.42-.27.1-.54.21-.74.42-.25.25-.33.64-.15.95.13.22.35.38.58.48.3.13.61.24.94.3.9.2,1.82.28,2.74.31,1.01.04,2.03,0,3.04-.1.25-.03.5-.06.75-.1.29-.04.48-.43.39-.7-.1-.32-.38-.44-.7-.39-.05,0-.09.01-.14.02h-.03c-.11.02-.21.03-.32.04-.22.02-.44.04-.66.06-.49.03-.99.05-1.49.05-.49,0-.97-.01-1.46-.05-.22-.01-.44-.03-.66-.06-.1-.01-.2-.02-.3-.03h-.1s-.02-.02-.02-.02h-.1c-.2-.04-.4-.08-.6-.12-.02,0-.04-.02-.05-.03-.01-.02-.02-.04-.02-.06s0-.04.02-.06c.01-.02.03-.03.05-.03h0c.17-.04.35-.07.52-.1.06,0,.12-.02.18-.03h0c.11,0,.22-.03.33-.04.95-.1,1.9-.13,2.85-.1.46.01.92.04,1.39.09.1.01.2.02.3.03.04,0,.08,0,.11.01h.08c.22.04.44.08.66.13.33.07.75.09.89.45.05.11.07.24.09.36l.03.15s0,0,0,0c.08.36.15.72.23,1.08,0,.03,0,.05,0,.08s-.02.05-.03.07-.04.04-.06.06c-.02.01-.05.02-.08.03h-.05s-.05.01-.05.01c-.15.02-.3.04-.44.05-.29.03-.58.06-.87.09-.58.05-1.16.08-1.74.09-.3,0-.59.01-.89.01-1.18,0-2.36-.07-3.53-.21-.12-.01-.24-.03-.36-.04-.02,0-.11-.01-.13-.02-.08-.01-.16-.02-.24-.04-.27-.04-.54-.09-.81-.13-.33-.05-.64-.03-.94.13-.24.13-.44.34-.56.58-.13.26-.17.55-.22.83-.06.28-.15.59-.11.88.07.63.51,1.14,1.14,1.25.59.11,1.19.19,1.79.27,2.35.29,4.73.32,7.09.1.19-.02.38-.04.58-.06.06,0,.12,0,.18.02s.11.05.15.09c.04.04.08.09.1.15.02.06.03.12.02.18l-.06.58c-.12,1.17-.24,2.35-.36,3.52-.13,1.23-.25,2.46-.38,3.7-.04.35-.07.69-.11,1.04-.03.34-.04.69-.1,1.03-.1.53-.46.86-.99.98-.48.11-.97.17-1.46.17-.55,0-1.09-.02-1.64-.02-.58,0-1.3-.05-1.75-.48-.4-.38-.45-.98-.5-1.49-.07-.68-.14-1.37-.21-2.05l-.4-3.8-.26-2.46s0-.08-.01-.12c-.03-.29-.24-.58-.57-.57-.28.01-.6.25-.57.57l.19,1.82.39,3.77c.11,1.07.22,2.14.33,3.21.02.21.04.41.06.62.12,1.12.98,1.72,2.04,1.89.62.1,1.25.12,1.88.13.81.01,1.62.04,2.41-.1,1.17-.22,2.05-1,2.18-2.21.04-.35.07-.7.11-1.05.12-1.16.24-2.32.36-3.48l.39-3.79.18-1.74c0-.09.05-.17.1-.23s.14-.11.22-.12c.34-.07.66-.18.89-.43.38-.41.46-.94.32-1.47l-.11-.56Zm-12.48,1.18h0s.01,0,.02.02c-.01-.01-.02-.02-.02-.02Zm.1.09h0s0,0,0,0c0,0,0,0,0,0Zm11.26-.08h0c-.12.11-.3.17-.48.19-2.01.3-4.05.45-6.09.38-1.46-.05-2.9-.21-4.34-.42-.14-.02-.29-.05-.39-.15-.06-.06-.08-.14-.1-.23,0,0,0,0,0,.01,0,0,0,0,0-.01-.03-.2.02-.43.05-.6.04-.22.13-.51.39-.54.4-.05.87.12,1.27.18.48.07.96.13,1.45.18,2.07.19,4.17.16,6.23-.12.38-.05.75-.11,1.12-.18.33-.06.7-.17.9.17.14.23.16.55.13.81,0,.12-.06.22-.14.3Z"/><path d="m6.22,7.77s0,0,0,0c0-.02.01-.05,0-.05,0,0,0,.03,0,.05Z"/></svg></span>
+            <div>
+                <div class="text-sm font-bold text-[#f5efe6] support-link-title transition-colors font-[Cinzel]">Buy Me a Coffee</div>
+                <div class="text-xs text-zinc-500 mt-0.5">If you enjoy this tool, consider supporting its development!</div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="card" style="border-left-color:#d4a017" data-theme-border="1">
+    <div class="flex justify-between items-center cursor-pointer border-b border-[#363026] pb-3 mb-4" onclick="toggleSection('sec-howto')">
+        <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest" data-theme-level="1" style="color:#d4a017">How to Use</h2>
+        <span class="text-zinc-500 text-xs toggle-icon" id="sec-howto-tog">▼</span>
+    </div>
+    <div id="sec-howto" class="text-sm text-zinc-400 space-y-3">
+        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Tabs:</span> Sheet for gameplay stats, Story for narrative/backstory, Support for links & help.</div>
+        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Saving:</span> All changes auto-save to your browser. Use Export to download a backup JSON file. Use Import to restore from a file.</div>
+        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Cards & Abilities:</span> Tap + Add to browse the SRD library. Click any card on your sheet to read it in full. Star up to 5 domain cards for your active loadout.</div>
+        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Gear:</span> Two weapon slots and one armor slot are fixed. Use + Gear to add shields, rings, cloaks, etc.</div>
+        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Inventory:</span> Track gold (handfuls/bags) and add/remove items with quantities.</div>
+        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Theme:</span> Pick an accent color with the color swatch. Use the slide toggle for dark/light mode.</div>
+        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Reorder Sections:</span> Hold and drag any section on the Sheet tab to rearrange the layout to your preference.</div>
+        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Tips:</span> Export often — localStorage is tied to your browser. Clearing browser data will lose unsaved sheets.</div>
+    </div>
+</div>
+
+<div class="card" style="border-left-color:#d4a017" data-theme-border="1">
+    <h2 class="text-xs font-bold uppercase font-[Cinzel] tracking-widest mb-4" data-theme-level="1" style="color:#d4a017">Resources & Community</h2>
+    <div class="space-y-3">
+
+        <a href="https://segattobuilder.github.io/daggerheart-dm-tools/" target="_blank" rel="noopener"
+           class="support-link flex items-start gap-3 p-4 bg-black/40 border border-zinc-800 rounded-xl transition-colors group">
+            <span class="text-2xl">⚔️</span>
+            <div>
+                <div class="text-sm font-bold text-[#f5efe6] support-link-title transition-colors font-[Cinzel]">Daggerheart DM Tools</div>
+                <div class="text-xs text-zinc-500 mt-0.5">Combat tracker and compendium search for DMs — no install needed.</div>
+            </div>
+        </a>
+
+        <a href="https://daggersearch.com/" target="_blank" rel="noopener"
+           class="support-link flex items-start gap-3 p-4 bg-black/40 border border-zinc-800 rounded-xl transition-colors group">
+            <span class="text-2xl">📖</span>
+            <div>
+                <div class="text-sm font-bold text-[#f5efe6] support-link-title transition-colors font-[Cinzel]">Daggersearch Compendium</div>
+                <div class="text-xs text-zinc-500 mt-0.5">Full SRD compendium search — the data source powering this sheet's card library.</div>
+            </div>
+        </a>
+
+        <a href="https://www.reddit.com/r/daggerheart/" target="_blank" rel="noopener"
+           class="support-link flex items-start gap-3 p-4 bg-black/40 border border-zinc-800 rounded-xl transition-colors group">
+            <span class="text-2xl">🎲</span>
+            <div>
+                <div class="text-sm font-bold text-[#f5efe6] support-link-title transition-colors font-[Cinzel]">r/Daggerheart</div>
+                <div class="text-xs text-zinc-500 mt-0.5">Community hub — tips, builds, homebrew, and discussions from players worldwide.</div>
+            </div>
+        </a>
+
+    </div>
+</div>
+
+</div>
+
+<div class="fixed bottom-0 left-0 right-0 bg-[#1a1714]/95 backdrop-blur border-t border-[#3d362a] p-3 z-40">
+    <div class="max-w-2xl mx-auto">
+        <div class="flex gap-3">
+            <button id="exportBtn" onclick="saveSheet()" class="flex-1 btn-action text-xs py-3 rounded-xl font-bold uppercase text-white flex items-center justify-center gap-1.5"><span>⬇</span> Export</button>
+            <button onclick="loadSheet()" class="flex-1 bg-[#2a2418] border border-[#3d362a] text-xs py-3 rounded-xl font-bold uppercase text-[#a89880] flex items-center justify-center gap-1.5"><span>⬆</span> Import</button>
+            <button onclick="clearSheet()" class="flex-1 btn-danger text-xs py-3 rounded-xl font-bold uppercase text-red-200 flex items-center justify-center gap-1.5"><span>🗑</span> Clear</button>
+        </div>
+        <div id="lastExportInfo" class="text-center text-[10px] text-zinc-600 mt-1.5"></div>
+    </div>
+</div>
+
+<!-- Card Detail Modal -->
+<div id="cardDetailModal" class="fixed inset-0 modal-overlay hidden z-50 p-4 overflow-y-auto flex items-center justify-center" onclick="closeCardDetail()">
+    <div class="w-full max-w-2xl modal-panel p-8 rounded-xl border border-[#3d362a] bg-[#1e1b16]" onclick="event.stopPropagation()">
+        <div class="flex justify-between items-center border-b border-[#363026] pb-4 mb-5">
+            <h2 id="cardDetailTitle" class="font-black text-xl uppercase font-[Cinzel] tracking-wide"></h2>
+            <button onclick="closeCardDetail()" class="text-[#6b5d4d] hover:text-white text-2xl leading-none">✕</button>
+        </div>
+        <div id="cardDetailBody" class="card-detail-content"></div>
+    </div>
+</div>
+
+<div id="cardModal" class="fixed inset-0 modal-overlay hidden z-50 p-4 overflow-y-auto">
+    <div class="max-w-lg mx-auto modal-panel p-5 mt-8 mb-8">
+        <div class="flex justify-between items-center border-b border-[#363026] pb-3 mb-4">
+            <h2 class="font-black text-[#d4a017] text-base uppercase font-[Cinzel] tracking-wide">SRD Library</h2>
+            <button onclick="closeDatabase()" class="text-[#6b5d4d] hover:text-white text-2xl leading-none">✕</button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mb-4">
+            <select id="dataType" class="col-span-2 sm:col-span-1 bg-[#1a1714] border border-[#4a3f30] rounded-lg p-3 text-sm" onchange="fetchData()">
+                <option value="">Choose Category...</option>
+                <option value="ancestries.json">Ancestries</option>
+                <option value="communities.json">Communities</option>
+                <option value="classes.json">Classes</option>
+                <option value="domain-cards.json">Domain Cards</option>
+                <option value="subclasses.json">Subclasses</option>
+            </select>
+            <input type="text" id="cardSearch" placeholder="Filter by name..." class="col-span-2 sm:col-span-1 bg-[#1a1714] border border-[#4a3f30] rounded-lg p-3 text-sm hidden" oninput="filterCards()">
+            <select id="domainFilter" class="bg-[#1a1714] border border-[#4a3f30] rounded-lg p-3 text-sm hidden" onchange="filterCards()">
+                <option value="">All Domains</option>
+                <option value="ARCANA">Arcana</option>
+                <option value="BLADE">Blade</option>
+                <option value="BLOOD">Blood</option>
+                <option value="BONE">Bone</option>
+                <option value="CODEX">Codex</option>
+                <option value="DREAD">Dread</option>
+                <option value="GRACE">Grace</option>
+                <option value="MIDNIGHT">Midnight</option>
+                <option value="SAGE">Sage</option>
+                <option value="SPLENDOR">Splendor</option>
+                <option value="VALOR">Valor</option>
+            </select>
+            <select id="levelFilter" class="bg-[#1a1714] border border-[#4a3f30] rounded-lg p-3 text-sm hidden" onchange="filterCards()">
+                <option value="">All Levels</option>
+                <option value="1">Level 1</option>
+                <option value="2">Level 2</option>
+                <option value="3">Level 3</option>
+                <option value="4">Level 4</option>
+                <option value="5">Level 5</option>
+                <option value="6">Level 6</option>
+                <option value="7">Level 7</option>
+                <option value="8">Level 8</option>
+                <option value="9">Level 9</option>
+                <option value="10">Level 10</option>
+            </select>
+        </div>
+
+        <div id="modalResults" class="space-y-2 max-h-[60vh] overflow-y-auto pr-1">
+        </div>
+    </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f951be3ed280465083ec75a17c4566ed"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
