@@ -72,8 +72,8 @@ function closeThemeDropdown(e) {
     if (!picker.contains(e.target)) dd.classList.add('hidden');
 }
 
-const MODE_CYCLE = ['dark', 'light', 'scifi'];
-const MODE_ICONS = { dark: '🌙', light: '☀️', scifi: '🖥️' };
+const MODE_CYCLE = ['dark', 'light', 'scifi', 'fantasy'];
+const MODE_ICONS = { dark: '🌙', light: '☀️', scifi: '🖥️', fantasy: '🐉' };
 
 export function toggleMode() {
     const current = document.body.getAttribute('data-mode') || 'dark';

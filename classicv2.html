@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/themes.css">
     <link rel="stylesheet" href="css/textures.css">
     <link rel="stylesheet" href="css/scifi.css">
+    <link rel="stylesheet" href="css/fantasy.css">
     <link rel="stylesheet" href="css/modern.css">
 </head>
 <body class="modern-layout mx-auto p-4 pb-24">
@@ -22,7 +23,7 @@
         <div class="flex items-center justify-between mb-2">
             <span class="font-[Cinzel] text-[14px] tracking-widest uppercase font-black italic leading-tight" data-theme-level="1" style="color:#d4a017">Dagger<br>heart</span>
             <div class="flex items-center gap-3">
-                <button onclick="toggleMode()" class="w-8 h-8 rounded-full bg-[#2a2418] border border-[#4a3f30] flex items-center justify-center text-[14px] cursor-pointer hover:border-[#d4a017] transition-colors" title="Cycle: Dark → Light → Sci-Fi"><span id="modeToggleIcon">🌙</span></button>
+                <button onclick="toggleMode()" class="w-8 h-8 rounded-full bg-[#2a2418] border border-[#4a3f30] flex items-center justify-center text-[14px] cursor-pointer hover:border-[#d4a017] transition-colors" title="Cycle: Dark → Light → Sci-Fi → Fantasy"><span id="modeToggleIcon">🌙</span></button>
                 <div id="themePicker" class="flex gap-1.5 items-center"></div>
                 <a class="switch-layout-link" onclick="switchLayout()">Classic View</a>
             </div>
@@ -368,7 +369,7 @@
     </div>
 
     <!-- Inventory Items -->
-    <div class="card accent-gold">
+    <div class="card accent-inventory">
         <div class="flex justify-between items-center border-b border-[#363026] pb-3 mb-4">
             <div class="flex items-center gap-2">
                 <div class="w-2 h-2 rounded-full theme-dot-el" data-theme-level="3" style="background-color:#9a7209"></div>
@@ -480,7 +481,7 @@
         <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Cards & Abilities:</span> Tap + Add to browse the SRD library. Click any card on your sheet to read it in full. Star up to 5 domain cards for your active loadout.</div>
         <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Gear:</span> Two weapon slots and one armor slot are fixed. Use + Gear to add shields, rings, cloaks, etc.</div>
         <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Inventory:</span> Track gold (handfuls/bags) and add/remove items with quantities.</div>
-        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Theme:</span> Pick an accent color with the color swatch. Click the mode button to cycle between Dark, Light, and Sci-Fi themes.</div>
+        <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Theme:</span> Pick an accent color with the color swatch. Click the mode button to cycle between Dark, Light, Sci-Fi, and Fantasy themes.</div>
         <div><span class="text-xs text-zinc-400 uppercase tracking-wide font-bold font-[Cinzel]">Tips:</span> Export often — localStorage is tied to your browser. Clearing browser data will lose unsaved sheets.</div>
     </div>
 </div>
