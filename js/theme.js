@@ -65,19 +65,20 @@ function toggleThemeDropdown() {
     document.getElementById('themeDropdown').classList.toggle('hidden');
 }
 
+const MODE_CYCLE = ['dark', 'light', 'scifi'];
+const MODE_ICONS = { dark: '🌙', light: '☀️', scifi: '🖥️' };
+
 export function toggleMode() {
-    const body = document.body;
-    const isLight = body.getAttribute('data-mode') === 'light';
-    const newMode = isLight ? 'dark' : 'light';
-    body.setAttribute('data-mode', newMode);
+    const current = document.body.getAttribute('data-mode') || 'dark';
+    const idx = MODE_CYCLE.indexOf(current);
+    const newMode = MODE_CYCLE[(idx + 1) % MODE_CYCLE.length];
+    document.body.setAttribute('data-mode', newMode);
     localStorage.setItem(MODE_KEY, newMode);
-    document.getElementById('modeToggleIcon').textContent = newMode === 'light' ? '☀️' : '🌙';
+    document.getElementById('modeToggleIcon').textContent = MODE_ICONS[newMode];
 }
 
 export function initMode() {
     const saved = localStorage.getItem(MODE_KEY) || 'dark';
     document.body.setAttribute('data-mode', saved);
-    const chk = document.getElementById('modeToggleChk');
-    if (chk) chk.checked = saved === 'light';
-    document.getElementById('modeToggleIcon').textContent = saved === 'light' ? '☀️' : '🌙';
+    document.getElementById('modeToggleIcon').textContent = MODE_ICONS[saved] || '🌙';
 }

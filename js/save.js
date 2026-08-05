@@ -154,9 +154,15 @@ export function updateExportIndicator() {
 }
 
 function showToast(msg) {
+    const mode = document.body.getAttribute('data-mode') || 'dark';
+    const styles = mode === 'scifi'
+        ? 'background:#0d1220;color:#c8dce8;border:1px solid #1e3a5f;box-shadow:0 0 12px rgba(0,180,255,0.2);'
+        : mode === 'light'
+        ? 'background:#fff;color:#2a2418;border:1px solid #d4c9b8;'
+        : 'background:#2a2418;color:#f5efe6;border:1px solid #4a3f30;';
     const toast = document.createElement('div');
     toast.textContent = msg;
-    toast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#2a2418;color:#f5efe6;border:1px solid #4a3f30;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:opacity 0.2s;';
+    toast.style.cssText = `position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);${styles}padding:12px 24px;border-radius:10px;font-size:13px;font-weight:600;z-index:99999;opacity:0;transition:opacity 0.2s;`;
     document.body.appendChild(toast);
     requestAnimationFrame(() => toast.style.opacity = '1');
     setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 200); }, 1000);
