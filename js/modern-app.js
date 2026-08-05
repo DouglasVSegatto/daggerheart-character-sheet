@@ -3,7 +3,9 @@ import { renderThemePicker, applyTheme, toggleMode, initMode } from './theme.js'
 import { toggleSection } from './ui.js';
 import { renderDots, updateThresholds, updateAttackBonus } from './trackers.js';
 import { openDatabase, closeDatabase, fetchData, filterCards, closeCardDetail } from './cards.js';
-import { addInventoryItem, addExperience, addGearItem } from './inventory.js';
+import { addInventoryItem } from './inventory.js';
+import { addExperience } from './experience.js';
+import { addGearItem } from './gear.js';
 import { autoCache, saveSheet, loadSheet, clearSheet, updateExportIndicator } from './save.js';
 
 // Expose to global for inline handlers

@@ -1,7 +1,9 @@
 import { SAVE_KEY, EXPORT_KEY, THEME_KEY, FIELD_IDS, TEXTAREA_IDS, _restoring, setRestoring, addedCards, selectedDomainCards, savedCardsData, setSavedCardsData } from './state.js';
 import { getDotStates, setDotStates, renderDots, updateThresholds, updateAttackBonus } from './trackers.js';
 import { addCardToSheet, updateDomainSelection, reorderDomainCards } from './cards.js';
-import { addExperience, getExperienceData, addInventoryItem, getInventoryData, addGearItem, getGearData } from './inventory.js';
+import { addExperience, getExperienceData } from './experience.js';
+import { addInventoryItem, getInventoryData } from './inventory.js';
+import { addGearItem, getGearData } from './gear.js';
 import { applyTheme } from './theme.js';
 
 export function autoCache() {
