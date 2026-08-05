@@ -4,7 +4,7 @@ A lightweight, mobile-friendly digital character sheet for **Daggerheart TTRPG**
 
 > 🎮 **Try it live:** [https://segattobuilder.github.io/daggerheart-character-sheet/](https://segattobuilder.github.io/daggerheart-character-sheet/) — no install needed, just open and play. Your data saves automatically in your browser.
 
-☕ If you enjoy this tool, consider [buying me a coffee](https://buymeacoffee.com/segatto)!
+☕ If you enjoy this tool, consider [buying me a coffee](https://buymeacoffee.com/segattobuilder)!
 
 ## Features
 
