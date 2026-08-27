@@ -1,7 +1,6 @@
 // Cloudflare Web Analytics — shared across all pages
-// Cloudflare Web Analytics — shared across all pages
 var s = document.createElement('script');
 s.type = 'module';
 s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
-s.setAttribute('data-cf-beacon', '{"token": "f951be3ed280465083ec75a17c4566ed"}');
+s.setAttribute('data-cf-beacon', '{"token": "6409cedbdc6944cea71d28c12f03bfe2"}');
 document.head.appendChild(s);
