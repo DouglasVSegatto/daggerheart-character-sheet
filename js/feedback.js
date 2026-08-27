@@ -3,7 +3,7 @@ window.onerror = function(msg, src, line, col) {
   fetch('/api/report', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ type: 'error', message: msg, source: src, line, col, page: location.pathname })
+    body: JSON.stringify({ type: 'error', message: msg, source: src, line, col, page: location.href })
   }).catch(() => {});
 };
 
@@ -26,7 +26,7 @@ function submitBugReport() {
   fetch('/api/report', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ type, message: msg, page: location.pathname })
+    body: JSON.stringify({ type, message: msg, page: location.href })
   }).then(() => {
     input.value = '';
     document.querySelectorAll('input[name="reportType"]').forEach(r => r.checked = false);
