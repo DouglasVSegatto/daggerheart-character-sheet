@@ -2,7 +2,11 @@
 
 A lightweight, mobile-friendly digital character sheet for **Daggerheart TTRPG**, built as a single HTML page with no backend required.
 
-> 🎮 **Try it live:** [https://segattobuilder.github.io/daggerheart-character-sheet/](https://segattobuilder.github.io/daggerheart-character-sheet/) — no install needed, just open and play. Your data saves automatically in your browser.
+> 🎮 **Try it live:** [https://daggerheart-character-sheet.pages.dev/](https://daggerheart-character-sheet.pages.dev/) — no install needed, just open and play. Your data saves automatically in your browser.
+>
+> Also available at: [https://segattobuilder.github.io/daggerheart-character-sheet/](https://segattobuilder.github.io/daggerheart-character-sheet/)
+>
+> 💻 **Source code:** [github.com/segattobuilder/daggerheart-character-sheet](https://github.com/segattobuilder/daggerheart-character-sheet)
 
 ☕ If you enjoy this tool, consider [buying me a coffee](https://buymeacoffee.com/segattobuilder)!
 
@@ -36,6 +40,7 @@ A lightweight, mobile-friendly digital character sheet for **Daggerheart TTRPG**
 - **Clear** — Reset the entire sheet with confirmation
 - **Loadout Protection** — Cannot delete a domain card while it's in your active loadout
 - **How to Use Guide** — Built-in help section in the Support tab explaining all features
+- **Feedback & Error Capture** — Submit bug reports or feature requests from the Support tab; JS errors are auto-captured silently
 
 ## Domain Colors & Icons
 
@@ -72,7 +77,14 @@ No build step required. Just serve the files.
 
 Open `index.html` in a browser.
 
-### GitHub Pages
+### Cloudflare Pages (Primary)
+
+1. Connect the repo to Cloudflare Pages
+2. Set production branch to `main`
+3. Cloudflare auto-deploys on push
+4. Your sheet will be live at `https://<project>.pages.dev/`
+
+### GitHub Pages (Mirror)
 
 1. Push the repo to GitHub
 2. Go to **Settings → Pages**
@@ -82,34 +94,33 @@ Open `index.html` in a browser.
 ## Project Structure
 
 ```
-├── index.html          # Main HTML page
+├── index.html          # Layout chooser (redirects to classic or v2)
+├── classic.html        # Classic single-column layout
+├── classicv2.html      # V2 tabbed grid layout
 ├── css/
 │   ├── base.css        # Variables, typography, inputs, layout
 │   ├── components.css  # Cards, dots/trackers, modals, buttons, tabs
 │   ├── themes.css      # Dark/light mode overrides
 │   └── textures.css    # Background grain, vignette, atmosphere
 ├── js/
-│   ├── app.js          # Entry point, initialization
+│   ├── app.js          # Entry point, initialization (classic)
+│   ├── modern-app.js   # Entry point, initialization (v2)
 │   ├── cards.js        # SRD card fetching, display, detail modal
-│   ├── inventory.js    # Inventory, experience, and gear item management
+│   ├── feedback.js     # Auto error capture + user bug/feature reports
+│   ├── inventory.js    # Inventory item management
+│   ├── experience.js   # Experience tracking
+│   ├── gear.js         # Gear item management
 │   ├── save.js         # Auto-cache, export, import, clear
 │   ├── sort.js         # Drag & drop section reordering
 │   ├── state.js        # Shared state, constants, domain colors
 │   ├── theme.js        # Accent color picker and dark/light mode toggle
 │   ├── trackers.js     # HP/Stress/Hope/Armor dots, thresholds, attack bonus
 │   └── ui.js           # Tab switching, section collapse
+├── functions/
+│   └── api/
+│       ├── report.js   # POST endpoint — stores reports in KV (30-day TTL)
+│       └── reports.js  # GET endpoint — view all reports (ADMIN_KEY protected)
 ├── images/             # Domain icons
-│   ├── arcana.png
-│   ├── blade.png
-│   ├── blood.png
-│   ├── bone.png
-│   ├── codex.png
-│   ├── dread.png
-│   ├── grace.png
-│   ├── midnight.png
-│   ├── sage.png
-│   ├── splendor.png
-│   └── valor.png
 └── README.md
 ```
 
@@ -123,3 +134,5 @@ Card data is fetched live from the [daggersearch/daggerheart-data](https://githu
 - [Tailwind CSS](https://tailwindcss.com/) (via CDN)
 - localStorage for auto-caching and theme persistence
 - GitHub raw content API for SRD data
+- [Cloudflare Pages](https://pages.cloudflare.com/) for hosting + serverless functions
+- Cloudflare KV for feedback/error report storage
